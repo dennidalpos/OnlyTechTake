@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.domain.models.UserRole
 import kotlinx.coroutines.flow.Flow
 
 @Dao

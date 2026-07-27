@@ -3,10 +3,10 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import androidx.lifecycle.SavedStateHandle
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
@@ -15,7 +15,11 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import com.onlytechtake.repairapp.domain.models.OrderDocument
+import com.onlytechtake.repairapp.domain.models.OrderDocumentType
+import com.onlytechtake.repairapp.domain.models.UserRole
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -27,6 +31,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -72,13 +77,13 @@ class OrderDetailViewModelTest {
                 )
             val pdf =
                 File(testRoot, "stato.pdf").absoluteFile.apply { writeBytes(byteArrayOf(1, 2, 3)) }
-            val documentRepository =
-                FakeOrderDocumentRepository(
-                    document(
-                        localPath = pdf.absolutePath,
-                        fileName = pdf.name,
-                    ),
+            val initialEntity =
+                document(
+                    localPath = pdf.absolutePath,
+                    fileName = pdf.name,
                 )
+            val documentRepository =
+                FakeOrderDocumentRepository(initialEntity)
             val orderRepository = mockk<OrderWorkflowRepository>()
             every { orderRepository.observeOrderDetail("order-1") } returns flowOf(null)
             coEvery {
@@ -106,7 +111,7 @@ class OrderDetailViewModelTest {
             val viewModel =
                 OrderDetailViewModel(
                     context = context,
-                    orderId = "order-1",
+                    savedStateHandle = SavedStateHandle(mapOf("orderId" to "order-1")),
                     authRepository = FakeAuthRepository(actor),
                     orderRepository = orderRepository,
                     orderMediaRepository = mockk<OrderMediaRepository>(relaxed = true),
@@ -115,8 +120,8 @@ class OrderDetailViewModelTest {
                     generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
                     shareDocumentIntentFactory = shareFactory,
                     diagnosticLogger = mockk(relaxed = true),
+                    workspaceManager = mockk(relaxed = true),
                     ioDispatcher = testDispatcher,
-                    onSetFormDirty = {},
                 )
 
             viewModel.onShareDocumentClicked("document-1")
@@ -177,15 +182,15 @@ class OrderDetailViewModelTest {
             documentsFlow.value = documents.values.toList()
         }
 
-        override suspend fun findById(id: String): OrderDocumentEntity? = documents[id]
+        override suspend fun findById(id: String): OrderDocument? = documents[id]?.toDomain()
 
-        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
-            documentsFlow
+        override fun observeByOrder(orderId: String): Flow<List<OrderDocument>> = documentsFlow.map { list -> list.map { it.toDomain() } }
 
         override suspend fun delete(documentId: String): Result<Unit> =
             runCatching {
                 documents.remove(documentId) ?: error("Documento non trovato")
                 documentsFlow.value = documents.values.toList()
+                Unit
             }
     }
 
@@ -215,8 +220,7 @@ class OrderDetailViewModelTest {
             newPassword: CharArray,
         ): Result<Unit> = error("changePassword is not expected")
 
-        override suspend fun getRecoveryKit(): Result<String> =
-            error("getRecoveryKit is not expected")
+        override suspend fun getRecoveryKit(): Result<String> = error("getRecoveryKit is not expected")
 
         override suspend fun resetAdminWithRecoveryCode(
             code: String,

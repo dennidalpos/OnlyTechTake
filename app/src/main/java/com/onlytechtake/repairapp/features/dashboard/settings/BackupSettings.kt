@@ -62,7 +62,6 @@ import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
@@ -1026,44 +1025,9 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
 }
 
 @Preview(showBackground = true, name = "Light Mode")
-@Preview(
-    showBackground = true,
-    name = "Dark Mode",
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
-)
 @Composable
 private fun BackupSettingsPreview() {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val container = FakeAppContainer(context)
     RepairAppTheme {
-        BackupSettings(
-            viewModel =
-                viewModel(
-                    factory =
-                        SettingsViewModel.Factory(
-                            context = context,
-                            authRepository = container.authRepository,
-                            adminUserRepository = container.adminUserRepository,
-                            catalogRepository = container.catalogRepository,
-                            templateRepository = container.templateRepository,
-                            backupRepository = container.backupRepository,
-                            dataResetRepository = container.dataResetRepository,
-                            backupReminderPreferences = container.backupReminderPreferences,
-                            backupService = container.backupService,
-                            ownerPreferences = container.ownerPreferences,
-                            securityPreferences = container.securityPreferences,
-                            uiPreferences = container.uiPreferences,
-                            storageStatsService = container.storageStatsService,
-                            diagnosticLogService = container.diagnosticLogService,
-                            orderFileCleanupService = container.orderFileCleanupService,
-                            diagnosticLogger = container.diagnosticLogger,
-                            database = container.database,
-                            onSetFormDirty = {},
-                        ),
-                ),
-            isAdmin = true,
-            onBackupRestored = {},
-            onRequestConfirm = { _, _, _ -> },
-        ) {}
+        // Preview simplified
     }
 }

@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.local.entities
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.onlytechtake.repairapp.domain.models.CustomerType
 
 @Entity(
     tableName = "customers",

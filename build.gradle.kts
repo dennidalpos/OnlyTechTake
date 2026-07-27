@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.hilt) apply false
     alias(libs.plugins.spotless)
 }
 
@@ -52,13 +53,6 @@ subprojects {
     configurations.configureEach {
         resolutionStrategy.eachDependency {
             when (requested.group) {
-                "androidx.appcompat" -> {
-                    if (requested.name.startsWith("appcompat")) {
-                        useVersion("1.7.1")
-                        because("Consistent appcompat version across all configurations")
-                    }
-                }
-
                 "com.google.protobuf" -> {
                     if (requested.name.startsWith("protobuf-")) {
                         useVersion("4.35.1")

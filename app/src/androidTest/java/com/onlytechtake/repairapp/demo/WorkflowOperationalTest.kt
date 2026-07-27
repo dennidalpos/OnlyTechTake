@@ -12,22 +12,34 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
+import com.onlytechtake.repairapp.data.session.InMemorySessionStore
+import com.onlytechtake.repairapp.domain.models.UserRole
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import javax.inject.Inject
 import com.onlytechtake.repairapp.test.R as TestR
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class WorkflowOperationalTest {
-    @get:Rule
+    @Inject lateinit var sessionStore: InMemorySessionStore
+
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
     val localeRule = LocaleTestRule("en", "US")
 
-    @get:Rule
+    @get:Rule(order = 2)
     val composeRule = createEmptyComposeRule()
 
     @get:Rule
@@ -36,6 +48,12 @@ class WorkflowOperationalTest {
             android.Manifest.permission.CAMERA,
             android.Manifest.permission.RECORD_AUDIO,
         )
+
+    @Before
+    fun setup() {
+        hiltRule.inject()
+        sessionStore.clear()
+    }
 
     private val context: Context
         get() =
@@ -77,7 +95,7 @@ class WorkflowOperationalTest {
                     username = "admin",
                     passwordHash = hash.hash,
                     passwordSalt = hash.salt,
-                    role = com.onlytechtake.repairapp.data.local.entities.UserRole.ADMIN,
+                    role = UserRole.ADMIN,
                     forcePasswordChange = true,
                     active = true,
                     createdAt = System.currentTimeMillis(),

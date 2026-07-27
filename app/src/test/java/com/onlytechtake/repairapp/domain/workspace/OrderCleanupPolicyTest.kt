@@ -1,6 +1,6 @@
 package com.onlytechtake.repairapp.domain.workspace
 
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.domain.models.ClosureReason
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

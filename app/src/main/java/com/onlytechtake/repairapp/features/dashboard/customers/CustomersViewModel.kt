@@ -6,16 +6,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
+import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
+import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,149 +31,131 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
-class CustomersViewModel(
-    private val context: Context,
-    private val authRepository: AuthRepository,
-    private val customerRepository: CustomerRepository,
-    private val orderWorkflowRepository: OrderRepository,
-    private val onSetFormDirty: (Boolean) -> Unit,
-    diagnosticLogger: DiagnosticLogger,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : ViewModel() {
-    private val _message = MutableStateFlow<WorkspaceMessage?>(null)
-    val message = _message.asStateFlow()
-
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery = _searchQuery.asStateFlow()
-
-    private val _showAll = MutableStateFlow(value = false)
-    val showAll = _showAll.asStateFlow()
-
-    private val actionRunner =
-        AuthenticatedActionRunner(
-            context = context,
-            authRepository = authRepository,
-            currentUser = authRepository.currentUser,
-            scope = viewModelScope,
-            showMessage = { text, isError, duration ->
-                _message.value = WorkspaceMessage(text, isError, duration)
-            },
-            diagnosticLogger = diagnosticLogger,
-            ioDispatcher = ioDispatcher,
-        )
-
-    private val _isFormDirty = MutableStateFlow(value = false)
-    val isFormDirty = _isFormDirty.asStateFlow()
-
-    val currentUser = authRepository.currentUser
-
-    val customerSuggestions: StateFlow<List<CustomerEntity>?> =
-        searchQuery
-            .debounce(300.milliseconds)
-            .flatMapLatest { query ->
-                customerRepository.search(query)
-            }.stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5_000),
-                null,
-            )
-
-    fun setShowAll(enabled: Boolean) {
-        _showAll.value = enabled
-        if (enabled) {
-            _searchQuery.value = ""
-        }
-    }
-
-    fun setFormDirty(dirty: Boolean) {
-        _isFormDirty.value = dirty
-        onSetFormDirty(dirty)
-    }
-
-    fun clearMessage() {
-        _message.value = null
-    }
-
-    fun setSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
-
-    fun saveCustomer(
-        input: CustomerInput,
-        onSaved: (CustomerEntity) -> Unit = {},
-    ) {
-        actionRunner.run(
-            successMessageRes = R.string.success_operation_completed,
-            autoDismissMillis = 1000L,
-        ) { actor ->
-            customerRepository.save(actor, input).onSuccess {
-                onSaved(it)
-                setFormDirty(dirty = false)
-            }
-        }
-    }
-
-    fun deleteCustomer(
-        customerId: String,
-        onDeleted: () -> Unit = {},
-    ) {
-        actionRunner.run(
-            successMessageRes = R.string.success_operation_completed,
-            autoDismissMillis = 1000L,
-        ) { actor ->
-            customerRepository.delete(actor, customerId).onSuccess {
-                onDeleted()
-            }
-        }
-    }
-
-    fun observeOrdersForCustomer(
-        customerId: String,
-        closed: Boolean,
-    ): Flow<List<OrderListItem>> =
-        currentUser.flatMapLatest { user ->
-            if (user == null) {
-                flowOf(emptyList())
-            } else {
-                val filter =
-                    OrderFilter(
-                        customerId = customerId,
-                        statuses =
-                            if (closed) {
-                                setOf(OrderStatus.CLOSED)
-                            } else {
-                                OrderStatus.entries
-                                    .asSequence()
-                                    .filter { it != OrderStatus.CLOSED }
-                                    .toSet()
-                            },
-                    )
-                orderWorkflowRepository.observeOrderList(user, filter)
-            }
-        }
-
-    class Factory(
-        private val context: Context,
+@HiltViewModel
+class CustomersViewModel
+    @Inject
+    constructor(
+        @ApplicationContext private val context: Context,
         private val authRepository: AuthRepository,
         private val customerRepository: CustomerRepository,
         private val orderWorkflowRepository: OrderRepository,
-        private val diagnosticLogger: DiagnosticLogger,
-        private val onSetFormDirty: (Boolean) -> Unit,
-        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            CustomersViewModel(
-                context,
-                authRepository,
-                customerRepository,
-                orderWorkflowRepository,
-                onSetFormDirty,
-                diagnosticLogger,
-                ioDispatcher,
-            ) as T
+        private val workspaceManager: WorkspaceManager,
+        diagnosticLogger: DiagnosticLogger,
+    ) : ViewModel() {
+        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+        private val _message = MutableStateFlow<WorkspaceMessage?>(null)
+        val message = _message.asStateFlow()
+
+        private val _searchQuery = MutableStateFlow("")
+        val searchQuery = _searchQuery.asStateFlow()
+
+        private val _showAll = MutableStateFlow(value = false)
+        val showAll = _showAll.asStateFlow()
+
+        private val actionRunner =
+            AuthenticatedActionRunner(
+                context = context,
+                authRepository = authRepository,
+                currentUser = authRepository.currentUser,
+                scope = viewModelScope,
+                showMessage = { text, isError, duration ->
+                    _message.value = WorkspaceMessage(text, isError, duration)
+                },
+                diagnosticLogger = diagnosticLogger,
+                ioDispatcher = ioDispatcher,
+            )
+
+        private val _isFormDirty = MutableStateFlow(value = false)
+        val isFormDirty = _isFormDirty.asStateFlow()
+
+        val currentUser = authRepository.currentUser
+
+        val customerSuggestions: StateFlow<List<Customer>?> =
+            searchQuery
+                .debounce(300.milliseconds)
+                .flatMapLatest { query ->
+                    customerRepository.search(query)
+                }.stateIn(
+                    viewModelScope,
+                    SharingStarted.WhileSubscribed(5_000),
+                    null,
+                )
+
+        fun setShowAll(enabled: Boolean) {
+            _showAll.value = enabled
+            if (enabled) {
+                _searchQuery.value = ""
+            }
+        }
+
+        fun setFormDirty(dirty: Boolean) {
+            _isFormDirty.value = dirty
+            workspaceManager.setFormDirty(dirty)
+        }
+
+        fun clearMessage() {
+            _message.value = null
+        }
+
+        fun setSearchQuery(query: String) {
+            _searchQuery.value = query
+        }
+
+        fun saveCustomer(
+            input: CustomerInput,
+            onSaved: (Customer) -> Unit = {},
+        ) {
+            actionRunner.run(
+                successMessageRes = R.string.success_operation_completed,
+                autoDismissMillis = 1000L,
+            ) { actor ->
+                customerRepository.save(actor, input).onSuccess {
+                    onSaved(it)
+                    setFormDirty(dirty = false)
+                }
+            }
+        }
+
+        fun deleteCustomer(
+            customerId: String,
+            onDeleted: () -> Unit = {},
+        ) {
+            actionRunner.run(
+                successMessageRes = R.string.success_operation_completed,
+                autoDismissMillis = 1000L,
+            ) { actor ->
+                customerRepository.delete(actor, customerId).onSuccess {
+                    onDeleted()
+                }
+            }
+        }
+
+        fun observeOrdersForCustomer(
+            customerId: String,
+            closed: Boolean,
+        ): Flow<List<OrderListItem>> =
+            currentUser.flatMapLatest { user ->
+                if (user == null) {
+                    flowOf(emptyList())
+                } else {
+                    val filter =
+                        OrderFilter(
+                            customerId = customerId,
+                            statuses =
+                                if (closed) {
+                                    setOf(OrderStatus.CLOSED)
+                                } else {
+                                    OrderStatus.entries
+                                        .asSequence()
+                                        .filter { it != OrderStatus.CLOSED }
+                                        .toSet()
+                                },
+                        )
+                    orderWorkflowRepository.observeOrderList(user, filter)
+                }
+            }
     }
-}

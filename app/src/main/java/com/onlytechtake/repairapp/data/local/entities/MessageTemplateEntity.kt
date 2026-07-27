@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.onlytechtake.repairapp.domain.models.MessageChannel
 
 @Entity(
     tableName = "message_templates",

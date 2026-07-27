@@ -2,8 +2,8 @@ package com.onlytechtake.repairapp.domain.workspace
 
 import android.content.Context
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 
 object OrderStatusPolicy {
     val closedStatuses: Set<OrderStatus> = setOf(OrderStatus.CLOSED)

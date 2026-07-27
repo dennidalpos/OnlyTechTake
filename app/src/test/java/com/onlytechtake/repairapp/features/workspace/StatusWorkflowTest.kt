@@ -2,11 +2,12 @@ package com.onlytechtake.repairapp.features.workspace
 
 import android.content.Context
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
@@ -79,7 +80,7 @@ class StatusWorkflowTest {
                 order(
                     OrderStatus.RESULT,
                     diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
-                ),
+                ).toDomain(),
             ),
         )
         assertEquals(
@@ -88,7 +89,7 @@ class StatusWorkflowTest {
                 order(
                     OrderStatus.RESULT,
                     diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE,
-                ),
+                ).toDomain(),
             ),
         )
         assertEquals(
@@ -97,24 +98,24 @@ class StatusWorkflowTest {
                 order(
                     OrderStatus.CLOSED,
                     closureReason = ClosureReason.NOT_REPAIRABLE,
-                ),
+                ).toDomain(),
             ),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_INTAKE,
-            statusTemplateAnchor(order(OrderStatus.OPEN)),
+            statusTemplateAnchor(order(OrderStatus.OPEN).toDomain()),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_UPDATE,
-            statusTemplateAnchor(order(OrderStatus.IN_PROGRESS)),
+            statusTemplateAnchor(order(OrderStatus.IN_PROGRESS).toDomain()),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_DIAGNOSIS,
-            statusTemplateAnchor(order(OrderStatus.DIAGNOSIS)),
+            statusTemplateAnchor(order(OrderStatus.DIAGNOSIS).toDomain()),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_READY,
-            statusTemplateAnchor(order(OrderStatus.READY_FOR_PICKUP)),
+            statusTemplateAnchor(order(OrderStatus.READY_FOR_PICKUP).toDomain()),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_COMPLETED,
@@ -122,7 +123,7 @@ class StatusWorkflowTest {
                 order(
                     OrderStatus.CLOSED,
                     closureReason = ClosureReason.COMPLETED,
-                ),
+                ).toDomain(),
             ),
         )
     }

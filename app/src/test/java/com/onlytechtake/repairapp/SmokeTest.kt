@@ -1,8 +1,8 @@
 package com.onlytechtake.repairapp
 
-import com.onlytechtake.repairapp.data.local.entities.AuditAction
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.models.AuditAction
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

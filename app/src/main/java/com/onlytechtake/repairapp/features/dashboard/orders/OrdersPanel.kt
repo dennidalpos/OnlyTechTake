@@ -1,85 +1,33 @@
 package com.onlytechtake.repairapp.features.dashboard.orders
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
-import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
-import com.onlytechtake.repairapp.core.design.RepairAppShapes
-import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.AppButton
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
-import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.AppDialog
-import com.onlytechtake.repairapp.core.design.components.AppIconButton
-import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
-import com.onlytechtake.repairapp.core.design.components.AppTextField
-import com.onlytechtake.repairapp.core.design.components.AppVerticalDivider
-import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.di.LocalAppContainer
-import com.onlytechtake.repairapp.core.utils.displayName
-import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
-import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
-import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
-import com.onlytechtake.repairapp.features.workspace.queueDefinitions
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 import kotlinx.coroutines.launch
 
@@ -92,361 +40,159 @@ fun OrdersPanel(
     onSetFormDirty: (Boolean) -> Unit = {},
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
-    val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
+    val isExpanded = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Expanded
+    val orderListItems by viewModel.orderListItems.collectAsState()
 
-    val resetSignal by sharedViewModel.resetSignal.collectAsState()
-    LaunchedEffect(resetSignal) {
-        if (resetSignal > 0) {
-            viewModel.setFilter(OrderFilter())
-        }
+    var selectedOrderId by remember { mutableStateOf<String?>(null) }
+    var showFilterDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        // Force refresh when entering the panel if needed
     }
 
-    if (isWide) {
-        var selectedOrderId by rememberSaveable { mutableStateOf<String?>(null) }
-        Row(Modifier.fillMaxSize()) {
-            Box(Modifier.weight(1f)) {
-                OrdersListContent(
-                    viewModel = viewModel,
-                    onOrderClick = { selectedOrderId = it },
-                    onNewOrder = onNewOrder,
-                )
-            }
+    Row(Modifier.fillMaxSize()) {
+        Box(Modifier.weight(1f)) {
+            OrderListContent(
+                orders = orderListItems,
+                onFilterClick = { showFilterDialog = true },
+                onOrderClick = {
+                    if (isExpanded) {
+                        selectedOrderId = it
+                    } else {
+                        onOrderClick(it)
+                    }
+                },
+                onNewOrder = onNewOrder,
+            )
+        }
+
+        if (isExpanded) {
             AppVerticalDivider()
             Box(Modifier.weight(1.5f)) {
                 if (selectedOrderId != null) {
-                    val container = LocalAppContainer.current
-                    val detailViewModel: OrderDetailViewModel =
-                        viewModel(
-                            key = "order_detail_$selectedOrderId",
-                            factory =
-                                OrderDetailViewModel.Factory(
-                                    context = container.context,
-                                    orderId = selectedOrderId!!,
-                                    authRepository = container.authRepository,
-                                    orderRepository = container.orderWorkflowRepository,
-                                    orderMediaRepository = container.orderMediaRepository,
-                                    orderDocumentRepository = container.orderDocumentRepository,
-                                    templateRepository = container.templateRepository,
-                                    generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
-                                    shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                                    diagnosticLogger = container.diagnosticLogger,
-                                    onSetFormDirty = onSetFormDirty,
-                                ),
+                    key(selectedOrderId) {
+                        val orderDetailViewModel: OrderDetailViewModel = hiltViewModel(key = selectedOrderId)
+                        LaunchedEffect(selectedOrderId) {
+                            orderDetailViewModel.setOrderId(selectedOrderId)
+                        }
+                        OrderDetailWorkspace(
+                            viewModel = orderDetailViewModel,
+                            sharedViewModel = sharedViewModel,
+                            showCloseButton = false,
+                            onBack = { selectedOrderId = null },
                         )
-                    OrderDetailWorkspace(
-                        viewModel = detailViewModel,
-                        sharedViewModel = sharedViewModel,
-                    ) { selectedOrderId = null }
+                    }
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        AppEmptyState(
-                            title = stringResource(R.string.orders_select_detail_title),
-                            body = stringResource(R.string.orders_select_detail_hint),
-                        )
-                    }
-                }
-            }
-        }
-    } else {
-        OrdersListContent(viewModel, onOrderClick, onNewOrder)
-    }
-}
-
-@Composable
-private fun OrdersListContent(
-    viewModel: OrdersViewModel,
-    onOrderClick: (String) -> Unit,
-    onNewOrder: () -> Unit,
-) {
-    val orderFilter by viewModel.orderFilter.collectAsState()
-    val orderListItems by viewModel.orderListItems.collectAsState()
-    val context = LocalContext.current
-    var showFilterDialog by rememberSaveable { mutableStateOf(value = false) }
-    val listState = rememberLazyListState()
-    val showScrollToTop by remember {
-        derivedStateOf { listState.firstVisibleItemIndex > 3 }
-    }
-    val scope = rememberCoroutineScope()
-
-    AppScreenContainer(scrollable = false) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            SectionTitle(stringResource(R.string.orders_title))
-            AppButton(
-                text = stringResource(R.string.orders_filter_title),
-                onClick = { showFilterDialog = true },
-                variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Warning else AppButtonVariant.Primary,
-                size = AppButtonSize.Compact,
-                leadingIcon = Icons.Default.FilterList,
-                testTag = RepairAppTestTags.OrdersFilterButton,
-            )
-        }
-
-        Spacer(Modifier.height(RepairAppSpacing.cardGap))
-
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-        ) {
-            AppTextField(
-                modifier =
-                    Modifier
-                        .weight(1f),
-                value = orderFilter.query,
-                onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
-                label = stringResource(R.string.label_search_customer),
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                trailingIcon =
-                    if (orderFilter.query.isNotEmpty()) {
-                        {
-                            AppIconButton(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = stringResource(R.string.content_description_clear),
-                                onClick = { viewModel.setFilter(orderFilter.copy(query = "")) },
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                stringResource(R.string.orders_select_detail_title),
+                                style = MaterialTheme.typography.titleMedium,
                             )
-                        }
-                    } else {
-                        null
-                    },
-                imeAction = ImeAction.Search,
-                singleLine = true,
-            )
-            Surface(
-                onClick = onNewOrder,
-                color = MaterialTheme.colorScheme.primary,
-                shape = RepairAppShapes.button,
-                modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .width(RepairAppSizes.buttonDefault)
-                        .testTag(RepairAppTestTags.HomeNewOrderButton),
-                tonalElevation = 0.dp,
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.home_new_order),
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(RepairAppIconSizes.standard),
-                    )
-                }
-            }
-        }
-
-        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
-
-        Box(modifier = Modifier.weight(1f)) {
-            val listItems = orderListItems
-            if (listItems == null) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    LoadingBrandIndicator(
-                        text = stringResource(R.string.order_loading_detail),
-                    )
-                }
-            } else {
-                LazyColumn(
-                    state = listState,
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .testTag("orders_list")
-                            .imePadding(),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                    contentPadding =
-                        PaddingValues(
-                            top = RepairAppSpacing.compactGap,
-                            bottom = RepairAppSpacing.bottomContentPadding,
-                        ),
-                ) {
-                    if (listItems.isEmpty()) {
-                        item {
-                            AppEmptyState(
-                                title = stringResource(R.string.orders_empty_title),
-                                body = stringResource(R.string.orders_empty_body),
+                            Text(
+                                stringResource(R.string.orders_select_detail_hint),
+                                style = MaterialTheme.typography.bodyMedium,
                             )
-                        }
-                    } else {
-                        items(listItems, key = { it.order.id }) { item ->
-                            val order = item.order
-                            val customerName =
-                                item.customer?.displayName(context)
-                                    ?: stringResource(R.string.orders_customer_unavailable)
-                            StandardCard(
-                                modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
-                                onClick = { onOrderClick(order.id) },
-                            ) {
-                                Column(
-                                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-                                ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.Top,
-                                    ) {
-                                        Column(modifier = Modifier.weight(1f)) {
-                                            Text(
-                                                text =
-                                                    stringResource(
-                                                        R.string.orders_order_reference,
-                                                        order.orderNumber,
-                                                        order.title,
-                                                    ),
-                                                modifier =
-                                                    Modifier.testTag(
-                                                        RepairAppTestTags.orderCardOrderReference(
-                                                            order.id,
-                                                        ),
-                                                    ),
-                                                style = MaterialTheme.typography.titleMedium,
-                                                fontWeight = FontWeight.Bold,
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis,
-                                                softWrap = false,
-                                            )
-                                            Text(
-                                                text =
-                                                    stringResource(
-                                                        R.string.orders_customer_reference,
-                                                        customerName,
-                                                    ),
-                                                modifier =
-                                                    Modifier.testTag(
-                                                        RepairAppTestTags.orderCardCustomerReference(
-                                                            order.id,
-                                                        ),
-                                                    ),
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = MaterialTheme.colorScheme.secondary,
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis,
-                                                softWrap = false,
-                                            )
-                                        }
-                                        Text(
-                                            text = formatUiDateTime(order.updatedAt),
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.outline,
-                                            modifier = Modifier.padding(start = RepairAppSpacing.compactGap),
-                                        )
-                                    }
-
-                                    OrderStatusStepper(
-                                        status = order.status,
-                                        compact = true,
-                                        modifier =
-                                            Modifier.testTag(
-                                                RepairAppTestTags.orderCardStatusStepper(
-                                                    order.id,
-                                                ),
-                                            ),
-                                    ) { step ->
-                                        RepairAppTestTags.orderCardStatusStep(
-                                            order.id,
-                                            step,
-                                        )
-                                    }
-
-                                    Text(
-                                        text =
-                                            stringResource(
-                                                R.string.orders_next_action_label,
-                                                nextActionLabel(LocalContext.current, order),
-                                            ),
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Medium,
-                                    )
-                                }
-                            }
                         }
                     }
                 }
-            }
-
-            if (showScrollToTop) {
-                AppButton(
-                    text = stringResource(R.string.customer_scroll_to_top),
-                    leadingIcon = Icons.Default.KeyboardArrowUp,
-                    modifier =
-                        Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = RepairAppSpacing.screenVertical)
-                            .testTag(RepairAppTestTags.ScrollToTopButton),
-                    onClick = {
-                        scope.launch { listState.animateScrollToItem(0) }
-                    },
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                )
             }
         }
     }
 
     if (showFilterDialog) {
-        AppDialog(
+        val filter by viewModel.orderFilter.collectAsState()
+        OrderFilterDialog(
+            currentFilter = filter,
             onDismissRequest = { showFilterDialog = false },
-            title = stringResource(R.string.orders_filter_title),
-            content = {
-                OrderFilterBar(
-                    filter = orderFilter,
-                    onFilter = viewModel::setFilter,
-                )
-            },
-            confirmButton = {
-                AppButton(
-                    text = stringResource(R.string.action_confirm),
-                    onClick = { showFilterDialog = false },
-                    variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact,
-                )
-            },
+            onFilterSelected = { viewModel.setFilter(it) },
         )
     }
 }
 
 @Composable
-private fun OrderFilterBar(
-    filter: OrderFilter,
-    onFilter: (OrderFilter) -> Unit,
+private fun OrderListContent(
+    orders: List<OrderListItem>?,
+    onFilterClick: () -> Unit,
+    onOrderClick: (String) -> Unit,
+    onNewOrder: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-    ) {
-        AppButton(
-            text = stringResource(R.string.orders_filter_all),
-            onClick = { onFilter(OrderFilter()) },
-            variant = if (!filter.hasActiveFilter()) AppButtonVariant.Primary else AppButtonVariant.Ghost,
-            size = AppButtonSize.Compact,
-            modifier = Modifier.fillMaxWidth(),
-            leadingIcon = Icons.Default.Clear,
-            testTag = RepairAppTestTags.OrdersFilterResetButton,
-        )
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    val showScrollToTop by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 2
+        }
+    }
 
-        Spacer(Modifier.height(RepairAppSpacing.compactGap))
-        SectionTitle(stringResource(R.string.home_queues_title))
-
-        queueDefinitions.forEach { (titleRes, statuses) ->
-            val title = stringResource(titleRes)
-            val isSelected =
-                (filter.statuses == statuses) || ((statuses.size == 1) && (filter.status == statuses.first()))
-            FilterToggleButton(
-                text = title,
-                selected = isSelected,
-                testTag = RepairAppTestTags.orderFilterQueue(title),
+    Scaffold(
+        topBar = {
+            AppTopBar(
+                title = stringResource(R.string.orders_title),
+                actions = {
+                    AppIconButton(
+                        imageVector = Icons.Default.FilterList,
+                        onClick = onFilterClick,
+                        contentDescription = stringResource(R.string.orders_filter_title),
+                        modifier = Modifier.testTag(RepairAppTestTags.OrdersFilterButton),
+                    )
+                },
+            )
+        },
+        floatingActionButton = {
+            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                if (showScrollToTop) {
+                    SmallFloatingActionButton(
+                        onClick = {
+                            scope.launch {
+                                listState.animateScrollToItem(0)
+                            }
+                        },
+                        modifier = Modifier.testTag(RepairAppTestTags.ScrollToTopButton),
+                    ) {
+                        Icon(Icons.Default.KeyboardArrowUp, contentDescription = null)
+                    }
+                }
+                FloatingActionButton(onClick = onNewOrder) {
+                    Icon(Icons.Default.Add, contentDescription = null)
+                }
+            }
+        },
+    ) { paddingValues ->
+        if (orders == null) {
+            Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else if (orders.isEmpty()) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(RepairAppSpacing.screenHorizontal),
+                contentAlignment = Alignment.Center,
             ) {
-                if (isSelected) {
-                    onFilter(filter.copy(status = null, statuses = emptySet()))
-                } else {
-                    onFilter(filter.copy(status = null, statuses = statuses))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        stringResource(R.string.orders_empty_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                    )
+                    Text(
+                        stringResource(R.string.orders_empty_body),
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize().padding(paddingValues).testTag("orders_list"),
+                contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
+            ) {
+                items(orders, key = { it.order.id }) { item ->
+                    OrderRow(item, onClick = { onOrderClick(item.order.id) })
+                    Spacer(Modifier.height(RepairAppSpacing.compactGap))
                 }
             }
         }
@@ -454,41 +200,30 @@ private fun OrderFilterBar(
 }
 
 @Composable
-private fun FilterToggleButton(
-    text: String,
-    selected: Boolean,
-    testTag: String? = null,
+private fun OrderRow(
+    item: OrderListItem,
     onClick: () -> Unit,
 ) {
-    AppButton(
-        text = text,
+    val context = LocalContext.current
+    StandardCard(
         onClick = onClick,
-        variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
-        size = AppButtonSize.Compact,
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .let { if (testTag != null) it.testTag(testTag) else it },
-        selected = selected,
-    )
-}
-
-@Preview(showBackground = true, name = "Light Mode")
-@Preview(
-    showBackground = true,
-    name = "Dark Mode",
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
-)
-@Composable
-private fun OrdersPanelPreview() {
-    com.onlytechtake.repairapp.core.design.RepairAppTheme {
-        Box(Modifier.fillMaxSize()) {
-            OrdersListContent(
-                viewModel = viewModel(),
-                onOrderClick = {},
-            ) {
-                // onNewOrder
+        modifier = Modifier.testTag(RepairAppTestTags.orderCard(item.order.id)),
+    ) {
+        Column(Modifier.padding(RepairAppSpacing.screenHorizontal)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(item.order.orderNumber, style = MaterialTheme.typography.labelLarge)
+                Spacer(Modifier.weight(1f))
+                AppStatusBadge(
+                    text = item.order.status.label(context),
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
             }
+            Text(item.order.title, style = MaterialTheme.typography.titleMedium)
+            Text(
+                item.customer?.displayName ?: stringResource(R.string.orders_customer_unavailable),
+                style = MaterialTheme.typography.bodyMedium,
+            )
         }
     }
 }

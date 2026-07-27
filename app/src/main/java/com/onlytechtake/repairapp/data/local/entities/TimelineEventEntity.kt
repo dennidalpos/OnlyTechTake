@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.models.TimelineEventType
 
 @Entity(
     tableName = "timeline_events",

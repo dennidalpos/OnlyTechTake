@@ -13,7 +13,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppStepper
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
 import com.onlytechtake.repairapp.features.dashboard.neworder.LAST_INTAKE_STEP
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper

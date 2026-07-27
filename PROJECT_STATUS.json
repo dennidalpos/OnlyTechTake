@@ -1,18 +1,13 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.1.0",
-  "status": "Allineamento varianti (Full, Demo, Showcase) completato. Risolto conflitto di dipendenze kotlinx-serialization tramite rigenerazione del lockfile. Aggiunte preview mancanti in AuthGateScreen.kt e armonizzato il comportamento del watermark per Showcase.",
-  "last_updated": "2026-07-05T14:30:00Z",
+  "version": "1.4.0",
+  "status": "Allineamento varianti completato. Risolti errori di compilazione in testDemo e conflitti variabili d'ambiente AGP 9.3.1. Build e Test passati su tutte le varianti (Full, Demo, Showcase).",
+  "last_updated": "2026-07-27T20:15:00Z",
   "backlog": [
     {
-      "priority": "HIGH",
-      "id": "B11",
-      "task": "GOOGLE PLAY: Pubblicazione e Distribuzione. Finalizzare Privacy Policy (URL HTTPS), completare Data Safety e caricare AAB."
-    },
-    {
       "priority": "MEDIUM",
-      "id": "B12",
-      "task": "AUTH REFACTOR: Scomporre AuthGateRoute per separare la logica di inizializzazione dai vari stati della UI (Setup, Login, Wizard)."
+      "id": "B11",
+      "task": "GOOGLE PLAY: Caricamento AAB. Utilizzare DATA_SAFETY_GUIDE.md per compilare il modulo."
     }
   ],
   "completed_recently": []

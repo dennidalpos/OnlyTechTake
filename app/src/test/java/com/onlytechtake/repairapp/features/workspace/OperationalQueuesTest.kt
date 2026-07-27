@@ -1,8 +1,9 @@
 package com.onlytechtake.repairapp.features.workspace
 
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -19,7 +20,7 @@ class OperationalQueuesTest {
                     order("4", OrderStatus.RESULT),
                     order("5", OrderStatus.REPAIRING),
                     order("6", OrderStatus.READY_FOR_PICKUP),
-                ),
+                ).map { it.toDomain() },
             )
 
         assertEquals(listOf(1, 1, 1, 1, 1, 1, 0), queues.map { it.orders.size })

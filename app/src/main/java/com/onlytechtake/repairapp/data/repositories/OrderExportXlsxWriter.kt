@@ -2,11 +2,11 @@ package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.core.utils.formatEuroCentsForExport
 import com.onlytechtake.repairapp.data.local.dao.OrderExportRow
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import net.lingala.zip4j.io.outputstream.ZipOutputStream
 import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.AesKeyStrength

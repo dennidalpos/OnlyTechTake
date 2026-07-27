@@ -3,8 +3,8 @@ package com.onlytechtake.repairapp.data.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import kotlinx.coroutines.flow.Flow
 
 @Dao

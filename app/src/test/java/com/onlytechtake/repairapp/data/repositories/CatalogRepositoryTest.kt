@@ -3,9 +3,9 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.UserPermission
+import com.onlytechtake.repairapp.domain.models.UserRole
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import io.mockk.mockk
 import kotlinx.coroutines.flow.emptyFlow

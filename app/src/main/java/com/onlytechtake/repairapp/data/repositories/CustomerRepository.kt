@@ -6,12 +6,15 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import java.util.UUID
 import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
 
@@ -21,30 +24,28 @@ class CustomerRepository(
     private val repairOrderDao: com.onlytechtake.repairapp.data.local.dao.RepairOrderDao? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : ICustomerRepository {
-    override fun observeRecent(): Flow<List<CustomerEntity>> =
-        customerDao.observeRecent().distinctUntilChanged()
+    override fun observeRecent(): Flow<List<Customer>> = customerDao.observeRecent().distinctUntilChanged().map { list -> list.map { it.toDomain() } }
 
-    override fun observeAll(): Flow<List<CustomerEntity>> =
-        customerDao.observeAll().distinctUntilChanged()
+    override fun observeAll(): Flow<List<Customer>> = customerDao.observeAll().distinctUntilChanged().map { list -> list.map { it.toDomain() } }
 
-    override fun search(query: String): Flow<List<CustomerEntity>> {
+    override fun search(query: String): Flow<List<Customer>> {
         val trimmed = query.trim()
-        if (trimmed.isEmpty()) return customerDao.observeRecent()
+        if (trimmed.isEmpty()) return observeRecent()
         val sanitized =
             trimmed
                 .split(" ")
                 .asSequence()
                 .filter { it.isNotBlank() }
                 .joinToString(" ") { "$it*" }
-        return customerDao.search(sanitized).distinctUntilChanged()
+        return customerDao.search(sanitized).distinctUntilChanged().map { list -> list.map { it.toDomain() } }
     }
 
-    override suspend fun findById(id: String): CustomerEntity? = customerDao.findById(id)
+    override suspend fun findById(id: String): Customer? = customerDao.findById(id)?.toDomain()
 
     override suspend fun save(
         actor: AuthenticatedUser?,
         input: CustomerInput,
-    ): Result<CustomerEntity> =
+    ): Result<Customer> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_CUSTOMERS)
             val now = clockMillis()
@@ -100,7 +101,7 @@ class CustomerRepository(
                     updatedAt = now,
                 )
             customerDao.upsert(entity)
-            entity
+            entity.toDomain()
         }
 
     override suspend fun delete(

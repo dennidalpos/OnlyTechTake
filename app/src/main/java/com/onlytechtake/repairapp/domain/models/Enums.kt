@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.data.local.entities
+package com.onlytechtake.repairapp.domain.models
 
 enum class CustomerType {
     PRIVATE,

@@ -43,12 +43,12 @@ import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
@@ -59,6 +59,7 @@ import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 fun OrderDetailWorkspace(
     viewModel: OrderDetailViewModel,
     sharedViewModel: SharedWorkspaceViewModel,
+    showCloseButton: Boolean = true,
     onBack: () -> Unit,
 ) {
     val message by viewModel.message.collectAsState()
@@ -78,7 +79,7 @@ fun OrderDetailWorkspace(
 
     val actor by viewModel.currentUser.collectAsState()
     val canDeleteOrder =
-        actor?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS) == true
+        actor?.permissions?.contains(UserPermission.EDIT_ALL_ORDERS) == true
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
@@ -462,16 +463,18 @@ fun OrderDetailWorkspace(
                     }
                 }
 
-                item(key = "footer", contentType = "actions") {
-                    AppButton(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(top = RepairAppSpacing.screenHorizontal),
-                        text = stringResource(R.string.action_close),
-                        variant = AppButtonVariant.Secondary,
-                        onClick = onBack,
-                    )
+                if (showCloseButton) {
+                    item(key = "footer", contentType = "actions") {
+                        AppButton(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = RepairAppSpacing.screenHorizontal),
+                            text = stringResource(R.string.action_close),
+                            variant = AppButtonVariant.Secondary,
+                            onClick = onBack,
+                        )
+                    }
                 }
             }
         }
@@ -614,35 +617,9 @@ private fun ExpandableHeader(
 }
 
 @Preview(showBackground = true, name = "Light Mode")
-@Preview(
-    showBackground = true,
-    name = "Dark Mode",
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
-)
 @Composable
 private fun OrderDetailWorkspacePreview() {
-    val context = LocalContext.current
-    val container = FakeAppContainer(context)
     RepairAppTheme {
-        OrderDetailWorkspace(
-            viewModel =
-                viewModel(
-                    factory =
-                        OrderDetailViewModel.Factory(
-                            context = context,
-                            orderId = "PREVIEW-ID",
-                            authRepository = container.authRepository,
-                            orderRepository = container.orderWorkflowRepository,
-                            orderMediaRepository = container.orderMediaRepository,
-                            orderDocumentRepository = container.orderDocumentRepository,
-                            templateRepository = container.templateRepository,
-                            generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
-                            shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                            diagnosticLogger = container.diagnosticLogger,
-                            onSetFormDirty = {},
-                        ),
-                ),
-            sharedViewModel = viewModel(),
-        ) {}
+        // Preview content simplified
     }
 }

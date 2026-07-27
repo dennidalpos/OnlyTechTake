@@ -7,26 +7,26 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult.Complete
 
 class CreateIntakeOrderUseCase(
     private val context: Context,
     private val customerRepository: CustomerRepository,
-    private val orderRepository: OrderWorkflowRepository,
+    private val orderRepository: OrderRepository,
     private val orderMediaRepository: OrderMediaRepository,
     private val signatureRepository: SignatureRepository,
     private val runAtomically: suspend (suspend () -> IntakeOrderCreationResult) -> IntakeOrderCreationResult = { block -> block() },
 ) {
     suspend fun countAllOrders(): Int = orderRepository.countAllOrders()
 
-    fun getDemoLimitErrorMessage(): String =
-        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
+    fun getDemoLimitErrorMessage(): String = DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
 
     suspend fun execute(
         actor: AuthenticatedUser,
@@ -43,8 +43,20 @@ class CreateIntakeOrderUseCase(
                     stagedMediaCount = stagedMedia.size,
                     hasPrivacySignature = privacyAccepted && termsAccepted,
                 )
-            val errors = normalizedInput.validationErrors(context)
-            require(errors.isEmpty()) { errors.joinToString("\n") }
+            val errors = normalizedInput.validationErrors()
+            if (errors.isNotEmpty()) {
+                val messages =
+                    errors.map { error ->
+                        when (error) {
+                            IntakeValidationError.CUSTOMER_REQUIRED -> context.getString(R.string.error_customer_required)
+                            IntakeValidationError.PROBLEM_REQUIRED -> context.getString(R.string.error_problem_required)
+                            IntakeValidationError.CATEGORY_REQUIRED -> context.getString(R.string.error_category_required)
+                            IntakeValidationError.MEDIA_REQUIRED -> context.getString(R.string.error_media_required)
+                            IntakeValidationError.PRIVACY_REQUIRED -> context.getString(R.string.error_privacy_required)
+                        }
+                    }
+                require(false) { messages.joinToString("\n") }
+            }
 
             if ((BuildConfig.IS_DEMO_VERSION) && (BuildConfig.MAX_ORDERS > 0)) {
                 val totalOrders = orderRepository.countAllOrders()
@@ -73,7 +85,7 @@ class CreateIntakeOrderUseCase(
                                 ).getOrThrow()
                                 .id
 
-                    val order =
+                    val order: Order =
                         orderRepository
                             .createOrder(
                                 actor = actor,

@@ -3,21 +3,20 @@ package com.onlytechtake.repairapp.domain.workspace
 import android.content.Context
 import androidx.compose.runtime.Immutable
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
-import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.domain.models.Category
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderMedia
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.Signature
+import com.onlytechtake.repairapp.domain.models.TimelineEvent
+import com.onlytechtake.repairapp.domain.models.TimelineEventType
+import com.onlytechtake.repairapp.domain.models.User
 
 data class OwnerInfo(
     val name: String = "",
@@ -95,26 +94,44 @@ data class IntakeOrderInput(
 )
 
 sealed interface IntakeOrderCreationResult {
-    val order: RepairOrderEntity
+    val order: Order
 
     data class Complete(
-        override val order: RepairOrderEntity,
+        override val order: Order,
     ) : IntakeOrderCreationResult
 }
 
-fun IntakeOrderInput.validationErrors(context: Context): List<String> =
+enum class IntakeValidationError {
+    CUSTOMER_REQUIRED,
+    PROBLEM_REQUIRED,
+    CATEGORY_REQUIRED,
+    MEDIA_REQUIRED,
+    PRIVACY_REQUIRED,
+}
+
+fun IntakeOrderInput.validationErrors(): List<IntakeValidationError> =
     buildList {
         val hasExistingCustomer = !existingCustomerId.isNullOrBlank()
         val hasValidNewCustomer = newCustomer?.isValidForIntake() == true
-        if (!hasExistingCustomer && !hasValidNewCustomer) add(context.getString(R.string.error_customer_required))
-        if (problemSummary.isBlank()) add(context.getString(R.string.error_problem_required))
-        if (categoryId.isNullOrBlank()) add(context.getString(R.string.error_category_required))
-        if (stagedMediaCount <= 0) add(context.getString(R.string.error_media_required))
-        if (!hasPrivacySignature) add(context.getString(R.string.error_privacy_required))
+        if (!hasExistingCustomer && !hasValidNewCustomer) add(IntakeValidationError.CUSTOMER_REQUIRED)
+        if (problemSummary.isBlank()) add(IntakeValidationError.PROBLEM_REQUIRED)
+        if (categoryId.isNullOrBlank()) add(IntakeValidationError.CATEGORY_REQUIRED)
+        if (stagedMediaCount <= 0) add(IntakeValidationError.MEDIA_REQUIRED)
+        if (!hasPrivacySignature) add(IntakeValidationError.PRIVACY_REQUIRED)
     }
 
-fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean =
-    validationErrors(context).isEmpty()
+fun IntakeOrderInput.validationErrors(context: Context): List<String> =
+    validationErrors().map { error ->
+        when (error) {
+            IntakeValidationError.CUSTOMER_REQUIRED -> context.getString(R.string.error_customer_required)
+            IntakeValidationError.PROBLEM_REQUIRED -> context.getString(R.string.error_problem_required)
+            IntakeValidationError.CATEGORY_REQUIRED -> context.getString(R.string.error_category_required)
+            IntakeValidationError.MEDIA_REQUIRED -> context.getString(R.string.error_media_required)
+            IntakeValidationError.PRIVACY_REQUIRED -> context.getString(R.string.error_privacy_required)
+        }
+    }
+
+fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean = validationErrors().isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
@@ -132,8 +149,7 @@ data class OrderFilter(
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,
 ) {
-    fun hasActiveFilter(): Boolean =
-        query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
+    fun hasActiveFilter(): Boolean = query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
 }
 
 @Immutable
@@ -147,21 +163,20 @@ data class OrderAttachmentCounts(
 
 @Immutable
 data class OrderListItem(
-    val order: RepairOrderEntity,
-    val customer: CustomerEntity? = null,
+    val order: Order,
+    val customer: Customer? = null,
     val attachments: OrderAttachmentCounts = OrderAttachmentCounts(),
 )
 
 @Immutable
 data class OrderDetail(
-    val order: RepairOrderEntity,
-    val customer: CustomerEntity?,
-    val category: OrderCategoryEntity?,
-    val assignedUser: UserEntity?,
-    val timeline: List<TimelineEventEntity>,
-    val messages: List<MessageLogEntity>,
-    val media: List<OrderMediaEntity>,
-    val signatures: List<SignatureEntity>,
+    val order: Order,
+    val customer: Customer?,
+    val category: Category?,
+    val assignedUser: User?,
+    val timeline: List<TimelineEvent>,
+    val media: List<OrderMedia>,
+    val signatures: List<Signature>,
 ) {
     val isPaid: Boolean
         get() =
@@ -185,10 +200,14 @@ data class FeedbackInput(
     val closureReason: ClosureReason? = null,
 )
 
-fun FeedbackInput.validationErrors(context: Context): List<String> =
+enum class FeedbackValidationError {
+    REJECT_REASON_REQUIRED,
+}
+
+fun FeedbackInput.validationErrors(): List<FeedbackValidationError> =
     buildList {
         if ((feedback == CustomerFeedbackType.REJECT) && note.isBlank()) {
-            add(context.getString(R.string.error_reject_reason_required))
+            add(FeedbackValidationError.REJECT_REASON_REQUIRED)
         }
     }
 
@@ -198,13 +217,17 @@ data class DiagnosisResultInput(
     val estimateAmountCents: Long? = null,
 )
 
-fun DiagnosisResultInput.validationErrors(context: Context): List<String> =
+enum class DiagnosisValidationError {
+    SUMMARY_REQUIRED,
+    POSITIVE_ESTIMATE_REQUIRED,
+}
+
+fun DiagnosisResultInput.validationErrors(): List<DiagnosisValidationError> =
     buildList {
-        if (summary.isBlank()) add(context.getString(R.string.error_result_summary_required))
+        if (summary.isBlank()) add(DiagnosisValidationError.SUMMARY_REQUIRED)
         if ((diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) && ((estimateAmountCents == null) || (estimateAmountCents <= 0L))) {
-            add(context.getString(R.string.error_positive_estimate_required))
+            add(DiagnosisValidationError.POSITIVE_ESTIMATE_REQUIRED)
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
-    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

@@ -8,8 +8,9 @@ import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.Order
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
@@ -36,7 +37,7 @@ internal class OrderWorkflowQueries(
     fun observeOrders(
         actor: AuthenticatedUser,
         filter: OrderFilter,
-    ): Flow<List<RepairOrderEntity>> =
+    ): Flow<List<Order>> =
         repairOrderDao
             .observeFiltered(
                 status = filter.status,
@@ -44,6 +45,7 @@ internal class OrderWorkflowQueries(
                 useStatuses = filter.statuses.isNotEmpty(),
                 statuses = filter.statuses.toList(),
             ).distinctUntilChanged()
+            .map { list -> list.map { it.toDomain() } }
 
     suspend fun countAllOrders(): Int = repairOrderDao.countAll()
 
@@ -62,8 +64,8 @@ internal class OrderWorkflowQueries(
             .map { list ->
                 list.map { projection ->
                     OrderListItem(
-                        order = projection.order,
-                        customer = projection.customer,
+                        order = projection.order.toDomain(),
+                        customer = projection.customer?.toDomain(),
                         attachments =
                             OrderAttachmentCounts(
                                 images = projection.imagesCount,
@@ -90,8 +92,8 @@ internal class OrderWorkflowQueries(
             .map { list ->
                 list.map { projection ->
                     OrderListItem(
-                        order = projection.order,
-                        customer = projection.customer,
+                        order = projection.order.toDomain(),
+                        customer = projection.customer?.toDomain(),
                         attachments =
                             OrderAttachmentCounts(
                                 images = projection.imagesCount,
@@ -109,7 +111,6 @@ internal class OrderWorkflowQueries(
             if (order == null) return@flatMapLatest flowOf(null)
 
             val timelineFlow = timelineEventDao.observeForOrder(orderId)
-            val messagesFlow = messageLogDao.observeForOrder(orderId)
             val mediaFlow = orderMediaDao.observeForOrder(orderId)
             val signaturesFlow = signatureDao.observeForOrder(orderId)
             val customerFlow = customerDao.observeById(order.customerId)
@@ -121,7 +122,6 @@ internal class OrderWorkflowQueries(
 
             combine(
                 timelineFlow,
-                messagesFlow,
                 mediaFlow,
                 signaturesFlow,
                 customerFlow,
@@ -130,14 +130,13 @@ internal class OrderWorkflowQueries(
             ) { array: Array<Any?> ->
                 @Suppress("UNCHECKED_CAST")
                 OrderDetail(
-                    order = order,
-                    customer = array[4] as com.onlytechtake.repairapp.data.local.entities.CustomerEntity?,
-                    category = array[5] as com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity?,
-                    assignedUser = array[6] as com.onlytechtake.repairapp.data.local.entities.UserEntity?,
-                    timeline = array[0] as List<com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity>,
-                    messages = array[1] as List<com.onlytechtake.repairapp.data.local.entities.MessageLogEntity>,
-                    media = array[2] as List<com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity>,
-                    signatures = array[3] as List<com.onlytechtake.repairapp.data.local.entities.SignatureEntity>,
+                    order = order.toDomain(),
+                    customer = (array[3] as com.onlytechtake.repairapp.data.local.entities.CustomerEntity?)?.toDomain(),
+                    category = (array[4] as com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity?)?.toDomain(),
+                    assignedUser = (array[5] as com.onlytechtake.repairapp.data.local.entities.UserEntity?)?.toDomain(),
+                    timeline = (array[0] as List<com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity>).map { it.toDomain() },
+                    media = (array[1] as List<com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity>).map { it.toDomain() },
+                    signatures = (array[2] as List<com.onlytechtake.repairapp.data.local.entities.SignatureEntity>).map { it.toDomain() },
                 )
             }.distinctUntilChanged()
         }

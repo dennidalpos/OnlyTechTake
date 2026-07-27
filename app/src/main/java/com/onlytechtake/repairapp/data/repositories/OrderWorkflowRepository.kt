@@ -14,11 +14,11 @@ import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
@@ -79,7 +79,7 @@ class OrderWorkflowRepository(
     override fun observeOrders(
         actor: AuthenticatedUser,
         filter: OrderFilter,
-    ): Flow<List<RepairOrderEntity>> = queries.observeOrders(actor, filter)
+    ): Flow<List<Order>> = queries.observeOrders(actor, filter)
 
     override suspend fun countAllOrders(): Int = queries.countAllOrders()
 
@@ -93,13 +93,12 @@ class OrderWorkflowRepository(
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> = queries.observeOrderList(actor, filter)
 
-    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
-        queries.observeOrderDetail(orderId)
+    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> = queries.observeOrderDetail(orderId)
 
     override suspend fun createOrder(
         actor: AuthenticatedUser,
         input: RepairOrderInput,
-    ): Result<RepairOrderEntity> = commands.createOrder(actor, input)
+    ): Result<Order> = commands.createOrder(actor, input)
 
     override suspend fun changeStatus(
         actor: AuthenticatedUser,

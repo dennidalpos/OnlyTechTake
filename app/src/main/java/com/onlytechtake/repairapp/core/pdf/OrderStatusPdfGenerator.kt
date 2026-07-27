@@ -10,10 +10,10 @@ import android.graphics.pdf.PdfDocument
 import androidx.core.graphics.withRotation
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.Signature
+import com.onlytechtake.repairapp.domain.models.TimelineEvent
 import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import java.io.File
 import java.io.FileOutputStream
@@ -22,14 +22,14 @@ import java.util.Date
 import java.util.Locale
 
 data class OrderStatusPdfPayload(
-    val order: RepairOrderEntity,
-    val customer: CustomerEntity,
+    val order: Order,
+    val customer: Customer,
     val categoryPath: String,
     val statusLabel: String,
     val estimateAmountLabel: String?,
     val assignedOperatorName: String?,
-    val timeline: List<TimelineEventEntity>,
-    val signature: SignatureEntity?,
+    val timeline: List<TimelineEvent>,
+    val signature: Signature?,
     val generatedAt: Long,
     val generatedBy: String,
     val ownerInfo: OwnerInfo? = null,

@@ -1,6 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 
 const val LAST_INTAKE_STEP = 5
@@ -25,8 +25,7 @@ fun selectedCategoryAfterClick(
     clickedCategoryId: String,
 ): String? = if (currentCategoryId == clickedCategoryId) null else clickedCategoryId
 
-fun completedStepAfterCategorySelection(completedStep: Int): Int =
-    completedStepAfterEdit(completedStep, 2)
+fun completedStepAfterCategorySelection(completedStep: Int): Int = completedStepAfterEdit(completedStep, 2)
 
 fun calculateIsDirty(draft: QuickIntakeDraft): Boolean =
     (draft.selectedCustomerId != null) ||

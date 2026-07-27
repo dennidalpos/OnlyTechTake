@@ -15,18 +15,24 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.demo.DemoDataSeeder
 import com.onlytechtake.repairapp.demo.LocaleTestRule
 import com.onlytechtake.repairapp.demo.TestUtils
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ScrollToTopTest {
-    @get:Rule
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
     val localeRule = LocaleTestRule("en", "US")
 
-    @get:Rule
+    @get:Rule(order = 2)
     val composeRule = createEmptyComposeRule()
 
     @Before

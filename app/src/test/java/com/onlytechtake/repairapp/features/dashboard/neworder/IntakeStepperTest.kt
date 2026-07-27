@@ -1,8 +1,9 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.categoryPath
 import org.junit.Assert.assertEquals
@@ -68,7 +69,7 @@ class IntakeStepperTest {
                     name = "L$level",
                     description = null,
                     active = true,
-                )
+                ).toDomain()
             }
 
         assertEquals("L0 > L1 > L2 > L3 > L4 > L5", categoryPath(categories, "level-5"))

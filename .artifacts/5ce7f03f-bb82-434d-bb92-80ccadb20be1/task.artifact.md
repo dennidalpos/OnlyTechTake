@@ -1,0 +1,7 @@
+- [x] Fix critical Lint error: Remove `WorkManagerInitializer` from manifest
+- [x] Fix Lint warning: Remove unused import in `RepairAppApplication.kt`
+- [x] Fix Lint warning: Reorder parameters in `AuthNavHost.kt`
+- [x] Update dependencies in `libs.versions.toml`
+- [x] Resolve `AppBundleLocaleChanges` warning in `app/build.gradle.kts`
+- [ ] Clean up unused strings in `strings.xml` (Skipped: used in other flavors or tests)
+- [x] Final verification with `lintFullDebug` and `spotlessCheck`

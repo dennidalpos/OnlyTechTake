@@ -156,7 +156,9 @@ fun DismissibleAppMessageBanner(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     autoDismissMillis: Long =
-        if (com.onlytechtake.repairapp.core.utils.LocaleForcer.forceEnglish) {
+        if (com.onlytechtake.repairapp.core.utils.AppLocaleManager
+                .isForceEnglish()
+        ) {
             0L // Disable auto-dismiss during tests
         } else {
             if (type == BannerType.Error) 8_000L else 4_000L

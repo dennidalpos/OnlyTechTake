@@ -56,7 +56,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.domain.models.Category
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
@@ -89,7 +89,7 @@ fun ColumnScope.CategoriesSettings(
         showEditCard = true
     }
 
-    fun selectCategoryForEdit(category: OrderCategoryEntity) {
+    fun selectCategoryForEdit(category: Category) {
         categoryId = category.id
         categoryParentId = category.parentId
         categoryName = category.name
@@ -186,7 +186,7 @@ fun ColumnScope.CategoriesSettings(
                         (
                             currentParent?.level
                                 ?: -1
-                            ) < 3
+                        ) < 3
                     ) {
                         Surface(
                             onClick = ::loadNewCategory,

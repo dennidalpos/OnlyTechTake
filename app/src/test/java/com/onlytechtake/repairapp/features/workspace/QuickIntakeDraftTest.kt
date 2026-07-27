@@ -1,6 +1,6 @@
 package com.onlytechtake.repairapp.features.workspace
 
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.domain.models.CustomerType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

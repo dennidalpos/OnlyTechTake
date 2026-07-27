@@ -1,10 +1,11 @@
 package com.onlytechtake.repairapp.domain.workspace
 
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
+import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.TimelineEventType
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -60,12 +61,11 @@ class OrderDetailPaymentStateTest {
                     updatedAt = 0L,
                     closedAt = null,
                     closureReason = null,
-                ),
+                ).toDomain(),
             customer = null,
             category = null,
             assignedUser = null,
-            timeline = timeline.toList(),
-            messages = emptyList(),
+            timeline = timeline.toList().map { it.toDomain() },
             media = emptyList(),
             signatures = emptyList(),
         )

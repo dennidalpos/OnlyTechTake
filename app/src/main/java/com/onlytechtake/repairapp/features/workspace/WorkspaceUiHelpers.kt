@@ -36,17 +36,17 @@ import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.labelRes
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.models.Category
+import com.onlytechtake.repairapp.domain.models.OrderMedia
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.Signature
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 
 fun attachmentCounts(
-    media: List<OrderMediaEntity>,
-    signatures: List<SignatureEntity>,
+    media: List<OrderMedia>,
+    signatures: List<Signature>,
 ): OrderAttachmentCounts =
     OrderAttachmentCounts(
         images = media.count { it.isImageAttachment() && !it.isFinalPhoto() },
@@ -79,17 +79,17 @@ fun OrderAttachmentCounts.label(context: Context): String =
         }
     }.joinToString(" – ")
 
-fun OrderMediaEntity.isImageAttachment(): Boolean =
+fun OrderMedia.isImageAttachment(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
         mediaType.equals("FINAL_PHOTO", ignoreCase = true) ||
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)
 
-fun OrderMediaEntity.isVideoAttachment(): Boolean =
+fun OrderMedia.isVideoAttachment(): Boolean =
     mediaType.equals("VIDEO", ignoreCase = true) ||
         mimeType.startsWith("video/", ignoreCase = true)
 
-fun OrderMediaEntity.isFinalPhoto(): Boolean = mediaType.equals("FINAL_PHOTO", ignoreCase = true)
+fun OrderMedia.isFinalPhoto(): Boolean = mediaType.equals("FINAL_PHOTO", ignoreCase = true)
 
 @Composable
 fun statusColors(status: OrderStatus): Pair<Color, Color> {
@@ -158,7 +158,7 @@ fun StagedOrderMedia.isImageAttachment(): Boolean =
         mimeType.startsWith("image/", ignoreCase = true)
 
 fun categoryPath(
-    categories: List<OrderCategoryEntity>,
+    categories: List<Category>,
     categoryId: String?,
 ): String? {
     if (categoryId == null) return null

@@ -43,7 +43,8 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.domain.models.OrderMedia
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
@@ -60,7 +61,7 @@ fun OrderPhotoSection(
 ) {
     var showCameraMode by rememberSaveable { mutableStateOf<CameraCaptureMode?>(null) }
     var selectedImageId by rememberSaveable { mutableStateOf<String?>(null) }
-    var deleteMedia by remember { mutableStateOf<OrderMediaEntity?>(null) }
+    var deleteMedia by remember { mutableStateOf<OrderMedia?>(null) }
     val attachmentLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let { viewModel.importAttachment(it) }
@@ -190,7 +191,7 @@ fun OrderPhotoSection(
                 leadingIcon = Icons.Default.Videocam,
                 enabled =
                     detail.assignedUser?.permissions?.contains(
-                        com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO,
+                        UserPermission.RECORD_VIDEO,
                     ) == true,
                 onClick = { showCameraMode = CameraCaptureMode.VIDEO },
             )
@@ -220,7 +221,7 @@ fun OrderPhotoSection(
                     initialMode = mode,
                     canRecordVideo =
                         detail.assignedUser?.permissions?.contains(
-                            com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO,
+                            UserPermission.RECORD_VIDEO,
                         ) == true,
                     createPhotoFile = { _, number -> viewModel.createPhotoFile(number) },
                     createVideoFile = { number -> viewModel.createVideoFile(number) },

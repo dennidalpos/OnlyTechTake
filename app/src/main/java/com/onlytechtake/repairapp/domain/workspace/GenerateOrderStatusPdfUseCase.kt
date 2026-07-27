@@ -10,19 +10,21 @@ import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
+import com.onlytechtake.repairapp.domain.models.OrderDocument
+import com.onlytechtake.repairapp.domain.models.OrderDocumentType
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.storage.StoragePolicy
 import kotlinx.coroutines.flow.firstOrNull
 import java.util.UUID
 
 class GenerateOrderStatusPdfUseCase(
     private val context: Context,
-    private val workflowRepository: OrderWorkflowRepository,
+    private val workflowRepository: OrderRepository,
     private val catalogRepository: CatalogRepository,
     private val documentRepository: OrderDocumentRepository,
     private val userDao: UserDao,
@@ -35,7 +37,7 @@ class GenerateOrderStatusPdfUseCase(
         orderId: String,
         userId: String,
         includeCustomerSignature: Boolean = true,
-    ): Result<OrderDocumentEntity> =
+    ): Result<OrderDocument> =
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
             runCatching {
                 StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
@@ -105,7 +107,7 @@ class GenerateOrderStatusPdfUseCase(
                     )
 
                 documentRepository.save(entity)
-                entity
+                entity.toDomain()
             }
         }
 }

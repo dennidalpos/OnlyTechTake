@@ -1,28 +1,20 @@
 package com.onlytechtake.repairapp.domain.workspace
 
-import android.content.Context
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import io.mockk.every
-import io.mockk.mockk
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DiagnosisResultInputTest {
-    private val context =
-        mockk<Context> {
-            every { getString(any()) } returns "error"
-        }
-
     @Test
     fun repairableRequiresPositiveEstimate() {
         val missing = DiagnosisResultInput("Display sostituibile", DiagnosisOutcome.REPAIRABLE)
         val zero = missing.copy(estimateAmountCents = 0L)
         val valid = missing.copy(estimateAmountCents = 12_300L)
 
-        assertEquals(listOf("error"), missing.validationErrors(context))
-        assertEquals(listOf("error"), zero.validationErrors(context))
-        assertTrue(valid.validationErrors(context).isEmpty())
+        assertEquals(listOf(DiagnosisValidationError.POSITIVE_ESTIMATE_REQUIRED), missing.validationErrors())
+        assertEquals(listOf(DiagnosisValidationError.POSITIVE_ESTIMATE_REQUIRED), zero.validationErrors())
+        assertTrue(valid.validationErrors().isEmpty())
         assertEquals(12_300L, valid.normalizedEstimateAmountCents())
     }
 
@@ -35,7 +27,7 @@ class DiagnosisResultInputTest {
                 estimateAmountCents = 12_300L,
             )
 
-        assertTrue(input.validationErrors(context).isEmpty())
+        assertTrue(input.validationErrors().isEmpty())
         assertEquals(null, input.normalizedEstimateAmountCents())
     }
 }

@@ -6,20 +6,22 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.Category
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class CatalogRepository(
     private val context: Context,
     private val categoryDao: OrderCategoryDao,
 ) {
-    fun observeCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeAll()
+    fun observeCategories(): Flow<List<Category>> = categoryDao.observeAll().map { list -> list.map { it.toDomain() } }
 
-    fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> =
-        categoryDao.observeActiveCategories()
+    fun observeActiveCategories(): Flow<List<Category>> = categoryDao.observeActiveCategories().map { list -> list.map { it.toDomain() } }
 
     suspend fun getCategoryPath(id: String): String {
         val all = categoryDao.findAll()

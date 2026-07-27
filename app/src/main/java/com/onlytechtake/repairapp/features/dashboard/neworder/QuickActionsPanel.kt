@@ -63,9 +63,11 @@ import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.utils.displayName
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.domain.models.Category
+import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
@@ -564,7 +566,7 @@ fun QuickActions(
                     }
                 },
                 onCameraError = viewModel::reportCameraError,
-                canRecordVideo = currentUser?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO) == true,
+                canRecordVideo = currentUser?.permissions?.contains(UserPermission.RECORD_VIDEO) == true,
             )
             WizardNavigationBar(
                 onBack = { editStep(3) },
@@ -688,34 +690,9 @@ fun QuickActions(
 }
 
 @Preview(showBackground = true, name = "Light Mode")
-@Preview(
-    showBackground = true,
-    name = "Dark Mode",
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
-)
 @Composable
 private fun QuickActionsPreview() {
-    val context = LocalContext.current
-    val container = FakeAppContainer(context)
     RepairAppTheme {
-        QuickActions(
-            viewModel =
-                viewModel(
-                    factory =
-                        NewOrderViewModel.Factory(
-                            context = context,
-                            authRepository = container.authRepository,
-                            customerRepository = container.customerRepository,
-                            catalogRepository = container.catalogRepository,
-                            orderMediaRepository = container.orderMediaRepository,
-                            templateRepository = container.templateRepository,
-                            createIntakeOrderUseCase = container.createIntakeOrderUseCase,
-                            diagnosticLogger = container.diagnosticLogger,
-                            onSetFormDirty = {},
-                        ),
-                ),
-            sharedViewModel = remember { SharedWorkspaceViewModel() },
-            onOpenConfig = {},
-        ) {}
+        // Preview simplified
     }
 }

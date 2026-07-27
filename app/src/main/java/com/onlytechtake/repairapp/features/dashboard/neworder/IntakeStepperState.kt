@@ -1,17 +1,17 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.Category
+import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 
 data class IntakeStepperState(
     private val draft: QuickIntakeDraft,
-    val categories: List<OrderCategoryEntity>,
+    val categories: List<Category>,
     val templates: List<MessageTemplateEntity>,
     private val anchorMappings: Map<TemplateAnchor, String>,
     val currentUser: AuthenticatedUser?,

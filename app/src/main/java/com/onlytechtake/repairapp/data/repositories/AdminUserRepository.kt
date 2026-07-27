@@ -8,15 +8,18 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
-import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.AuditAction
+import com.onlytechtake.repairapp.domain.models.User
+import com.onlytechtake.repairapp.domain.models.UserPermission
+import com.onlytechtake.repairapp.domain.models.UserRole
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class AdminUserRepository(
@@ -26,7 +29,7 @@ class AdminUserRepository(
     private val passwordHasher: PasswordHasher,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
-    fun observeUsers(): Flow<List<UserEntity>> = userDao.observeAll()
+    fun observeUsers(): Flow<List<User>> = userDao.observeAll().map { list -> list.map { it.toDomain() } }
 
     @Suppress("KotlinConstantConditions")
     suspend fun createOperator(

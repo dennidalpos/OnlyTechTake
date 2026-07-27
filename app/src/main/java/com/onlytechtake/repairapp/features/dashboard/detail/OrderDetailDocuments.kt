@@ -31,13 +31,13 @@ import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
+import com.onlytechtake.repairapp.domain.models.OrderDocument
 
 @Composable
 fun OrderDocumentSection(
     isGeneratingPdf: Boolean,
     pdfError: String?,
-    documents: List<OrderDocumentEntity>,
+    documents: List<OrderDocument>,
     hasSignatures: Boolean,
     onGeneratePdf: (Boolean) -> Unit,
     onShareDocument: (String) -> Unit,

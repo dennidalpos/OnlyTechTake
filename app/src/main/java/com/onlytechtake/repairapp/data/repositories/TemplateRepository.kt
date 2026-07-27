@@ -16,19 +16,20 @@ import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
-import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
-import com.onlytechtake.repairapp.data.local.entities.MessageMode
-import com.onlytechtake.repairapp.data.local.entities.MessageStatus
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.AuditAction
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.MessageChannel
+import com.onlytechtake.repairapp.domain.models.MessageMode
+import com.onlytechtake.repairapp.domain.models.MessageStatus
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import kotlinx.coroutines.flow.Flow
@@ -242,8 +243,7 @@ class TemplateRepository(
         return prepareMessage(actor, orderId, templateCode, anchor)
     }
 
-    private suspend fun resolveAnchor(anchor: TemplateAnchor): String =
-        settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
+    private suspend fun resolveAnchor(anchor: TemplateAnchor): String = settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
 
     suspend fun prepareMessage(
         actor: AuthenticatedUser,
@@ -291,7 +291,7 @@ class TemplateRepository(
                                 .ifBlank { context.getString(R.string.signature_default_signer) },
                         "esito_diagnosi" to order.diagnosisOutcome?.label(context).orEmpty(),
                         "importo_preventivo" to order.estimateAmountCents.formatEuroCentsForExport(),
-                        "prossima_azione" to nextActionLabel(context, order),
+                        "prossima_azione" to nextActionLabel(context, order.toDomain()),
                         "motivo_chiusura" to
                             when {
                                 order.closureReason != null -> {
@@ -330,8 +330,7 @@ class TemplateRepository(
         actor: AuthenticatedUser,
         prepared: PreparedMessage,
         body: String,
-    ): Result<Unit> =
-        writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
+    ): Result<Unit> = writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
 
     private suspend fun writeMessage(
         actor: AuthenticatedUser,

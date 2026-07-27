@@ -1,51 +1,41 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SharedWorkspaceViewModel : ViewModel() {
-    private val _message = MutableStateFlow<WorkspaceMessage?>(null)
-    val message = _message.asStateFlow()
+@HiltViewModel
+class SharedWorkspaceViewModel
+    @Inject
+    constructor(
+        private val workspaceManager: WorkspaceManager,
+    ) : ViewModel() {
+        val message = workspaceManager.message
+        val isFormDirty = workspaceManager.isFormDirty
+        val resetSignal = workspaceManager.resetSignal
+        val autoSaveSignal = workspaceManager.autoSaveSignal
 
-    private val _isFormDirty = MutableStateFlow(value = false)
-    val isFormDirty = _isFormDirty.asStateFlow()
+        fun triggerReset() {
+            workspaceManager.triggerReset()
+        }
 
-    private val _resetSignal = MutableStateFlow(value = 0)
-    val resetSignal = _resetSignal.asStateFlow()
+        fun triggerAutoSave() {
+            workspaceManager.triggerAutoSave()
+        }
 
-    private val _autoSaveSignal = MutableStateFlow(value = 0)
-    val autoSaveSignal = _autoSaveSignal.asStateFlow()
+        fun showMessage(
+            text: String,
+            isError: Boolean = false,
+            autoDismissMillis: Long? = null,
+        ) {
+            workspaceManager.showMessage(text, isError, autoDismissMillis)
+        }
 
-    fun triggerReset() {
-        _resetSignal.value += 1
+        fun clearMessage() {
+            workspaceManager.clearMessage()
+        }
+
+        fun setFormDirty(dirty: Boolean) {
+            workspaceManager.setFormDirty(dirty)
+        }
     }
-
-    fun triggerAutoSave() {
-        _autoSaveSignal.value += 1
-    }
-
-    @Suppress("unused")
-    fun showMessage(
-        text: String,
-        isError: Boolean = false,
-        autoDismissMillis: Long? = null,
-    ) {
-        _message.value = WorkspaceMessage(text, isError, autoDismissMillis)
-    }
-
-    fun clearMessage() {
-        _message.value = null
-    }
-
-    fun setFormDirty(dirty: Boolean) {
-        _isFormDirty.value = dirty
-    }
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            SharedWorkspaceViewModel() as T
-    }
-}

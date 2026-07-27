@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 
 enum class OrderStatusAction(
     @param:StringRes val labelRes: Int,
@@ -40,7 +40,7 @@ fun statusTemplateAnchor(status: OrderStatus): TemplateAnchor =
         OrderStatus.CLOSED -> TemplateAnchor.WHATSAPP_COMPLETED
     }
 
-fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
+fun statusTemplateAnchor(order: Order): TemplateAnchor =
     when (order.status) {
         OrderStatus.RESULT -> {
             if (order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
@@ -77,7 +77,7 @@ fun nextActionLabel(
 
 fun nextActionLabel(
     context: Context,
-    order: RepairOrderEntity,
+    order: Order,
 ): String =
     when (order.status) {
         OrderStatus.RESULT -> {
@@ -93,8 +93,7 @@ fun nextActionLabel(
         }
     }
 
-fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean =
-    outcome == DiagnosisOutcome.REPAIRABLE
+fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean = outcome == DiagnosisOutcome.REPAIRABLE
 
 fun canConfirmDiagnosisResult(
     summary: String,

@@ -9,11 +9,9 @@ import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
-import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.LoginAttemptEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
-import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
@@ -21,6 +19,9 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import com.onlytechtake.repairapp.domain.models.AuditAction
+import com.onlytechtake.repairapp.domain.models.UserPermission
+import com.onlytechtake.repairapp.domain.models.UserRole
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -62,7 +63,7 @@ class DefaultAuthRepository(
                             now,
                             timeoutMillis,
                         )
-                        )
+                    )
                 ) {
                     sessionStore.clear()
                     null
@@ -113,9 +114,7 @@ class DefaultAuthRepository(
                         passwordHash = passwordHash.hash,
                         passwordSalt = passwordHash.salt,
                         role = UserRole.ADMIN,
-                        permissions =
-                            com.onlytechtake.repairapp.data.local.entities.UserPermission.entries
-                                .toSet(),
+                        permissions = UserPermission.entries.toSet(),
                         active = true,
                         forcePasswordChange = false,
                         createdAt = now,
@@ -201,9 +200,7 @@ class DefaultAuthRepository(
                 displayName = DemoMode.getAdminDisplayName(context),
                 username = "admin",
                 role = UserRole.ADMIN,
-                permissions =
-                    com.onlytechtake.repairapp.data.local.entities.UserPermission.entries
-                        .toSet(),
+                permissions = UserPermission.entries.toSet(),
                 forcePasswordChange = false,
             )
         sessionStore.setCurrentUser(demoUser, clockMillis())

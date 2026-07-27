@@ -3,15 +3,14 @@ package com.onlytechtake.repairapp.features.dashboard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.onlytechtake.repairapp.core.di.LocalAppContainer
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.models.AppSummary
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanel
 import com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel
@@ -36,25 +35,13 @@ fun DashboardNavHost(
     onAppDataRestored: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val container = LocalAppContainer.current
-    val context = androidx.compose.ui.platform.LocalContext.current
-
     NavHost(
         navController = navController,
         startDestination = DashboardNavRoute.Home,
         modifier = modifier,
     ) {
         composable<DashboardNavRoute.Home> {
-            val homeViewModel: HomeViewModel =
-                viewModel(
-                    factory =
-                        HomeViewModel.Factory(
-                            authRepository = container.authRepository,
-                            orderRepository = container.orderWorkflowRepository,
-                            backupRepository = container.backupRepository,
-                            backupReminderPreferences = container.backupReminderPreferences,
-                        ),
-                )
+            val homeViewModel: HomeViewModel = hiltViewModel()
             HomePanel(
                 summary = summary,
                 viewModel = homeViewModel,
@@ -80,21 +67,7 @@ fun DashboardNavHost(
             }
         }
         composable<DashboardNavRoute.NewOrder> {
-            val newOrderViewModel: NewOrderViewModel =
-                viewModel(
-                    factory =
-                        NewOrderViewModel.Factory(
-                            context = context,
-                            authRepository = container.authRepository,
-                            customerRepository = container.customerRepository,
-                            catalogRepository = container.catalogRepository,
-                            orderMediaRepository = container.orderMediaRepository,
-                            templateRepository = container.templateRepository,
-                            createIntakeOrderUseCase = container.createIntakeOrderUseCase,
-                            diagnosticLogger = container.diagnosticLogger,
-                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
-                        ),
-                )
+            val newOrderViewModel: NewOrderViewModel = hiltViewModel()
             QuickActions(
                 viewModel = newOrderViewModel,
                 sharedViewModel = sharedViewModel,
@@ -109,18 +82,7 @@ fun DashboardNavHost(
             ) { navController.popBackStack() }
         }
         composable<DashboardNavRoute.Customers> {
-            val customersViewModel: CustomersViewModel =
-                viewModel(
-                    factory =
-                        CustomersViewModel.Factory(
-                            context = context,
-                            authRepository = container.authRepository,
-                            customerRepository = container.customerRepository,
-                            orderWorkflowRepository = container.orderWorkflowRepository,
-                            diagnosticLogger = container.diagnosticLogger,
-                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
-                        ),
-                )
+            val customersViewModel: CustomersViewModel = hiltViewModel()
             CustomerPanel(
                 viewModel = customersViewModel,
                 sharedViewModel = sharedViewModel,
@@ -130,18 +92,7 @@ fun DashboardNavHost(
         }
         composable<DashboardNavRoute.Orders> { backStackEntry ->
             val route = backStackEntry.toRoute<DashboardNavRoute.Orders>()
-
-            val ordersViewModel: OrdersViewModel =
-                viewModel(
-                    factory =
-                        OrdersViewModel.Factory(
-                            authRepository = container.authRepository,
-                            orderRepository = container.orderWorkflowRepository,
-                            backupRepository = container.backupRepository,
-                            backupReminderPreferences = container.backupReminderPreferences,
-                            ordersPreferences = container.ordersPreferences,
-                        ),
-                )
+            val ordersViewModel: OrdersViewModel = hiltViewModel()
 
             LaunchedEffect(route) {
                 val status =
@@ -173,58 +124,17 @@ fun DashboardNavHost(
                 onNewOrder = { navController.navigate(DashboardNavRoute.NewOrder) },
             ) { dirty -> sharedViewModel.setFormDirty(dirty) }
         }
-        composable<DashboardNavRoute.OrderDetail> { backStackEntry ->
-            val route = backStackEntry.toRoute<DashboardNavRoute.OrderDetail>()
-            val orderId = route.orderId
-            val orderDetailViewModel: OrderDetailViewModel =
-                viewModel(
-                    key = "order_detail_$orderId",
-                    factory =
-                        OrderDetailViewModel.Factory(
-                            context = context,
-                            orderId = orderId,
-                            authRepository = container.authRepository,
-                            orderRepository = container.orderWorkflowRepository,
-                            orderMediaRepository = container.orderMediaRepository,
-                            orderDocumentRepository = container.orderDocumentRepository,
-                            templateRepository = container.templateRepository,
-                            generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
-                            shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                            diagnosticLogger = container.diagnosticLogger,
-                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
-                        ),
-                )
+        composable<DashboardNavRoute.OrderDetail> {
+            val orderDetailViewModel: OrderDetailViewModel = hiltViewModel()
             OrderDetailWorkspace(
                 viewModel = orderDetailViewModel,
                 sharedViewModel = sharedViewModel,
+                showCloseButton = true,
             ) { navController.popBackStack() }
         }
         composable<DashboardNavRoute.Settings> { backStackEntry ->
             val route = backStackEntry.toRoute<DashboardNavRoute.Settings>()
-            val settingsViewModel: SettingsViewModel =
-                viewModel(
-                    factory =
-                        SettingsViewModel.Factory(
-                            context = context,
-                            authRepository = container.authRepository,
-                            adminUserRepository = container.adminUserRepository,
-                            catalogRepository = container.catalogRepository,
-                            templateRepository = container.templateRepository,
-                            backupRepository = container.backupRepository,
-                            dataResetRepository = container.dataResetRepository,
-                            backupReminderPreferences = container.backupReminderPreferences,
-                            backupService = container.backupService,
-                            ownerPreferences = container.ownerPreferences,
-                            securityPreferences = container.securityPreferences,
-                            uiPreferences = container.uiPreferences,
-                            storageStatsService = container.storageStatsService,
-                            diagnosticLogService = container.diagnosticLogService,
-                            orderFileCleanupService = container.orderFileCleanupService,
-                            diagnosticLogger = container.diagnosticLogger,
-                            database = container.database,
-                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
-                        ),
-                )
+            val settingsViewModel: SettingsViewModel = hiltViewModel()
             SettingsPanel(
                 viewModel = settingsViewModel,
                 isAdmin = isAdmin,
@@ -236,30 +146,7 @@ fun DashboardNavHost(
             )
         }
         composable<DashboardNavRoute.Admin> {
-            val settingsViewModel: SettingsViewModel =
-                viewModel(
-                    factory =
-                        SettingsViewModel.Factory(
-                            context = context,
-                            authRepository = container.authRepository,
-                            adminUserRepository = container.adminUserRepository,
-                            catalogRepository = container.catalogRepository,
-                            templateRepository = container.templateRepository,
-                            backupRepository = container.backupRepository,
-                            dataResetRepository = container.dataResetRepository,
-                            backupReminderPreferences = container.backupReminderPreferences,
-                            backupService = container.backupService,
-                            ownerPreferences = container.ownerPreferences,
-                            securityPreferences = container.securityPreferences,
-                            uiPreferences = container.uiPreferences,
-                            storageStatsService = container.storageStatsService,
-                            diagnosticLogService = container.diagnosticLogService,
-                            orderFileCleanupService = container.orderFileCleanupService,
-                            diagnosticLogger = container.diagnosticLogger,
-                            database = container.database,
-                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
-                        ),
-                )
+            val settingsViewModel: SettingsViewModel = hiltViewModel()
             SettingsPanel(
                 viewModel = settingsViewModel,
                 isAdmin = isAdmin,

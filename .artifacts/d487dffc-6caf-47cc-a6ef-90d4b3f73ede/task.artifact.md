@@ -1,0 +1,4 @@
+- [x] Fix warnings in `OrderFilterDialog.kt` and add Previews
+- [x] Fix warnings in `DashboardScreen.kt`
+- [x] Fix warnings in `AuthGateScreen.kt` (partial fix, remaining is flavor-dependent)
+- [x] Final verification with `analyze_file` and build

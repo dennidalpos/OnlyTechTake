@@ -12,12 +12,12 @@ import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
-import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.MessageChannel
+import com.onlytechtake.repairapp.domain.models.UserPermission
+import com.onlytechtake.repairapp.domain.models.UserRole
 import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -96,8 +96,8 @@ class TemplateRepositoryTest {
                     customerId = customerId,
                     title = "Phone Repair",
                     categoryId = "cat-1",
-                    status = com.onlytechtake.repairapp.data.local.entities.OrderStatus.OPEN,
-                    priority = com.onlytechtake.repairapp.data.local.entities.OrderPriority.NORMAL,
+                    status = com.onlytechtake.repairapp.domain.models.OrderStatus.OPEN,
+                    priority = com.onlytechtake.repairapp.domain.models.OrderPriority.NORMAL,
                     createdByUserId = "u1",
                     assignedToUserId = null,
                     description = "",
@@ -120,7 +120,7 @@ class TemplateRepositoryTest {
                     id = customerId,
                     firstName = "John",
                     lastName = "Doe",
-                    type = com.onlytechtake.repairapp.data.local.entities.CustomerType.PRIVATE,
+                    type = com.onlytechtake.repairapp.domain.models.CustomerType.PRIVATE,
                     phone = "123456",
                     companyName = null,
                     vatNumber = null,

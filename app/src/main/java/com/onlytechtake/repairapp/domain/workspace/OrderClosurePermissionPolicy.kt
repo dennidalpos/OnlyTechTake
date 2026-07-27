@@ -1,9 +1,9 @@
 package com.onlytechtake.repairapp.domain.workspace
 
 import com.onlytechtake.repairapp.core.permissions.PermissionService
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.UserPermission
 
 object OrderClosurePermissionPolicy {
     fun requireClosePermissionIfNeeded(

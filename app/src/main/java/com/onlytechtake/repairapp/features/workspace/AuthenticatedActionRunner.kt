@@ -3,7 +3,6 @@ package com.onlytechtake.repairapp.features.workspace
 import android.content.Context
 import androidx.annotation.StringRes
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.utils.LocaleHelper
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import kotlinx.coroutines.CoroutineDispatcher
@@ -50,7 +49,7 @@ internal class AuthenticatedActionRunner(
                     val message =
                         (result as? String)
                             ?: successMessage
-                            ?: successMessageRes?.let { getLocalizedContext(context).getString(it) }
+                            ?: successMessageRes?.let { context.getString(it) }
                     message?.let { showMessage(it, false, autoDismissMillis) }
                     onSuccess()
                 },
@@ -62,14 +61,11 @@ internal class AuthenticatedActionRunner(
                     error,
                 )
                 showMessage(
-                    error.message ?: getLocalizedContext(context).getString(R.string.error_unknown),
+                    error.message ?: context.getString(R.string.error_unknown),
                     true,
                     autoDismissMillis,
                 )
             }
         }
     }
-
-    private fun getLocalizedContext(baseContext: Context): Context =
-        LocaleHelper.applyLocale(baseContext)
 }

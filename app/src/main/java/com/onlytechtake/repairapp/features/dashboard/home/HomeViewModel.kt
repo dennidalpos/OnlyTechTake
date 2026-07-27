@@ -14,6 +14,7 @@ import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.workspace.OperationalQueue
 import com.onlytechtake.repairapp.features.workspace.buildOperationalQueues
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,72 +24,60 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class HomeViewModel(
-    authRepository: AuthRepository,
-    orderRepository: OrderRepository,
-    private val backupRepository: BackupRepository,
-    backupReminderPreferences: BackupReminderPreferences,
-) : ViewModel() {
-    val currentUser = authRepository.currentUser
+@HiltViewModel
+class HomeViewModel
+    @Inject
+    constructor(
+        authRepository: AuthRepository,
+        orderRepository: OrderRepository,
+        private val backupRepository: BackupRepository,
+        backupReminderPreferences: BackupReminderPreferences,
+    ) : ViewModel() {
+        val currentUser = authRepository.currentUser
 
-    val operationalQueues: StateFlow<List<OperationalQueue>?> =
-        currentUser
-            .flatMapLatest { user ->
-                if (user == null) {
-                    flowOf(emptyList())
-                } else {
-                    orderRepository.observeOrders(
-                        user,
-                        OrderFilter(),
-                    )
-                }
-            }.map(::buildOperationalQueues)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+        val operationalQueues: StateFlow<List<OperationalQueue>?> =
+            currentUser
+                .flatMapLatest { user ->
+                    if (user == null) {
+                        flowOf(emptyList())
+                    } else {
+                        orderRepository.observeOrders(
+                            user,
+                            OrderFilter(),
+                        )
+                    }
+                }.map(::buildOperationalQueues)
+                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    val backupReminderSettings: StateFlow<BackupReminderSettings> =
-        backupReminderPreferences.settings
-            .stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5_000),
-                BackupReminderSettings(),
-            )
-
-    @Suppress("unused")
-    val isBackupReminderDue: StateFlow<Boolean> =
-        combine(
-            currentUser,
-            backupReminderSettings,
-        ) { user, settings ->
-            PermissionService.isAdmin(user) &&
-                BackupReminderPolicy.shouldShowReminder(
-                    settings,
-                    System.currentTimeMillis(),
+        val backupReminderSettings: StateFlow<BackupReminderSettings> =
+            backupReminderPreferences.settings
+                .stateIn(
+                    viewModelScope,
+                    SharingStarted.WhileSubscribed(5_000),
+                    BackupReminderSettings(),
                 )
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
 
-    @Suppress("unused")
-    fun exportCompleteBackup(uri: Uri) {
-        val user = currentUser.value ?: return
-        viewModelScope.launch {
-            backupRepository.exportCompleteBackup(user, uri)
+        @Suppress("unused")
+        val isBackupReminderDue: StateFlow<Boolean> =
+            combine(
+                currentUser,
+                backupReminderSettings,
+            ) { user, settings ->
+                PermissionService.isAdmin(user) &&
+                    BackupReminderPolicy.shouldShowReminder(
+                        settings,
+                        System.currentTimeMillis(),
+                    )
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
+
+        @Suppress("unused")
+        fun exportCompleteBackup(uri: Uri) {
+            val user = currentUser.value ?: return
+            viewModelScope.launch {
+                backupRepository.exportCompleteBackup(user, uri)
+            }
         }
     }
-
-    class Factory(
-        private val authRepository: AuthRepository,
-        private val orderRepository: OrderRepository,
-        private val backupRepository: BackupRepository,
-        private val backupReminderPreferences: BackupReminderPreferences,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            HomeViewModel(
-                authRepository,
-                orderRepository,
-                backupRepository,
-                backupReminderPreferences,
-            ) as T
-    }
-}

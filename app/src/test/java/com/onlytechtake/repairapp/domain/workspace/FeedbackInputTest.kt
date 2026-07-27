@@ -1,36 +1,28 @@
 package com.onlytechtake.repairapp.domain.workspace
 
-import android.content.Context
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import io.mockk.every
-import io.mockk.mockk
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class FeedbackInputTest {
-    private val context =
-        mockk<Context> {
-            every { getString(any()) } returns "error"
-        }
-
     @Test
     fun acceptedQuoteDoesNotRequireNote() {
-        val errors = FeedbackInput(CustomerFeedbackType.ACCEPT).validationErrors(context)
+        val errors = FeedbackInput(CustomerFeedbackType.ACCEPT).validationErrors()
 
         assertTrue(errors.isEmpty())
     }
 
     @Test
     fun rejectedQuoteRequiresManualReason() {
-        val errors = FeedbackInput(CustomerFeedbackType.REJECT).validationErrors(context)
+        val errors = FeedbackInput(CustomerFeedbackType.REJECT).validationErrors()
 
-        assertEquals(listOf("error"), errors)
+        assertEquals(listOf(FeedbackValidationError.REJECT_REASON_REQUIRED), errors)
         assertTrue(
             FeedbackInput(
                 CustomerFeedbackType.REJECT,
                 note = "Troppo caro",
-            ).validationErrors(context).isEmpty(),
+            ).validationErrors().isEmpty(),
         )
     }
 }

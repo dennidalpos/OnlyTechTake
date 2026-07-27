@@ -4,12 +4,13 @@ import android.content.Context
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
@@ -39,8 +40,8 @@ class WorkspaceUiHelpersTest {
 
     @Test
     fun imageRecognitionUsesMediaTypeAndMimeType() {
-        assertTrue(media("PHOTO", "application/octet-stream").isImageAttachment())
-        assertTrue(media("DOCUMENT", "image/png").isImageAttachment())
+        assertTrue(media("PHOTO", "application/octet-stream").toDomain().isImageAttachment())
+        assertTrue(media("DOCUMENT", "image/png").toDomain().isImageAttachment())
     }
 
     @Test
@@ -52,8 +53,8 @@ class WorkspaceUiHelpersTest {
                         media("PHOTO", "image/jpeg"),
                         media("DOCUMENT", "application/pdf"),
                         media("FINAL_PHOTO", "image/jpeg"),
-                    ),
-                signatures = listOf(signature()),
+                    ).map { it.toDomain() },
+                signatures = listOf(signature()).map { it.toDomain() },
             )
 
         assertEquals(1, counts.images)
@@ -69,7 +70,7 @@ class WorkspaceUiHelpersTest {
 
     @Test
     fun finalPhotosAreImageHistoryButNotIntakePhotos() {
-        val media = media("FINAL_PHOTO", "image/jpeg")
+        val media = media("FINAL_PHOTO", "image/jpeg").toDomain()
 
         assertTrue(media.isImageAttachment())
         assertTrue(media.isFinalPhoto())
@@ -95,11 +96,11 @@ class WorkspaceUiHelpersTest {
         assertEquals("label", nextActionLabel(context, OrderStatus.CLOSED))
         assertEquals(
             "label",
-            nextActionLabel(context, order(DiagnosisOutcome.REPAIRABLE)),
+            nextActionLabel(context, order(DiagnosisOutcome.REPAIRABLE).toDomain()),
         )
         assertEquals(
             "label",
-            nextActionLabel(context, order(DiagnosisOutcome.NOT_REPAIRABLE)),
+            nextActionLabel(context, order(DiagnosisOutcome.NOT_REPAIRABLE).toDomain()),
         )
     }
 

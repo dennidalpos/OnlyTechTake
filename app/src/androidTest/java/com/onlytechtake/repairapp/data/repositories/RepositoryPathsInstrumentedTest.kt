@@ -14,19 +14,11 @@ import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
-import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
@@ -35,6 +27,14 @@ import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.MessageChannel
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.UserRole
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
@@ -342,9 +342,10 @@ class RepositoryPathsInstrumentedTest {
                         actor,
                         RepairOrderInput(CUSTOMER_ID, "Riparabile", CATEGORY_ID),
                     ).getOrThrow()
+            val repairableEntity = database.repairOrderDao().findById(repairable.id)!!
             database
                 .repairOrderDao()
-                .upsert(repairable.copy(diagnosisOutcome = DiagnosisOutcome.REPAIRABLE))
+                .upsert(repairableEntity.copy(diagnosisOutcome = DiagnosisOutcome.REPAIRABLE))
 
             val notRepairable =
                 workflow
@@ -352,9 +353,10 @@ class RepositoryPathsInstrumentedTest {
                         actor,
                         RepairOrderInput(CUSTOMER_ID, "Non riparabile", CATEGORY_ID),
                     ).getOrThrow()
+            val notRepairableEntity = database.repairOrderDao().findById(notRepairable.id)!!
             database
                 .repairOrderDao()
-                .upsert(notRepairable.copy(diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE))
+                .upsert(notRepairableEntity.copy(diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE))
 
             val missing =
                 workflow
@@ -1123,7 +1125,7 @@ class RepositoryPathsInstrumentedTest {
                 ).getOrThrow()
         repository.changeStatus(actor, order.id, OrderStatus.IN_PROGRESS).getOrThrow()
         repository.changeStatus(actor, order.id, OrderStatus.DIAGNOSIS).getOrThrow()
-        return order
+        return database.repairOrderDao().findById(order.id)!!
     }
 
     private fun clearAppFiles() {
@@ -1132,8 +1134,7 @@ class RepositoryPathsInstrumentedTest {
         }
     }
 
-    private fun File.walkFiles(): Sequence<File> =
-        if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
+    private fun File.walkFiles(): Sequence<File> = if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
 
     private fun File.unzipTextEntries(): Map<String, String> {
         val entries = mutableMapOf<String, String>()

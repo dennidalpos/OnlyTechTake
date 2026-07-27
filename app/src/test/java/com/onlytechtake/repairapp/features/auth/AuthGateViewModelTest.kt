@@ -45,7 +45,7 @@ class AuthGateViewModelTest {
                     authRepository = fakeRepo,
                     ownerPreferences = mockk(relaxed = true),
                     backupRepository = mockk(relaxed = true),
-                    dataSeeder = mockk(relaxed = true),
+                    showcaseManager = mockk(relaxed = true),
                 )
 
             // Logout resets the form state including loading

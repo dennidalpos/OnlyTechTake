@@ -1,56 +1,70 @@
 package com.onlytechtake.repairapp.navigation
 
+import android.app.Activity
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.onlytechtake.repairapp.core.di.AppContainer
-import com.onlytechtake.repairapp.core.di.DefaultAppContainer
-import com.onlytechtake.repairapp.core.di.LocalAppContainer
-import com.onlytechtake.repairapp.features.auth.AuthGateRoute
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.features.auth.AuthGateViewModel
+import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
+import kotlinx.serialization.Serializable
 
-private object Routes {
-    const val AUTH_GATE = "auth_gate"
+@Serializable sealed interface MainRoute {
+    @Serializable data object Auth : MainRoute
+
+    @Serializable data object Dashboard : MainRoute
 }
 
 @Composable
 fun RepairAppNavHost(
     windowSizeClass: WindowSizeClass,
-    appContainer: AppContainer,
     disableAutoSeed: Boolean = false,
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
-    var appInstanceKey by remember { mutableIntStateOf(0) }
-    val currentAppContainer =
-        remember(context, appInstanceKey) {
-            if (appInstanceKey == 0) appContainer else DefaultAppContainer(context.applicationContext)
-        }
-    val recreateAppContainer = {
-        currentAppContainer.close()
-        appInstanceKey += 1
+    val authViewModel: AuthGateViewModel = hiltViewModel()
+
+    val onAppDataRestored = {
+        RepairAppDatabase.closeInstance()
+        (context as? Activity)?.recreate()
+        Unit
     }
 
     CompositionLocalProvider(
-        LocalAppContainer provides currentAppContainer,
         LocalWindowSizeClass provides windowSizeClass,
     ) {
         NavHost(
             navController = navController,
-            startDestination = Routes.AUTH_GATE,
+            startDestination = MainRoute.Auth,
         ) {
-            composable(Routes.AUTH_GATE) {
-                AuthGateRoute(
-                    appInstanceKey = appInstanceKey,
-                    onAppDataRestored = recreateAppContainer,
+            composable<MainRoute.Auth> {
+                AuthNavHost(
+                    onAuthenticated = {
+                        navController.navigate(MainRoute.Dashboard) {
+                            popUpTo(MainRoute.Auth) { inclusive = true }
+                        }
+                    },
+                    onAppDataRestored = onAppDataRestored,
+                    onExit = { (context as? Activity)?.finish() },
                     disableAutoSeed = disableAutoSeed,
+                )
+            }
+            composable<MainRoute.Dashboard> {
+                DashboardRoute(
+                    appInstanceKey = 0,
+                    onLogout = {
+                        authViewModel.logout()
+                        navController.navigate(MainRoute.Auth) {
+                            popUpTo(MainRoute.Dashboard) { inclusive = true }
+                        }
+                    },
+                    onAppDataRestored = onAppDataRestored,
                 )
             }
         }
@@ -58,6 +72,6 @@ fun RepairAppNavHost(
 }
 
 val LocalWindowSizeClass =
-    androidx.compose.runtime.staticCompositionLocalOf<WindowSizeClass> {
+    staticCompositionLocalOf<WindowSizeClass> {
         error("No WindowSizeClass provided")
     }

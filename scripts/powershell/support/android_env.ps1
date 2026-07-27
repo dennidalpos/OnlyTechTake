@@ -190,6 +190,11 @@ function Add-ToProcessPath {
 }
 
 function Set-AndroidCliEnvironment {
+    # AGP 9.3.1+ is picky about having both ANDROID_USER_HOME and ANDROID_PREFS_ROOT set.
+    # Unset the deprecated ones to avoid "Several environment variables... contain different paths" error.
+    $env:ANDROID_PREFS_ROOT = $null
+    $env:ANDROID_SDK_HOME = $null
+
     $jdk = Resolve-AndroidJdk
     if ($null -ne $jdk) {
         $env:JAVA_HOME = $jdk.Path

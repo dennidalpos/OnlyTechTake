@@ -78,9 +78,9 @@ import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBa
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.labelRes
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
@@ -102,7 +102,7 @@ fun CustomerPanel(
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
     val message by viewModel.message.collectAsState()
 
-    var selectedCustomer by remember { mutableStateOf<CustomerEntity?>(null) }
+    var selectedCustomer by remember { mutableStateOf<Customer?>(null) }
     var showForm by rememberSaveable { mutableStateOf(value = false) }
     var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
     var confirmSave by rememberSaveable { mutableStateOf(value = false) }
@@ -174,7 +174,7 @@ fun CustomerPanel(
         }
     }
 
-    fun editCustomer(customer: CustomerEntity) {
+    fun editCustomer(customer: Customer) {
         editingCustomerId = customer.id
         isBusiness = customer.type == CustomerType.BUSINESS
         firstName = customer.firstName.orEmpty()
@@ -492,7 +492,7 @@ fun CustomerPanel(
 @Composable
 private fun CustomerListContent(
     viewModel: CustomersViewModel,
-    onCustomerClick: (CustomerEntity) -> Unit,
+    onCustomerClick: (Customer) -> Unit,
     onNewCustomer: () -> Unit,
 ) {
     val customers by viewModel.customerSuggestions.collectAsState()
@@ -783,7 +783,7 @@ private fun CustomerForm(
 
 @Composable
 private fun CustomerDetailContent(
-    customer: CustomerEntity,
+    customer: Customer,
     viewModel: CustomersViewModel,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
@@ -912,7 +912,7 @@ private fun CustomerDetailContent(
 
 @Composable
 private fun CustomerCard(
-    customer: CustomerEntity,
+    customer: Customer,
     onClick: () -> Unit,
 ) {
     StandardCard(
@@ -993,7 +993,7 @@ private fun CustomerPanelFullPreview() {
 private fun CustomerPanelPreview() {
     RepairAppTheme {
         val mockCustomer =
-            CustomerEntity(
+            Customer(
                 id = "1",
                 type = CustomerType.PRIVATE,
                 firstName = "John",

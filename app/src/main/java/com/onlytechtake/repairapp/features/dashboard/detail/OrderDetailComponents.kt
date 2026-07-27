@@ -42,8 +42,8 @@ import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.TimelineEvent
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
@@ -104,7 +104,7 @@ fun OrderHeader(
                             ?.split(">")
                             ?.lastOrNull()
                             ?.trim()
-                        ?: stringResource(R.string.orders_category_unavailable),
+                            ?: stringResource(R.string.orders_category_unavailable),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -394,8 +394,7 @@ fun QuoteDecisionRow(
                 .background(
                     if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
                     RepairAppShapes.compactButton,
-                )
-                .padding(
+                ).padding(
                     horizontal = RepairAppSpacing.compactGap,
                     vertical = RepairAppSpacing.compactGap,
                 ),
@@ -430,7 +429,7 @@ fun InternalNotesPanel(
 
 @Composable
 fun OrderTimelineSection(
-    timeline: List<TimelineEventEntity>,
+    timeline: List<TimelineEvent>,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),

@@ -1,10 +1,11 @@
 package com.onlytechtake.repairapp.domain.workspace
 
 import android.content.Context
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
@@ -19,15 +20,15 @@ class IntakeOrderInputTest {
 
     @Test
     fun validationRequiresCustomerProblemMediaAndSignature() {
-        val errors = IntakeOrderInput().validationErrors(context)
+        val errors = IntakeOrderInput().validationErrors()
 
         assertEquals(
             listOf(
-                "error",
-                "error",
-                "error",
-                "error",
-                "error",
+                IntakeValidationError.CUSTOMER_REQUIRED,
+                IntakeValidationError.PROBLEM_REQUIRED,
+                IntakeValidationError.CATEGORY_REQUIRED,
+                IntakeValidationError.MEDIA_REQUIRED,
+                IntakeValidationError.PRIVACY_REQUIRED,
             ),
             errors,
         )
@@ -63,7 +64,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertTrue(input.validationErrors(context).isEmpty())
+        assertTrue(input.validationErrors().isEmpty())
     }
 
     @Test
@@ -85,7 +86,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertEquals(listOf("error"), input.validationErrors(context))
+        assertEquals(listOf(IntakeValidationError.CUSTOMER_REQUIRED), input.validationErrors())
     }
 
     @Test
@@ -104,7 +105,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertEquals(listOf("error"), input.validationErrors(context))
+        assertEquals(listOf(IntakeValidationError.CUSTOMER_REQUIRED), input.validationErrors())
     }
 
     @Test
@@ -123,7 +124,7 @@ class IntakeOrderInputTest {
 
     @Test
     fun completeResultCarriesCreatedOrder() {
-        val result = IntakeOrderCreationResult.Complete(order = testOrder())
+        val result = IntakeOrderCreationResult.Complete(order = testOrder().toDomain())
 
         assertEquals("2026-0001", result.order.orderNumber)
     }

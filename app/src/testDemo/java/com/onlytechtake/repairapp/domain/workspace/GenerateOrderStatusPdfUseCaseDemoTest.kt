@@ -8,26 +8,28 @@ import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfPayload
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfWriter
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.OrderDocument
+import com.onlytechtake.repairapp.domain.models.OrderPriority
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.UserPermission
+import com.onlytechtake.repairapp.domain.models.UserRole
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -51,8 +53,8 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
 
     @Test
     fun demoFlavorAddsWatermarkToGeneratedStatusPdfPayload() =
-        runBlocking {
-            assertTrue(BuildConfig.IS_DEMO_VERSION)
+        runTest {
+            assertTrue("Expected IS_DEMO_VERSION to be true", BuildConfig.IS_DEMO_VERSION)
 
             val context = mockk<Context>()
             every { context.filesDir } returns testRoot
@@ -95,7 +97,7 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
                 ).getOrThrow()
 
             assertEquals("VERSIONE DEMO", pdfGenerator.capturedPayload?.watermarkText)
-            assertEquals(document, documentRepository.saved.single())
+            assertEquals(document, documentRepository.saved.single().toDomain())
             assertTrue(File(document.localPath).exists())
         }
 
@@ -115,7 +117,7 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
                     description = "Avvio lento",
                     createdAt = 1L,
                     updatedAt = 1L,
-                ),
+                ).toDomain(),
             customer =
                 CustomerEntity(
                     id = "customer-1",
@@ -131,11 +133,10 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
                     notes = null,
                     createdAt = 1L,
                     updatedAt = 1L,
-                ),
+                ).toDomain(),
             category = null,
             assignedUser = null,
             timeline = emptyList(),
-            messages = emptyList(),
             media = emptyList(),
             signatures = emptyList(),
         )
@@ -173,11 +174,11 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
 
     private class FakeOrderDocumentRepository : OrderDocumentRepository {
         val saved = mutableListOf<OrderDocumentEntity>()
-        private val documentsFlow = MutableStateFlow<List<OrderDocumentEntity>>(emptyList())
+        private val documentsFlow = MutableStateFlow<List<OrderDocument>>(emptyList())
 
         override suspend fun save(document: OrderDocumentEntity) {
             saved += document
-            documentsFlow.value = saved.toList()
+            documentsFlow.value = saved.map { it.toDomain() }
         }
 
         override suspend fun markShared(
@@ -185,11 +186,9 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
             sharedAt: Long,
         ) = Unit
 
-        override suspend fun findById(id: String): OrderDocumentEntity? =
-            saved.firstOrNull { it.id == id }
+        override suspend fun findById(id: String): OrderDocument? = saved.firstOrNull { it.id == id }?.toDomain()
 
-        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
-            documentsFlow
+        override fun observeByOrder(orderId: String): Flow<List<OrderDocument>> = documentsFlow
 
         override suspend fun delete(documentId: String): Result<Unit> = Result.success(Unit)
     }

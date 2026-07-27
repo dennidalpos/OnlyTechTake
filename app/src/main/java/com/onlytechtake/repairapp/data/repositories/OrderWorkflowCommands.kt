@@ -13,18 +13,23 @@ import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.mappers.toDomain
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.AuditAction
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.CustomerActionStatus
+import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.workspace.DiagnosisValidationError
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
+import com.onlytechtake.repairapp.domain.workspace.FeedbackValidationError
+import com.onlytechtake.repairapp.domain.workspace.IntakeValidationError
 import com.onlytechtake.repairapp.domain.workspace.OrderClosurePermissionPolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
@@ -46,7 +51,7 @@ internal class OrderWorkflowCommands(
     suspend fun createOrder(
         actor: AuthenticatedUser,
         input: RepairOrderInput,
-    ): Result<RepairOrderEntity> =
+    ): Result<Order> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.CREATE_ORDERS)
             database.withTransaction {
@@ -88,7 +93,7 @@ internal class OrderWorkflowCommands(
 
                 repairOrderDao.upsert(order)
                 eventWriter.orderCreated(order.id, actor.id, now)
-                order
+                order.toDomain()
             }
         }
 
@@ -154,8 +159,17 @@ internal class OrderWorkflowCommands(
     ): Result<Unit> =
         runCatching {
             database.withTransaction {
-                val errors = input.validationErrors(context)
-                require(errors.isEmpty()) { errors.joinToString("\n") }
+                val errors = input.validationErrors()
+                if (errors.isNotEmpty()) {
+                    val messages =
+                        errors.map { error ->
+                            when (error) {
+                                DiagnosisValidationError.SUMMARY_REQUIRED -> context.getString(R.string.error_result_summary_required)
+                                DiagnosisValidationError.POSITIVE_ESTIMATE_REQUIRED -> context.getString(R.string.error_positive_estimate_required)
+                            }
+                        }
+                    require(false) { messages.joinToString("\n") }
+                }
                 val order = requireWritableOrder(actor, orderId)
                 require((order.status == OrderStatus.DIAGNOSIS) || (order.status == OrderStatus.RESULT)) {
                     context.getString(R.string.error_diagnosis_only_during)
@@ -265,8 +279,16 @@ internal class OrderWorkflowCommands(
     ): Result<Unit> =
         runCatching {
             database.withTransaction {
-                val errors = input.validationErrors(context)
-                require(errors.isEmpty()) { errors.joinToString("\n") }
+                val errors = input.validationErrors()
+                if (errors.isNotEmpty()) {
+                    val messages =
+                        errors.map { error ->
+                            when (error) {
+                                FeedbackValidationError.REJECT_REASON_REQUIRED -> context.getString(R.string.error_reject_reason_required)
+                            }
+                        }
+                    require(false) { messages.joinToString("\n") }
+                }
                 val order = requireWritableOrder(actor, orderId)
                 require(order.status == OrderStatus.RESULT) {
                     context.getString(R.string.error_feedback_requires_result)
@@ -274,7 +296,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                        -> {
+                    -> {
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             context.getString(R.string.error_feedback_only_repairable)
                         }

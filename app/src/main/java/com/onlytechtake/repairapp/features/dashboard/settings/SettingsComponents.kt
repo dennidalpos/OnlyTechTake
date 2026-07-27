@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.repairColors
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.domain.models.Category
 
 @Composable
 internal fun LevelDot(level: Int) {
@@ -56,12 +56,12 @@ internal fun colorForLevel(level: Int): Color =
 
 @Composable
 internal fun CategoryBreadcrumb(
-    categories: List<OrderCategoryEntity>,
+    categories: List<Category>,
     parentId: String?,
 ) {
     if (parentId == null) return
     val byId = categories.associateBy { it.id }
-    val nodes = mutableListOf<OrderCategoryEntity>()
+    val nodes = mutableListOf<Category>()
     var current = parentId.let(byId::get)
     while (current != null) {
         nodes.add(0, current)

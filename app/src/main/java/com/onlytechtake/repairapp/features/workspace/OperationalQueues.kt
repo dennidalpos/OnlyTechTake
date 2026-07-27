@@ -2,14 +2,14 @@ package com.onlytechtake.repairapp.features.workspace
 
 import androidx.annotation.StringRes
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 
 data class OperationalQueue(
     @get:StringRes val titleRes: Int,
     val statuses: Set<OrderStatus>,
-    val orders: List<RepairOrderEntity>,
+    val orders: List<Order>,
 )
 
 val queueDefinitions: List<Pair<Int, Set<OrderStatus>>> =
@@ -23,7 +23,7 @@ val queueDefinitions: List<Pair<Int, Set<OrderStatus>>> =
         R.string.queue_closed to setOf(OrderStatus.CLOSED),
     )
 
-fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQueue> {
+fun buildOperationalQueues(orders: List<Order>): List<OperationalQueue> {
     val groupedOrders = orders.groupBy { it.status }
     return queueDefinitions.map { (titleRes, statuses) ->
         OperationalQueue(

@@ -4,7 +4,10 @@ import android.content.Context
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.dao.OrderDocumentDao
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.models.OrderDocument
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 interface OrderDocumentRepository {
     suspend fun save(document: OrderDocumentEntity)
@@ -14,9 +17,9 @@ interface OrderDocumentRepository {
         sharedAt: Long,
     )
 
-    suspend fun findById(id: String): OrderDocumentEntity?
+    suspend fun findById(id: String): OrderDocument?
 
-    fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>>
+    fun observeByOrder(orderId: String): Flow<List<OrderDocument>>
 
     suspend fun delete(documentId: String): Result<Unit>
 }
@@ -35,10 +38,9 @@ class DefaultOrderDocumentRepository(
         dao.markShared(documentId, sharedAt)
     }
 
-    override suspend fun findById(id: String): OrderDocumentEntity? = dao.getById(id)
+    override suspend fun findById(id: String): OrderDocument? = dao.getById(id)?.toDomain()
 
-    override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
-        dao.observeByOrder(orderId)
+    override fun observeByOrder(orderId: String): Flow<List<OrderDocument>> = dao.observeByOrder(orderId).map { list -> list.map { it.toDomain() } }
 
     override suspend fun delete(documentId: String): Result<Unit> =
         runCatching {

@@ -1,9 +1,9 @@
 package com.onlytechtake.repairapp.domain.repositories
 
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
@@ -16,7 +16,7 @@ interface OrderRepository {
     fun observeOrders(
         actor: AuthenticatedUser,
         filter: OrderFilter,
-    ): Flow<List<RepairOrderEntity>>
+    ): Flow<List<Order>>
 
     suspend fun countAllOrders(): Int
 
@@ -35,7 +35,7 @@ interface OrderRepository {
     suspend fun createOrder(
         actor: AuthenticatedUser,
         input: RepairOrderInput,
-    ): Result<RepairOrderEntity>
+    ): Result<Order>
 
     suspend fun changeStatus(
         actor: AuthenticatedUser,

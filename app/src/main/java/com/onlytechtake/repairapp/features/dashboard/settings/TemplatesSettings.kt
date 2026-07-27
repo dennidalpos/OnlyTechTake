@@ -64,8 +64,8 @@ import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
+import com.onlytechtake.repairapp.domain.models.MessageChannel
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
@@ -566,5 +566,4 @@ private fun isRiskyTemplateChange(
     loadedCode: String?,
     currentCode: String,
     active: Boolean,
-): Boolean =
-    ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)
+): Boolean = ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)

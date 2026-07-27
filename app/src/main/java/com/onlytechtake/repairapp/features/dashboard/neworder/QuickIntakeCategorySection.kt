@@ -36,13 +36,13 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.domain.models.Category
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.workspace.categoryPath
 
 @Composable
 fun QuickIntakeCategorySection(
-    activeCategories: List<OrderCategoryEntity>,
+    activeCategories: List<Category>,
     selectedCategoryId: String?,
     onCategorySelected: (String) -> Unit,
     onOpenConfig: () -> Unit,
