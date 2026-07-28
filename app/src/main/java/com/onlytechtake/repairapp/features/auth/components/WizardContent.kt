@@ -19,7 +19,7 @@ import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

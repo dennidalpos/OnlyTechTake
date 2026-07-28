@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
+import com.onlytechtake.repairapp.domain.models.OrderFilter
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.workspace.OperationalQueue
 import com.onlytechtake.repairapp.features.workspace.buildOperationalQueues
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,7 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.domain.workspace.CategoryInput
+import com.onlytechtake.repairapp.domain.models.CategoryInput
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test

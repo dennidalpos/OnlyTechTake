@@ -30,7 +30,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
+import com.onlytechtake.repairapp.domain.models.Template
 
 @Composable
 fun AnchorStepHeader(anchor: TemplateAnchor) {
@@ -60,7 +60,7 @@ fun AnchorStepHeader(anchor: TemplateAnchor) {
 @Composable
 fun AnchorSelectionDialog(
     anchor: TemplateAnchor,
-    templates: List<MessageTemplateEntity>,
+    templates: List<Template>,
     currentMapping: String?,
     onDismiss: () -> Unit,
     onSelect: (String) -> Unit,

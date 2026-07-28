@@ -12,21 +12,26 @@ import com.onlytechtake.repairapp.core.di.IoDispatcher
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
-import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.models.FeedbackInput
+import com.onlytechtake.repairapp.domain.models.OrderDetail
 import com.onlytechtake.repairapp.domain.models.OrderDocument
+import com.onlytechtake.repairapp.domain.models.OrderListItem
 import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.PreparedMessage
+import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
-import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
-import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
-import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
-import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
+import com.onlytechtake.repairapp.domain.repositories.SignatureRepository
+import com.onlytechtake.repairapp.domain.repositories.TemplateRepository
+import com.onlytechtake.repairapp.domain.usecases.ChangeOrderStatusUseCase
+import com.onlytechtake.repairapp.domain.usecases.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.domain.usecases.RecordCustomerFeedbackUseCase
+import com.onlytechtake.repairapp.domain.usecases.RecordDiagnosisResultUseCase
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
@@ -39,6 +44,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -59,6 +65,9 @@ class OrderDetailViewModel
         private val orderDocumentRepository: OrderDocumentRepository,
         private val templateRepository: TemplateRepository,
         private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
+        private val changeOrderStatusUseCase: ChangeOrderStatusUseCase,
+        private val recordDiagnosisResultUseCase: RecordDiagnosisResultUseCase,
+        private val recordCustomerFeedbackUseCase: RecordCustomerFeedbackUseCase,
         private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
         private val workspaceManager: WorkspaceManager,
         private val actionRunner: AuthenticatedActionRunner,
@@ -109,19 +118,58 @@ class OrderDetailViewModel
             }
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        val orderDetail: StateFlow<OrderDetail?> =
-            _orderId
-                .filterNotNull()
-                .flatMapLatest { id -> orderRepository.observeOrderDetail(id) }
-                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+        private val notesExpandedFlow = MutableStateFlow(value = false)
+        private val photosExpandedFlow = MutableStateFlow(value = false)
+        private val timelineExpandedFlow = MutableStateFlow(value = false)
+        private val signaturesExpandedFlow = MutableStateFlow(value = false)
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        val documents: StateFlow<List<OrderDocument>> =
-            _orderId
-                .filterNotNull()
-                .flatMapLatest { id -> orderDocumentRepository.observeByOrder(id) }
-                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+        val viewState: StateFlow<OrderDetailViewState> =
+            combine(
+                _orderId.filterNotNull().flatMapLatest { id -> orderRepository.observeOrderDetail(id) },
+                _orderId.filterNotNull().flatMapLatest { id -> orderDocumentRepository.observeByOrder(id) },
+                _isProcessing,
+                _isGeneratingStatusPdf,
+                _statusPdfError,
+                _showPdfSentConfirmation,
+                _preparedMessage,
+                _preparedMessageBody,
+                notesExpandedFlow,
+                photosExpandedFlow,
+                timelineExpandedFlow,
+                signaturesExpandedFlow,
+            ) { args ->
+                OrderDetailViewState(
+                    detail = args[0] as OrderDetail?,
+                    documents = args[1] as List<OrderDocument>,
+                    isProcessing = args[2] as Boolean,
+                    isGeneratingStatusPdf = args[3] as Boolean,
+                    statusPdfError = args[4] as String?,
+                    showPdfSentConfirmation = args[5] as Boolean,
+                    preparedMessage = args[6] as PreparedMessage?,
+                    preparedMessageBody = args[7] as String,
+                    notesExpanded = args[8] as Boolean,
+                    photosExpanded = args[9] as Boolean,
+                    timelineExpanded = args[10] as Boolean,
+                    signaturesExpanded = args[11] as Boolean,
+                )
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), OrderDetailViewState())
+
+        fun toggleNotesExpanded() {
+            notesExpandedFlow.value = !notesExpandedFlow.value
+        }
+
+        fun togglePhotosExpanded() {
+            photosExpandedFlow.value = !photosExpandedFlow.value
+        }
+
+        fun toggleTimelineExpanded() {
+            timelineExpandedFlow.value = !timelineExpandedFlow.value
+        }
+
+        fun toggleSignaturesExpanded() {
+            signaturesExpandedFlow.value = !signaturesExpandedFlow.value
+        }
 
         fun setOrderId(id: String?) {
             _orderId.value = id
@@ -149,7 +197,7 @@ class OrderDetailViewModel
                 setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
-                orderRepository.changeStatus(actor, id, status, note, closureReason)
+                changeOrderStatusUseCase(actor, id, status, note, closureReason)
             }
         }
 
@@ -167,7 +215,7 @@ class OrderDetailViewModel
                 setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
-                orderRepository.recordResult(
+                recordDiagnosisResultUseCase(
                     actor,
                     id,
                     DiagnosisResultInput(summary, outcome, estimateMillis),
@@ -189,7 +237,7 @@ class OrderDetailViewModel
                 setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
-                orderRepository.recordFeedback(actor, id, FeedbackInput(type, note, closureReason))
+                recordCustomerFeedbackUseCase(actor, id, FeedbackInput(type, note, closureReason))
             }
         }
 
@@ -474,5 +522,70 @@ class OrderDetailViewModel
 
         fun clearPendingShareIntent() {
             _pendingShareIntent.value = null
+        }
+
+        fun onActionClick(
+            action: com.onlytechtake.repairapp.domain.logic.OrderStatusAction,
+            diagnosisOutcome: DiagnosisOutcome?,
+            decision: com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision?,
+            quoteRejectNote: String,
+            requestConfirm: (String, String, () -> Unit) -> Unit,
+            openStatusAction: (com.onlytechtake.repairapp.domain.logic.OrderStatusAction, DiagnosisOutcome?) -> Unit,
+            onSuccess: () -> Unit = {},
+        ) {
+            val detail = viewState.value.detail ?: return
+            val isResultStep = detail.order.status == OrderStatus.RESULT
+            val isRepairable = diagnosisOutcome == DiagnosisOutcome.REPAIRABLE
+            val isNotRepairable = diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE
+
+            // Logic from OrderDetailWorkspace.kt moved here
+            val isActionMatchDecision =
+                (isResultStep && isRepairable && (decision != null)) &&
+                    (action == com.onlytechtake.repairapp.domain.logic.OrderStatusAction.START_REPAIR || action == com.onlytechtake.repairapp.domain.logic.OrderStatusAction.CLOSE_ORDER)
+
+            val isActionMatchNotRepairable =
+                isResultStep && isNotRepairable && (action == com.onlytechtake.repairapp.domain.logic.OrderStatusAction.READY_FOR_PICKUP)
+
+            when {
+                isActionMatchDecision -> {
+                    if (decision == com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision.ACCEPTED) {
+                        recordFeedback(
+                            CustomerFeedbackType.ACCEPT,
+                            "Quote Accepted", // TODO: use string resource via context if needed, or just a key
+                        ) {
+                            prepareMessage(TemplateAnchor.WHATSAPP_REPAIRING)
+                            onSuccess()
+                        }
+                    } else {
+                        recordFeedback(
+                            CustomerFeedbackType.REJECT,
+                            quoteRejectNote,
+                            ClosureReason.CUSTOMER_DECLINED,
+                        ) {
+                            prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                            onSuccess()
+                        }
+                    }
+                }
+
+                isActionMatchNotRepairable -> {
+                    requestConfirm(
+                        "Confirm", // TODO: resources
+                        "Are you sure?",
+                    ) {
+                        changeStatus(
+                            status = OrderStatus.READY_FOR_PICKUP,
+                            note = "Not repairable",
+                        ) {
+                            prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                            onSuccess()
+                        }
+                    }
+                }
+
+                else -> {
+                    openStatusAction(action, diagnosisOutcome)
+                }
+            }
         }
     }

@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.ShowcaseManager
+import com.onlytechtake.repairapp.data.backup.BackupRepository
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
-import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.LoginResult
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow

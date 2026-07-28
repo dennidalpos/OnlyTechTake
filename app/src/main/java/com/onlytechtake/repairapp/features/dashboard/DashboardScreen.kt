@@ -14,7 +14,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -114,9 +114,9 @@ fun DashboardScreen(
             )
         }
 
-    var pendingRoute by remember { mutableStateOf<DashboardNavRoute?>(null) }
-    var pendingIsReset by remember { mutableStateOf(value = false) }
-    var showUnsavedChangesDialog by remember { mutableStateOf(value = false) }
+    val pendingRoute by dashboardViewModel.pendingRoute.collectAsState()
+    val pendingIsReset by dashboardViewModel.pendingIsReset.collectAsState()
+    val showUnsavedChangesDialog by dashboardViewModel.showUnsavedChangesDialog.collectAsState()
 
     fun isTabSelected(itemRoute: DashboardNavRoute): Boolean {
         val destination = navBackStackEntry?.destination ?: return false
@@ -176,9 +176,7 @@ fun DashboardScreen(
     ) {
         val currentRouteIsNewOrder = navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
         if (currentRouteIsNewOrder && isFormDirty) {
-            pendingRoute = route
-            pendingIsReset = isReset
-            showUnsavedChangesDialog = true
+            dashboardViewModel.setPendingNavigation(route, isReset)
         } else {
             if (isFormDirty) dashboardViewModel.triggerAutoSave()
             performNavigation(route, isReset = isReset)
@@ -187,8 +185,7 @@ fun DashboardScreen(
 
     BackHandler(enabled = !isHome()) {
         if (isFormDirty) {
-            pendingRoute = null
-            showUnsavedChangesDialog = true
+            dashboardViewModel.setPendingNavigation(null)
         } else {
             navController.popBackStack()
         }
@@ -201,8 +198,7 @@ fun DashboardScreen(
                 showLogo = isHome(),
                 onBack = {
                     if (isFormDirty) {
-                        pendingRoute = null
-                        showUnsavedChangesDialog = true
+                        dashboardViewModel.setPendingNavigation(null)
                     } else {
                         navController.popBackStack()
                     }
@@ -292,16 +288,13 @@ fun DashboardScreen(
     if (showUnsavedChangesDialog) {
         UnsavedChangesDialog(
             onDismiss = {
-                showUnsavedChangesDialog = false
-                pendingRoute = null
-                pendingIsReset = false
+                dashboardViewModel.dismissUnsavedChangesDialog()
             },
         ) {
-            showUnsavedChangesDialog = false
-            dashboardViewModel.setFormDirty(dirty = false)
-            pendingRoute?.let { performNavigation(it, isReset = pendingIsReset) } ?: navController.popBackStack()
-            pendingRoute = null
-            pendingIsReset = false
+            dashboardViewModel.confirmNavigation { route, isReset ->
+                performNavigation(route, isReset = isReset)
+            }
+            if (pendingRoute == null) navController.popBackStack()
         }
     }
 

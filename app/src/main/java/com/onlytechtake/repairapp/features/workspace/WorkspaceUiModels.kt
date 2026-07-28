@@ -1,8 +1,8 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import android.graphics.Bitmap
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.StagedOrderMedia
 import java.util.UUID
 
 data class WorkspaceMessage(

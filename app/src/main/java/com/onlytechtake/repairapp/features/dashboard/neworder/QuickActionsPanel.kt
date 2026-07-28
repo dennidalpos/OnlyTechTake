@@ -64,12 +64,15 @@ import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.displayName
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.domain.models.Category
 import com.onlytechtake.repairapp.domain.models.Customer
 import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.models.Template
 import com.onlytechtake.repairapp.domain.models.UserPermission
-import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
-import com.onlytechtake.repairapp.domain.workspace.validationErrors
+import com.onlytechtake.repairapp.domain.models.isReadyForSubmit
+import com.onlytechtake.repairapp.domain.models.validationErrors
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
@@ -78,6 +81,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
+import com.onlytechtake.repairapp.features.workspace.isStagedImage
 
 @Composable
 fun QuickActions(
@@ -152,7 +156,7 @@ fun QuickActions(
 
     val context = LocalContext.current
     val missingRequirements =
-        remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors(context) }
+        remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors() }
 
     LaunchedEffect(stepperState.isDirty) {
         viewModel.setFormDirty(stepperState.isDirty)
@@ -589,7 +593,7 @@ fun QuickActions(
                                         .padding(bottom = RepairAppSpacing.fieldGap),
                             ) {
                                 items(draft.stagedMedia) { media ->
-                                    if (media.isImageAttachment()) {
+                                    if (media.isStagedImage()) {
                                         Box(
                                             modifier =
                                                 Modifier
@@ -647,7 +651,7 @@ fun QuickActions(
             QuickIntakeSubmitSection(
                 missingRequirements =
                     if (isIntakeSubmitUnlocked(draft.completedStep)) {
-                        missingRequirements
+                        missingRequirements.map { it.label(context) }
                     } else {
                         listOf(stringResource(R.string.intake_confirm_all_steps))
                     },

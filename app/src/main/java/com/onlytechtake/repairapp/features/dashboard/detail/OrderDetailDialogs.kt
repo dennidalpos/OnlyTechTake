@@ -27,13 +27,16 @@ import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
+import com.onlytechtake.repairapp.domain.logic.canConfirmDiagnosisResult
+import com.onlytechtake.repairapp.domain.logic.requiresConfirmation
+import com.onlytechtake.repairapp.domain.logic.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.models.FeedbackInput
 import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
-import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
-import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
+import com.onlytechtake.repairapp.domain.models.PreparedMessage
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 
@@ -310,7 +313,7 @@ fun OrderPdfSentConfirmationDialog(
 
 @Composable
 fun WhatsAppPreviewDialog(
-    prepared: com.onlytechtake.repairapp.domain.workspace.PreparedMessage?,
+    prepared: PreparedMessage?,
     body: String,
     onBodyChange: (String) -> Unit,
     onOpenWhatsApp: () -> Unit,

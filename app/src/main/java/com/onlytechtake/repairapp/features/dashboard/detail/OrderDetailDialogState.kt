@@ -7,9 +7,9 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
 import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 
 class OrderDetailWorkspaceState(

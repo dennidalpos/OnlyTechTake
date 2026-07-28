@@ -64,8 +64,8 @@ import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.domain.models.MessageChannel
+import com.onlytechtake.repairapp.domain.models.Template
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
@@ -78,7 +78,7 @@ fun ColumnScope.TemplatesSettings(
 ) {
     val templates by viewModel.templates.collectAsState()
     val anchorMappings by viewModel.anchorMappings.collectAsState()
-    var editingTemplate by remember { mutableStateOf<MessageTemplateEntity?>(null) }
+    var editingTemplate by remember { mutableStateOf<Template?>(null) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
 
     val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
@@ -149,16 +149,14 @@ fun ColumnScope.TemplatesSettings(
                     Surface(
                         onClick = {
                             editingTemplate =
-                                MessageTemplateEntity(
+                                Template(
                                     id = "",
                                     code = "",
                                     title = "",
-                                    channel = MessageChannel.WHATSAPP,
+                                    channel = com.onlytechtake.repairapp.domain.models.MessageChannel.WHATSAPP,
                                     body = "",
                                     active = true,
                                     version = 1,
-                                    updatedByUserId = null,
-                                    updatedAt = 0L,
                                     step = null,
                                 )
                         },
@@ -383,7 +381,7 @@ fun ColumnScope.TemplatesSettings(
 
 @Composable
 fun TemplateEditDialog(
-    template: MessageTemplateEntity,
+    template: Template,
     onDismiss: () -> Unit,
     onSave: (String, String, String, Boolean, String?) -> Unit,
     onSetDirty: (Boolean) -> Unit = {},

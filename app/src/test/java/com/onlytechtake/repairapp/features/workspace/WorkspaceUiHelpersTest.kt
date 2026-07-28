@@ -8,13 +8,14 @@ import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.logic.canConfirmDiagnosisResult
+import com.onlytechtake.repairapp.domain.logic.nextActionLabel
+import com.onlytechtake.repairapp.domain.logic.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.OrderAttachmentCounts
+import com.onlytechtake.repairapp.domain.models.OrderListItem
 import com.onlytechtake.repairapp.domain.models.OrderPriority
 import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
-import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
-import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
-import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
@@ -72,7 +73,7 @@ class WorkspaceUiHelpersTest {
     fun finalPhotosAreImageHistoryButNotIntakePhotos() {
         val media = media("FINAL_PHOTO", "image/jpeg").toDomain()
 
-        assertTrue(media.isImageAttachment())
+        assertTrue(media.isStagedImage())
         assertTrue(media.isFinalPhoto())
     }
 

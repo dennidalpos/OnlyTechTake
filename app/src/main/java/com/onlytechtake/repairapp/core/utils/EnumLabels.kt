@@ -7,8 +7,21 @@ import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.CustomerActionStatus
 import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.IntakeValidationError
 import com.onlytechtake.repairapp.domain.models.OrderPriority
 import com.onlytechtake.repairapp.domain.models.OrderStatus
+
+val IntakeValidationError.labelRes: Int
+    @StringRes get() =
+        when (this) {
+            IntakeValidationError.CUSTOMER_REQUIRED -> R.string.error_customer_required
+            IntakeValidationError.PROBLEM_REQUIRED -> R.string.error_problem_required
+            IntakeValidationError.CATEGORY_REQUIRED -> R.string.error_category_required
+            IntakeValidationError.MEDIA_REQUIRED -> R.string.error_media_required
+            IntakeValidationError.PRIVACY_REQUIRED -> R.string.error_privacy_required
+        }
+
+fun IntakeValidationError.label(context: Context): String = context.getString(labelRes)
 
 val OrderStatus.labelRes: Int
     @StringRes get() =

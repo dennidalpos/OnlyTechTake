@@ -17,14 +17,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.domain.models.OrderListItem
 import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass

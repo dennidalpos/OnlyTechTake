@@ -13,9 +13,9 @@ import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 import com.onlytechtake.repairapp.domain.models.UserRole
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first

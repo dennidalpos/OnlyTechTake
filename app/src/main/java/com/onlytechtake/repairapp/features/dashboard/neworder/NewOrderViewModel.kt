@@ -10,18 +10,15 @@ import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
-import com.onlytechtake.repairapp.data.repositories.CatalogRepository
-import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
-import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
-import com.onlytechtake.repairapp.domain.models.Category
-import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.*
+import com.onlytechtake.repairapp.domain.models.CustomerInput
+import com.onlytechtake.repairapp.domain.models.IntakeOrderInput
+import com.onlytechtake.repairapp.domain.repositories.CatalogRepository
 import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
-import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
-import com.onlytechtake.repairapp.domain.workspace.CustomerInput
-import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
+import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
+import com.onlytechtake.repairapp.domain.repositories.TemplateRepository
+import com.onlytechtake.repairapp.domain.usecases.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
@@ -86,7 +83,7 @@ class NewOrderViewModel
                 .observeActiveCategories()
                 .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-        val templates: StateFlow<List<MessageTemplateEntity>> =
+        val templates: StateFlow<List<Template>> =
             templateRepository
                 .observeTemplates()
                 .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())

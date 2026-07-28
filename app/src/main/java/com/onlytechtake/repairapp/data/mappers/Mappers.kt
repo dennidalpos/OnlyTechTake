@@ -1,23 +1,8 @@
 package com.onlytechtake.repairapp.data.mappers
 
 import com.onlytechtake.repairapp.data.local.dao.OrderDetailProjection
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
-import com.onlytechtake.repairapp.data.local.entities.UserEntity
-import com.onlytechtake.repairapp.domain.models.Category
-import com.onlytechtake.repairapp.domain.models.Customer
-import com.onlytechtake.repairapp.domain.models.Order
-import com.onlytechtake.repairapp.domain.models.OrderDocument
-import com.onlytechtake.repairapp.domain.models.OrderMedia
-import com.onlytechtake.repairapp.domain.models.Signature
-import com.onlytechtake.repairapp.domain.models.TimelineEvent
-import com.onlytechtake.repairapp.domain.models.User
-import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.domain.models.*
 
 fun CustomerEntity.toDomain(): Customer =
     Customer(
@@ -133,6 +118,31 @@ fun OrderDocumentEntity.toDomain(): OrderDocument =
         createdByUserId = createdByUserId,
         createdAt = createdAt,
         sharedAt = sharedAt,
+    )
+
+fun MessageTemplateEntity.toDomain(): Template =
+    Template(
+        id = id,
+        code = code,
+        title = title,
+        channel = channel,
+        body = body,
+        active = active,
+        version = version,
+        step = step,
+    )
+
+fun MessageLogEntity.toDomain(): MessageLog =
+    MessageLog(
+        id = id,
+        orderId = orderId,
+        customerId = customerId,
+        channel = channel,
+        mode = mode,
+        body = body,
+        status = status,
+        sentAt = sentAt,
+        createdAt = createdAt,
     )
 
 fun OrderDetailProjection.toDomain(): OrderDetail =

@@ -19,24 +19,18 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
@@ -44,14 +38,11 @@ import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.domain.models.ClosureReason
-import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
+import com.onlytechtake.repairapp.domain.logic.statusTemplateAnchor
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
 import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.models.UserPermission
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
-import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 
 @Composable
@@ -60,49 +51,25 @@ fun OrderDetailWorkspace(
     showCloseButton: Boolean = true,
     onBack: () -> Unit,
 ) {
+    val state by viewModel.viewState.collectAsState()
     val message by viewModel.message.collectAsState()
-    val detail by viewModel.orderDetail.collectAsState()
-    val documents by viewModel.documents.collectAsState()
-    val preparedMessage by viewModel.preparedMessage.collectAsState()
-    val preparedMessageBody by viewModel.preparedMessageBody.collectAsState()
-    val isProcessing by viewModel.isProcessing.collectAsState()
-    val isGeneratingStatusPdf by viewModel.isGeneratingStatusPdf.collectAsState()
-    val statusPdfError by viewModel.statusPdfError.collectAsState()
-    val showPdfSentConfirmation by viewModel.showPdfSentConfirmation.collectAsState()
     val pendingShareIntent by viewModel.pendingShareIntent.collectAsState()
+    val actor by viewModel.currentUser.collectAsState()
+
     val context = LocalContext.current
     val workspaceState = rememberOrderDetailWorkspaceState()
     val decision = workspaceState.quoteDecision
     val shareStatusChooserTitle = stringResource(R.string.order_share_status_chooser)
 
-    val actor by viewModel.currentUser.collectAsState()
-    val canDeleteOrder =
-        actor?.permissions?.contains(UserPermission.EDIT_ALL_ORDERS) == true
+    val canDeleteOrder = actor?.permissions?.contains(UserPermission.EDIT_ALL_ORDERS) == true
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
-    val diagnosisOutcomeConfirmTitle =
-        stringResource(R.string.order_confirm_diagnosis_outcome_title)
-    val diagnosisOutcomeConfirmText = stringResource(R.string.order_confirm_diagnosis_outcome_text)
-    val deleteOrderConfirmTitle =
-        stringResource(
-            R.string.action_delete_confirm_title,
-            stringResource(R.string.label_repair_order),
-        )
-    val deleteOrderConfirmText =
-        stringResource(
-            R.string.action_delete_confirm_text,
-            stringResource(R.string.label_repair_order),
-        )
-    val notRepairableNote = stringResource(R.string.order_not_repairable_note)
 
-    val selected = detail
+    val selected = state.detail
     if (selected == null) {
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(RepairAppSpacing.screenHorizontal),
+            modifier = Modifier.fillMaxSize().padding(RepairAppSpacing.screenHorizontal),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -125,7 +92,7 @@ fun OrderDetailWorkspace(
         }
     }
 
-    val hasUnsavedLocalWork = (workspaceState.note.isNotBlank() || (preparedMessage != null))
+    val hasUnsavedLocalWork = (workspaceState.note.isNotBlank() || (state.preparedMessage != null))
     BackHandler(enabled = true) {
         if (hasUnsavedLocalWork) {
             workspaceState.requestConfirm(exitConfirmTitle, exitConfirmText) {
@@ -137,11 +104,6 @@ fun OrderDetailWorkspace(
         }
     }
 
-    var notesExpanded by rememberSaveable { mutableStateOf(value = false) }
-    var photosExpanded by rememberSaveable { mutableStateOf(value = false) }
-    var timelineExpanded by rememberSaveable { mutableStateOf(value = false) }
-    var signaturesExpanded by rememberSaveable { mutableStateOf(value = false) }
-
     Column(Modifier.fillMaxSize()) {
         message?.let {
             DismissibleAppMessageBanner(
@@ -152,12 +114,9 @@ fun OrderDetailWorkspace(
             )
         }
 
-        if (isProcessing) {
+        if (state.isProcessing) {
             androidx.compose.foundation.layout.Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(RepairAppSpacing.compactGap),
+                modifier = Modifier.fillMaxWidth().padding(RepairAppSpacing.compactGap),
                 contentAlignment = Alignment.Center,
             ) {
                 androidx.compose.material3.LinearProgressIndicator(
@@ -169,118 +128,47 @@ fun OrderDetailWorkspace(
 
         AppScreenContainer(scrollable = false) {
             LazyColumn(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .testTag(RepairAppTestTags.OrderDetailLazyColumn)
-                        .imePadding(),
+                modifier = Modifier.weight(1f).testTag(RepairAppTestTags.OrderDetailLazyColumn).imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                contentPadding =
-                    PaddingValues(
-                        top = RepairAppSpacing.compactGap,
-                        bottom = RepairAppSpacing.bottomContentPadding,
-                    ),
+                contentPadding = PaddingValues(top = RepairAppSpacing.compactGap, bottom = RepairAppSpacing.bottomContentPadding),
             ) {
-                item(key = "header", contentType = "header") {
-                    OrderHeader(selected, context)
-                }
+                item(key = "header") { OrderHeader(selected, context) }
 
-                item(key = "actions", contentType = "actions") {
+                item(key = "actions") {
                     val isResultStep = selected.order.status == OrderStatus.RESULT
-                    val outcome = selected.order.diagnosisOutcome
-                    val isRepairable = outcome == DiagnosisOutcome.REPAIRABLE
-                    val isNotRepairable = outcome == DiagnosisOutcome.NOT_REPAIRABLE
+                    val isRepairable = selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE
+                    val isNotRepairable = selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE
 
                     val primaryOverride =
                         when {
-                            (isResultStep && isRepairable && (decision == QuoteDecision.REJECTED)) -> {
-                                OrderStatusAction.CLOSE_ORDER
-                            }
-
-                            isResultStep && isNotRepairable -> {
-                                OrderStatusAction.READY_FOR_PICKUP
-                            }
-
-                            else -> {
-                                null
-                            }
+                            isResultStep && isRepairable && decision == QuoteDecision.REJECTED -> OrderStatusAction.CLOSE_ORDER
+                            isResultStep && isNotRepairable -> OrderStatusAction.READY_FOR_PICKUP
+                            else -> null
                         }
 
                     val primaryLabel =
-                        if (isResultStep && isRepairable && (decision == QuoteDecision.REJECTED)) {
+                        if (isResultStep && isRepairable && decision == QuoteDecision.REJECTED) {
                             stringResource(R.string.action_close_order)
                         } else {
                             null
                         }
 
-                    val isPrimaryEnabled =
-                        if (isResultStep && isRepairable) {
-                            decision != null
-                        } else {
-                            true
-                        }
-
-                    val quoteAcceptedLabel = stringResource(R.string.order_quote_accepted)
+                    val deleteConfirmTitle = stringResource(R.string.action_delete_confirm_title, stringResource(R.string.label_repair_order))
+                    val deleteConfirmText = stringResource(R.string.action_delete_confirm_text, stringResource(R.string.label_repair_order))
 
                     OrderActionCard(
                         status = selected.order.status,
                         isPaid = selected.isPaid,
                         whatsAppAnchor = statusTemplateAnchor(selected.order),
                         onActionClick = { action ->
-                            val isActionMatchDecision =
-                                (isResultStep && isRepairable && (decision != null)) &&
-                                    ((action == primaryOverride) || ((primaryOverride == null) && (action == OrderStatusAction.START_REPAIR)))
-
-                            val isActionMatchNotRepairable =
-                                isResultStep && isNotRepairable && (action == OrderStatusAction.READY_FOR_PICKUP)
-
-                            when {
-                                isActionMatchDecision -> {
-                                    if (decision == QuoteDecision.ACCEPTED) {
-                                        viewModel.recordFeedback(
-                                            CustomerFeedbackType.ACCEPT,
-                                            quoteAcceptedLabel,
-                                        ) {
-                                            viewModel.prepareMessage(
-                                                TemplateAnchor.WHATSAPP_REPAIRING,
-                                            )
-                                        }
-                                    } else {
-                                        viewModel.recordFeedback(
-                                            CustomerFeedbackType.REJECT,
-                                            workspaceState.quoteRejectNote,
-                                            ClosureReason.CUSTOMER_DECLINED,
-                                        ) {
-                                            viewModel.prepareMessage(
-                                                TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
-                                            )
-                                        }
-                                    }
-                                }
-
-                                isActionMatchNotRepairable -> {
-                                    workspaceState.requestConfirm(
-                                        diagnosisOutcomeConfirmTitle,
-                                        diagnosisOutcomeConfirmText,
-                                    ) {
-                                        viewModel.changeStatus(
-                                            status = OrderStatus.READY_FOR_PICKUP,
-                                            note = notRepairableNote,
-                                        ) {
-                                            viewModel.prepareMessage(
-                                                TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
-                                            )
-                                        }
-                                    }
-                                }
-
-                                else -> {
-                                    workspaceState.openStatusAction(
-                                        action,
-                                        selected.order.diagnosisOutcome,
-                                    )
-                                }
-                            }
+                            viewModel.onActionClick(
+                                action = action,
+                                diagnosisOutcome = selected.order.diagnosisOutcome,
+                                decision = workspaceState.quoteDecision,
+                                quoteRejectNote = workspaceState.quoteRejectNote,
+                                requestConfirm = workspaceState::requestConfirm,
+                                openStatusAction = workspaceState::openStatusAction,
+                            )
                         },
                         onTogglePayment = { viewModel.togglePaymentStatus(!selected.isPaid) },
                         onSendWhatsApp = viewModel::prepareMessage,
@@ -288,8 +176,8 @@ fun OrderDetailWorkspace(
                             if (canDeleteOrder) {
                                 {
                                     workspaceState.requestConfirm(
-                                        deleteOrderConfirmTitle,
-                                        deleteOrderConfirmText,
+                                        deleteConfirmTitle,
+                                        deleteConfirmText,
                                     ) {
                                         viewModel.deleteOrder { onBack() }
                                     }
@@ -297,7 +185,7 @@ fun OrderDetailWorkspace(
                             } else {
                                 null
                             },
-                        isPrimaryActionEnabled = isPrimaryEnabled,
+                        isPrimaryActionEnabled = if (isResultStep && isRepairable) decision != null else true,
                         primaryActionLabel = primaryLabel,
                         primaryActionOverride = primaryOverride,
                         showSecondaryActions = !isResultStep,
@@ -305,166 +193,94 @@ fun OrderDetailWorkspace(
                 }
 
                 if (selected.order.status == OrderStatus.RESULT) {
-                    when (selected.order.diagnosisOutcome) {
-                        DiagnosisOutcome.REPAIRABLE -> {
-                            item(key = "quote_decision", contentType = "decision") {
+                    item(key = "quote_decision") {
+                        when (selected.order.diagnosisOutcome) {
+                            DiagnosisOutcome.REPAIRABLE -> {
                                 QuoteDecisionPanel(
                                     quoteDecision = workspaceState.quoteDecision,
                                     quoteRejectNote = workspaceState.quoteRejectNote,
                                     onQuoteDecisionChange = { workspaceState.quoteDecision = it },
-                                ) {
-                                    workspaceState.quoteRejectNote = it
-                                }
+                                    onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it },
+                                )
                             }
-                        }
 
-                        DiagnosisOutcome.NOT_REPAIRABLE -> {
-                            item(key = "not_repairable", contentType = "info") {
+                            DiagnosisOutcome.NOT_REPAIRABLE -> {
                                 StandardCard {
                                     Column(
                                         modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                                         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                                     ) {
-                                        Text(
-                                            stringResource(R.string.order_not_repairable_title),
-                                            style = MaterialTheme.typography.titleMedium,
-                                            color = MaterialTheme.colorScheme.error,
-                                        )
-                                        OperatorText(stringResource(R.string.order_not_repairable_body))
+                                        Text(stringResource(R.string.order_not_repairable_title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
+                                        com.onlytechtake.repairapp.features.dashboard.common
+                                            .OperatorText(stringResource(R.string.order_not_repairable_body))
                                     }
                                 }
                             }
-                        }
 
-                        else -> {}
+                            else -> {}
+                        }
                     }
                 }
 
-                item(key = "notes", contentType = "notes") {
+                item(key = "notes") {
                     val hasNotes = selected.order.internalNotes?.isNotBlank() == true
-                    StandardCard(
-                        onClick = { notesExpanded = !notesExpanded },
-                        highlight = notesExpanded || hasNotes,
-                        modifier = Modifier.testTag(RepairAppTestTags.OrderNotesSectionCard),
-                    ) {
+                    StandardCard(onClick = viewModel::toggleNotesExpanded, highlight = state.notesExpanded || hasNotes) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
-                            ExpandableHeader(
-                                title = stringResource(R.string.order_internal_notes),
-                                isExpanded = notesExpanded,
-                                showBadge = hasNotes && !notesExpanded,
-                                badgeText = if (hasNotes) "1" else null,
-                            )
-                            if (notesExpanded) {
-                                Column(modifier = Modifier.padding(horizontal = RepairAppSpacing.tinyGap)) {
-                                    InternalNotesPanel(
-                                        notes = selected.order.internalNotes,
-                                    ) {
-                                        workspaceState.openInternalNote()
-                                    }
-                                }
+                            ExpandableHeader(title = stringResource(R.string.order_internal_notes), isExpanded = state.notesExpanded, showBadge = hasNotes && !state.notesExpanded, badgeText = if (hasNotes) "1" else null)
+                            if (state.notesExpanded) {
+                                InternalNotesPanel(notes = selected.order.internalNotes, onAddNoteClick = workspaceState::openInternalNote)
                             }
                         }
                     }
                 }
 
-                item(key = "photos", contentType = "photos") {
+                item(key = "photos") {
                     val mediaCount = selected.media.size
-                    StandardCard(
-                        onClick = { photosExpanded = !photosExpanded },
-                        highlight = photosExpanded || (mediaCount > 0),
-                        modifier = Modifier.testTag(RepairAppTestTags.OrderPhotosSectionCard),
-                    ) {
+                    StandardCard(onClick = viewModel::togglePhotosExpanded, highlight = state.photosExpanded || (mediaCount > 0)) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
-                            ExpandableHeader(
-                                title = stringResource(R.string.intake_step_media),
-                                isExpanded = photosExpanded,
-                                showBadge = (mediaCount > 0) && !photosExpanded,
-                                badgeText = mediaCount.toString(),
-                            )
-                            if (photosExpanded) {
-                                Column(modifier = Modifier.padding(horizontal = RepairAppSpacing.tinyGap)) {
-                                    OrderPhotoSection(selected, viewModel)
-                                }
-                            }
+                            ExpandableHeader(title = stringResource(R.string.intake_step_media), isExpanded = state.photosExpanded, showBadge = (mediaCount > 0) && !state.photosExpanded, badgeText = mediaCount.toString())
+                            if (state.photosExpanded) OrderPhotoSection(selected, viewModel)
                         }
                     }
                 }
 
-                item(key = "signatures", contentType = "signatures") {
+                item(key = "signatures") {
                     val signatureCount = selected.signatures.size
-                    StandardCard(
-                        onClick = { signaturesExpanded = !signaturesExpanded },
-                        highlight = signaturesExpanded || (signatureCount > 0),
-                        modifier = Modifier.testTag(RepairAppTestTags.OrderSignaturesCard),
-                    ) {
+                    StandardCard(onClick = viewModel::toggleSignaturesExpanded, highlight = state.signaturesExpanded || (signatureCount > 0)) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
-                            ExpandableHeader(
-                                title = stringResource(R.string.signature_section_title),
-                                isExpanded = signaturesExpanded,
-                                showBadge = (signatureCount > 0) && !signaturesExpanded,
-                                badgeText = signatureCount.toString(),
-                            )
-                            if (signaturesExpanded) {
-                                OrderSignatureSection(
-                                    detail = selected,
-                                    onDeleteSignature = viewModel::deleteSignature,
-                                )
-                            }
+                            ExpandableHeader(title = stringResource(R.string.signature_section_title), isExpanded = state.signaturesExpanded, showBadge = (signatureCount > 0) && !state.signaturesExpanded, badgeText = signatureCount.toString())
+                            if (state.signaturesExpanded) OrderSignatureSection(detail = selected, onDeleteSignature = viewModel::deleteSignature)
                         }
                     }
                 }
 
-                item(key = "documents", contentType = "documents") {
+                item(key = "documents") {
                     OrderDocumentSection(
-                        isGeneratingPdf = isGeneratingStatusPdf,
-                        pdfError = statusPdfError,
-                        documents = documents,
+                        isGeneratingPdf = state.isGeneratingStatusPdf,
+                        pdfError = state.statusPdfError,
+                        documents = state.documents,
                         hasSignatures = selected.signatures.isNotEmpty(),
-                        onGeneratePdf = { includeSignature ->
-                            viewModel.generateStatusPdf(includeSignature = includeSignature)
-                        },
-                        onShareDocument = { viewModel.onShareDocumentClicked(it) },
-                        onWhatsAppDocument = { viewModel.onWhatsAppDocumentClicked() },
-                        onDeleteDocument = { docId ->
-                            viewModel.onDeleteDocumentClicked(docId)
-                        },
-                    ) { title, text, action ->
-                        workspaceState.requestConfirm(title, text, action)
-                    }
+                        onGeneratePdf = { viewModel.generateStatusPdf(includeSignature = it) },
+                        onShareDocument = viewModel::onShareDocumentClicked,
+                        onWhatsAppDocument = { _ -> viewModel.onWhatsAppDocumentClicked() },
+                        onDeleteDocument = viewModel::onDeleteDocumentClicked,
+                        requestConfirm = workspaceState::requestConfirm,
+                    )
                 }
 
-                item(key = "timeline", contentType = "timeline") {
+                item(key = "timeline") {
                     val timelineCount = selected.timeline.size
-                    StandardCard(
-                        onClick = { timelineExpanded = !timelineExpanded },
-                        highlight = timelineExpanded,
-                        modifier = Modifier.testTag(RepairAppTestTags.OrderTimelineSection),
-                    ) {
+                    StandardCard(onClick = viewModel::toggleTimelineExpanded, highlight = state.timelineExpanded) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
-                            ExpandableHeader(
-                                title = stringResource(R.string.order_timeline),
-                                isExpanded = timelineExpanded,
-                                showBadge = (timelineCount > 0) && !timelineExpanded,
-                                badgeText = timelineCount.toString(),
-                            )
-                            if (timelineExpanded) {
-                                OrderTimelineSection(timeline = selected.timeline)
-                            }
+                            ExpandableHeader(title = stringResource(R.string.order_timeline), isExpanded = state.timelineExpanded, showBadge = (timelineCount > 0) && !state.timelineExpanded, badgeText = timelineCount.toString())
+                            if (state.timelineExpanded) OrderTimelineSection(timeline = selected.timeline)
                         }
                     }
                 }
 
                 if (showCloseButton) {
-                    item(key = "footer", contentType = "actions") {
-                        AppButton(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = RepairAppSpacing.screenHorizontal),
-                            text = stringResource(R.string.action_close),
-                            variant = AppButtonVariant.Secondary,
-                            onClick = onBack,
-                        )
+                    item(key = "footer") {
+                        AppButton(modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal), text = stringResource(R.string.action_close), variant = AppButtonVariant.Secondary, onClick = onBack)
                     }
                 }
             }
@@ -472,96 +288,16 @@ fun OrderDetailWorkspace(
     }
 
     OrderConfirmDialog(workspaceState)
-
-    OrderStatusActionDialog(
-        state = workspaceState,
-        context = context,
-        onRecordResult = { summary, outcome, estimateAmountCents ->
-            viewModel.recordResult(
-                summary = summary,
-                outcome = outcome,
-                estimateMillis = estimateAmountCents,
-            ) {
-                viewModel.prepareMessage(
-                    if (outcome == DiagnosisOutcome.REPAIRABLE) {
-                        TemplateAnchor.WHATSAPP_QUOTE
-                    } else {
-                        TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
-                    },
-                )
-            }
-        },
-    ) { targetStatus, statusNote, closureReason ->
-        viewModel.changeStatus(
-            status = targetStatus,
-            note = statusNote,
-            closureReason = closureReason,
-        ) {
-            when (targetStatus) {
-                OrderStatus.CLOSED -> {
-                    if (closureReason == ClosureReason.NOT_REPAIRABLE) {
-                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
-                    } else {
-                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_COMPLETED)
-                    }
-                }
-
-                OrderStatus.IN_PROGRESS -> {
-                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_UPDATE)
-                }
-
-                OrderStatus.DIAGNOSIS -> {
-                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_DIAGNOSIS)
-                }
-
-                OrderStatus.REPAIRING -> {
-                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_REPAIRING)
-                }
-
-                OrderStatus.READY_FOR_PICKUP -> {
-                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
-                }
-
-                else -> {}
-            }
-        }
-    }
-
-    InternalNoteDialog(
-        state = workspaceState,
-        currentInternalNotes = selected.order.internalNotes,
-        onAddNote = viewModel::addNote,
-    )
-
-    OrderPdfSentConfirmationDialog(
-        show = showPdfSentConfirmation,
-        onDismiss = viewModel::onPdfSentDismissed,
-        onConfirm = viewModel::onPdfSentConfirmed,
-    )
-
-    WhatsAppPreviewDialog(
-        prepared = preparedMessage?.takeIf { it.orderId == selected.order.id },
-        body = preparedMessageBody,
-        onBodyChange = viewModel::updatePreparedMessageBody,
-        onOpenWhatsApp = {
-            viewModel.recordPreparedMessage()
-            val intent =
-                Intent(
-                    Intent.ACTION_VIEW,
-                    "https://wa.me/${preparedMessage?.phone}?text=${
-                        Uri.encode(
-                            preparedMessageBody,
-                        )
-                    }".toUri(),
-                )
-            context.startActivity(intent)
-        },
-        onConfirmSent = {
-            viewModel.confirmSentMessage()
-            viewModel.clearPreparedMessage()
-        },
-        onClose = viewModel::clearPreparedMessage,
-    )
+    OrderStatusActionDialog(state = workspaceState, context = context, onRecordResult = viewModel::recordResult, onChangeStatus = viewModel::changeStatus)
+    InternalNoteDialog(state = workspaceState, currentInternalNotes = selected.order.internalNotes, onAddNote = viewModel::addNote)
+    OrderPdfSentConfirmationDialog(show = state.showPdfSentConfirmation, onDismiss = viewModel::onPdfSentDismissed, onConfirm = viewModel::onPdfSentConfirmed)
+    WhatsAppPreviewDialog(prepared = state.preparedMessage, body = state.preparedMessageBody, onBodyChange = viewModel::updatePreparedMessageBody, onOpenWhatsApp = {
+        viewModel.recordPreparedMessage()
+        context.startActivity(Intent(Intent.ACTION_VIEW, "https://wa.me/${state.preparedMessage?.phone}?text=${Uri.encode(state.preparedMessageBody)}".toUri()))
+    }, onConfirmSent = {
+        viewModel.confirmSentMessage()
+        viewModel.clearPreparedMessage()
+    }, onClose = viewModel::clearPreparedMessage)
 }
 
 @Composable
@@ -571,46 +307,16 @@ private fun ExpandableHeader(
     showBadge: Boolean = false,
     badgeText: String? = null,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(RepairAppSpacing.tinyGap),
-            )
+            Text(text = title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(RepairAppSpacing.tinyGap))
             if (showBadge) {
                 androidx.compose.foundation.layout
                     .Spacer(Modifier.padding(4.dp))
-                com.onlytechtake.repairapp.core.design.components.AppBadge(
-                    text = badgeText ?: "!",
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
+                com.onlytechtake.repairapp.core.design.components
+                    .AppBadge(text = badgeText ?: "!", containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
             }
         }
-        Text(
-            if (isExpanded) {
-                stringResource(R.string.action_close)
-            } else {
-                stringResource(
-                    R.string.content_description_open,
-                )
-            },
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
-}
-
-@Preview(showBackground = true, name = "Light Mode")
-@Composable
-private fun OrderDetailWorkspacePreview() {
-    RepairAppTheme {
-        // Preview content simplified
+        Text(if (isExpanded) stringResource(R.string.action_close) else stringResource(R.string.content_description_open), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
     }
 }

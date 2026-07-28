@@ -1,11 +1,9 @@
-package com.onlytechtake.repairapp.domain.workspace
+package com.onlytechtake.repairapp.domain.models
 
 import android.content.Context
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.mappers.toDomain
-import com.onlytechtake.repairapp.domain.models.CustomerType
-import com.onlytechtake.repairapp.domain.models.OrderPriority
-import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.*
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals

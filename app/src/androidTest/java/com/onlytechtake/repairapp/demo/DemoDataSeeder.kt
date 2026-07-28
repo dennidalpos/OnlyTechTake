@@ -24,10 +24,10 @@ import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.domain.models.MessageChannel
 import com.onlytechtake.repairapp.domain.models.OrderPriority
 import com.onlytechtake.repairapp.domain.models.OrderStatus
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 import com.onlytechtake.repairapp.domain.models.TimelineEventType
 import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.models.UserRole
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import java.io.File
 import java.io.FileOutputStream
 import com.onlytechtake.repairapp.test.R as TestR

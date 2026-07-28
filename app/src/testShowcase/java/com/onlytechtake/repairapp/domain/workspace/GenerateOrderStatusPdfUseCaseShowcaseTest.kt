@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.domain.workspace
+package com.onlytechtake.repairapp.domain.usecases
 
 import android.content.Context
 import com.onlytechtake.repairapp.BuildConfig
@@ -12,23 +12,21 @@ import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.data.orders.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
-import com.onlytechtake.repairapp.data.repositories.CatalogRepository
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
-import com.onlytechtake.repairapp.domain.models.CustomerType
-import com.onlytechtake.repairapp.domain.models.OrderDocument
-import com.onlytechtake.repairapp.domain.models.OrderPriority
-import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.models.UserPermission
-import com.onlytechtake.repairapp.domain.models.UserRole
+import com.onlytechtake.repairapp.domain.models.*
+import com.onlytechtake.repairapp.domain.repositories.CatalogRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
+import com.onlytechtake.repairapp.domain.repositories.UserRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -62,14 +60,14 @@ class GenerateOrderStatusPdfUseCaseShowcaseTest {
                 if (firstArg<Int>() == R.string.demo_version_banner) "VERSIONE SHOWCASE" else "Aperta"
             }
 
-            val workflowRepository = mockk<OrderWorkflowRepository>()
+            val workflowRepository = mockk<OrderRepository>()
             every { workflowRepository.observeOrderDetail("order-1") } returns flowOf(orderDetail())
 
             val catalogRepository = mockk<CatalogRepository>()
             coEvery { catalogRepository.getCategoryPath("cat-1") } returns "Notebook"
 
-            val userDao = mockk<UserDao>()
-            coEvery { userDao.findById("operator-1") } returns user()
+            val userRepository = mockk<UserRepository>()
+            coEvery { userRepository.findById("operator-1") } returns user().toDomain()
 
             val ownerPreferences = mockk<OwnerPreferences>()
             every { ownerPreferences.ownerInfo } returns flowOf(OwnerInfo())
@@ -82,7 +80,7 @@ class GenerateOrderStatusPdfUseCaseShowcaseTest {
                     workflowRepository = workflowRepository,
                     catalogRepository = catalogRepository,
                     documentRepository = documentRepository,
-                    userDao = userDao,
+                    userRepository = userRepository,
                     fileStorage = OrderDocumentFileStorage(MediaStorageProvider(context)),
                     ownerPreferences = ownerPreferences,
                     pdfGenerator = pdfGenerator,
@@ -97,7 +95,7 @@ class GenerateOrderStatusPdfUseCaseShowcaseTest {
                 ).getOrThrow()
 
             assertEquals("VERSIONE SHOWCASE", pdfGenerator.capturedPayload?.watermarkText)
-            assertEquals(document, documentRepository.saved.single().toDomain())
+            assertEquals(document, documentRepository.saved.single())
             assertTrue(File(document.localPath).exists())
         }
 
@@ -173,12 +171,12 @@ class GenerateOrderStatusPdfUseCaseShowcaseTest {
     }
 
     private class FakeOrderDocumentRepository : OrderDocumentRepository {
-        val saved = mutableListOf<OrderDocumentEntity>()
+        val saved = mutableListOf<OrderDocument>()
         private val documentsFlow = MutableStateFlow<List<OrderDocument>>(emptyList())
 
-        override suspend fun save(document: OrderDocumentEntity) {
+        override suspend fun save(document: OrderDocument) {
             saved += document
-            documentsFlow.value = saved.map { it.toDomain() }
+            documentsFlow.value = saved.toList()
         }
 
         override suspend fun markShared(
@@ -186,7 +184,7 @@ class GenerateOrderStatusPdfUseCaseShowcaseTest {
             sharedAt: Long,
         ) = Unit
 
-        override suspend fun findById(id: String): OrderDocument? = saved.firstOrNull { it.id == id }?.toDomain()
+        override suspend fun findById(id: String): OrderDocument? = saved.firstOrNull { it.id == id }
 
         override fun observeByOrder(orderId: String): Flow<List<OrderDocument>> = documentsFlow
 

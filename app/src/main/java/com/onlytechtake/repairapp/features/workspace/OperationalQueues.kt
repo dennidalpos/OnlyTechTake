@@ -3,8 +3,8 @@ package com.onlytechtake.repairapp.features.workspace
 import androidx.annotation.StringRes
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderFilter
 import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 
 data class OperationalQueue(
     @get:StringRes val titleRes: Int,

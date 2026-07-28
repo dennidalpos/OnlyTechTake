@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.orders.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
@@ -27,6 +28,7 @@ import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import com.onlytechtake.repairapp.domain.models.*
 import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
 import com.onlytechtake.repairapp.domain.models.CustomerType
@@ -35,12 +37,12 @@ import com.onlytechtake.repairapp.domain.models.MessageChannel
 import com.onlytechtake.repairapp.domain.models.OrderPriority
 import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.models.UserRole
-import com.onlytechtake.repairapp.domain.workspace.CategoryInput
-import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
-import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
-import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
-import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
-import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
+import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
+import com.onlytechtake.repairapp.domain.repositories.SignatureRepository
+import com.onlytechtake.repairapp.domain.repositories.UserRepository
+import com.onlytechtake.repairapp.domain.usecases.CreateIntakeOrderUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
@@ -411,7 +413,7 @@ class RepositoryPathsInstrumentedTest {
                 repository
                     .save(
                         actor,
-                        com.onlytechtake.repairapp.domain.workspace.CustomerInput(
+                        CustomerInput(
                             id = CUSTOMER_ID,
                             type = CustomerType.PRIVATE,
                             firstName = "Luigi",
@@ -981,9 +983,9 @@ class RepositoryPathsInstrumentedTest {
             clockMillis = clockMillis,
         )
 
-    private fun orderWorkflowRepository(): OrderWorkflowRepository {
+    private fun orderWorkflowRepository(): DefaultOrderRepository {
         val mediaProvider = MediaStorageProvider(context)
-        return OrderWorkflowRepository(
+        return DefaultOrderRepository(
             context = context,
             repairOrderDao = database.repairOrderDao(),
             customerDao = database.customerDao(),
@@ -997,9 +999,9 @@ class RepositoryPathsInstrumentedTest {
         ) { NOW }
     }
 
-    private fun orderMediaRepository(): OrderMediaRepository {
+    private fun orderMediaRepository(): DefaultOrderMediaRepository {
         val mediaProvider = MediaStorageProvider(context)
-        return OrderMediaRepository(
+        return DefaultOrderMediaRepository(
             context = context,
             repairOrderDao = database.repairOrderDao(),
             orderMediaDao = database.orderMediaDao(),
@@ -1024,9 +1026,9 @@ class RepositoryPathsInstrumentedTest {
             ownerPreferences = ownerPreferences,
         ) { NOW }
 
-    private fun signatureRepository(): SignatureRepository {
+    private fun signatureRepository(): DefaultSignatureRepository {
         val mediaProvider = MediaStorageProvider(context)
-        return SignatureRepository(
+        return DefaultSignatureRepository(
             context = context,
             repairOrderDao = database.repairOrderDao(),
             signatureDao = database.signatureDao(),

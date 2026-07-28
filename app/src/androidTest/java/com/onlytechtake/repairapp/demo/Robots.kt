@@ -6,7 +6,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollToIndex
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
 import com.onlytechtake.repairapp.test.R as TestR
 
 class DemoAssetRobot(

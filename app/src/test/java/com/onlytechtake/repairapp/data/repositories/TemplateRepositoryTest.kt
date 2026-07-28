@@ -16,9 +16,9 @@ import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.models.MessageChannel
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.models.UserRole
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

@@ -8,12 +8,12 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.CustomerInput
+import com.onlytechtake.repairapp.domain.models.OrderFilter
+import com.onlytechtake.repairapp.domain.models.OrderListItem
 import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
-import com.onlytechtake.repairapp.domain.workspace.CustomerInput
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
@@ -74,6 +74,9 @@ class CustomersViewModel
             }
         }
 
+        private val _viewState = MutableStateFlow(CustomerViewState())
+        val viewState = _viewState.asStateFlow()
+
         val customerSuggestions: StateFlow<List<Customer>?> =
             searchQuery
                 .debounce(300.milliseconds)
@@ -84,6 +87,101 @@ class CustomersViewModel
                     SharingStarted.WhileSubscribed(5_000),
                     null,
                 )
+
+        fun onSelectedCustomerChange(customer: Customer?) {
+            _viewState.value = _viewState.value.copy(selectedCustomer = customer)
+        }
+
+        fun onShowFormChange(show: Boolean) {
+            _viewState.value = _viewState.value.copy(showForm = show)
+            if (!show) clearForm()
+        }
+
+        fun onBusinessChange(isBusiness: Boolean) {
+            _viewState.value = _viewState.value.copy(isBusiness = isBusiness)
+            setFormDirty(true)
+        }
+
+        fun onFirstNameChange(name: String) {
+            _viewState.value = _viewState.value.copy(firstName = name)
+            setFormDirty(true)
+        }
+
+        fun onLastNameChange(name: String) {
+            _viewState.value = _viewState.value.copy(lastName = name)
+            setFormDirty(true)
+        }
+
+        fun onCompanyNameChange(name: String) {
+            _viewState.value = _viewState.value.copy(companyName = name)
+            setFormDirty(true)
+        }
+
+        fun onPhoneChange(phone: String) {
+            _viewState.value = _viewState.value.copy(phone = phone)
+            setFormDirty(true)
+        }
+
+        fun onEmailChange(email: String) {
+            _viewState.value = _viewState.value.copy(email = email)
+            setFormDirty(true)
+        }
+
+        fun onTaxCodeChange(code: String) {
+            _viewState.value = _viewState.value.copy(taxCode = code)
+            setFormDirty(true)
+        }
+
+        fun onVatNumberChange(vat: String) {
+            _viewState.value = _viewState.value.copy(vatNumber = vat)
+            setFormDirty(true)
+        }
+
+        fun onAddressChange(address: String) {
+            _viewState.value = _viewState.value.copy(address = address)
+            setFormDirty(true)
+        }
+
+        fun onNotesChange(notes: String) {
+            _viewState.value = _viewState.value.copy(notes = notes)
+            setFormDirty(true)
+        }
+
+        fun editCustomer(customer: Customer) {
+            _viewState.value =
+                _viewState.value.copy(
+                    editingCustomerId = customer.id,
+                    isBusiness = customer.type == com.onlytechtake.repairapp.domain.models.CustomerType.BUSINESS,
+                    firstName = customer.firstName.orEmpty(),
+                    lastName = customer.lastName.orEmpty(),
+                    companyName = customer.companyName.orEmpty(),
+                    phone = customer.phone.orEmpty(),
+                    email = customer.email.orEmpty(),
+                    taxCode = customer.taxCode.orEmpty(),
+                    vatNumber = customer.vatNumber.orEmpty(),
+                    address = customer.address.orEmpty(),
+                    notes = customer.notes.orEmpty(),
+                    showForm = true,
+                )
+        }
+
+        fun clearForm() {
+            _viewState.value =
+                _viewState.value.copy(
+                    editingCustomerId = null,
+                    isBusiness = false,
+                    firstName = "",
+                    lastName = "",
+                    companyName = "",
+                    phone = "",
+                    email = "",
+                    taxCode = "",
+                    vatNumber = "",
+                    address = "",
+                    notes = "",
+                )
+            setFormDirty(false)
+        }
 
         fun setShowAll(enabled: Boolean) {
             _showAll.value = enabled

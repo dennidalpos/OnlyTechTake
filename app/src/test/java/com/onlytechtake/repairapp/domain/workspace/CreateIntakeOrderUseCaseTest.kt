@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.domain.workspace
+package com.onlytechtake.repairapp.domain.usecases
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -6,17 +6,13 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.mappers.toDomain
-import com.onlytechtake.repairapp.data.repositories.CustomerRepository
-import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
-import com.onlytechtake.repairapp.data.repositories.SignatureRepository
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import com.onlytechtake.repairapp.domain.models.CustomerType
-import com.onlytechtake.repairapp.domain.models.OrderPriority
-import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.models.UserPermission
-import com.onlytechtake.repairapp.domain.models.UserRole
+import com.onlytechtake.repairapp.domain.models.*
+import com.onlytechtake.repairapp.domain.models.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
+import com.onlytechtake.repairapp.domain.repositories.SignatureRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

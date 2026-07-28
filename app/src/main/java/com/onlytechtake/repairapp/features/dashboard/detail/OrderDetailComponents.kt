@@ -42,12 +42,12 @@ import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
+import com.onlytechtake.repairapp.domain.logic.availableOrderStatusActions
+import com.onlytechtake.repairapp.domain.logic.requiresConfirmation
+import com.onlytechtake.repairapp.domain.models.OrderDetail
 import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.models.TimelineEvent
-import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
-import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision

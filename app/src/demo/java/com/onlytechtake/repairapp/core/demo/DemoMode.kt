@@ -6,7 +6,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.domain.models.CustomerType
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 
 @Suppress("SameReturnValue", "ConstPropertyName")
 object DemoMode {

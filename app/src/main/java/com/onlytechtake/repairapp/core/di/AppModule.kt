@@ -12,8 +12,6 @@ import com.onlytechtake.repairapp.data.preferences.OrdersPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.preferences.UiPreferences
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
-import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.services.BackupService
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
@@ -88,18 +86,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOrderFileCleanupService(
-        @ApplicationContext context: Context,
-        mediaStorageProvider: MediaStorageProvider,
-    ): OrderFileCleanupService = OrderFileCleanupService(context, mediaStorageProvider)
-
-    @Provides
-    @Singleton
     fun provideMediaOptimizer(): MediaOptimizer = MediaOptimizer()
-
-    @Provides
-    @Singleton
-    fun provideOrderDocumentFileStorage(mediaStorageProvider: MediaStorageProvider): OrderDocumentFileStorage = OrderDocumentFileStorage(mediaStorageProvider)
 
     @Provides
     @Singleton
@@ -125,7 +112,7 @@ object AppModule {
     @Singleton
     fun provideBackupService(
         @ApplicationContext context: Context,
-        backupRepository: com.onlytechtake.repairapp.data.repositories.BackupRepository,
+        backupRepository: com.onlytechtake.repairapp.data.backup.BackupRepository,
         backupReminderPreferences: BackupReminderPreferences,
         securityPreferences: SecurityPreferences,
     ): BackupService =

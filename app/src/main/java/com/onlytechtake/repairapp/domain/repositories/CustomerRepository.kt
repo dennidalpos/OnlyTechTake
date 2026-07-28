@@ -2,7 +2,7 @@ package com.onlytechtake.repairapp.domain.repositories
 
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.models.Customer
-import com.onlytechtake.repairapp.domain.workspace.CustomerInput
+import com.onlytechtake.repairapp.domain.models.CustomerInput
 import kotlinx.coroutines.flow.Flow
 
 interface CustomerRepository {

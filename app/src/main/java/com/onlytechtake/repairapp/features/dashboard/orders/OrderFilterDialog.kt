@@ -18,8 +18,8 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppQueueCard
+import com.onlytechtake.repairapp.domain.models.OrderFilter
 import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.workspace.OperationalQueue
 import com.onlytechtake.repairapp.features.workspace.queueFilter
 import com.onlytechtake.repairapp.features.workspace.statusColors

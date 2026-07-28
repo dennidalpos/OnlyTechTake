@@ -1,0 +1,130 @@
+package com.onlytechtake.repairapp.data.repositories
+
+import android.content.Context
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.permissions.PermissionService
+import com.onlytechtake.repairapp.core.utils.capitalizeFirst
+import com.onlytechtake.repairapp.data.local.dao.CustomerDao
+import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.Customer
+import com.onlytechtake.repairapp.domain.models.CustomerInput
+import com.onlytechtake.repairapp.domain.models.CustomerType
+import com.onlytechtake.repairapp.domain.models.UserPermission
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class DefaultCustomerRepository
+    @Inject
+    constructor(
+        private val context: Context,
+        private val customerDao: CustomerDao,
+        private val repairOrderDao: RepairOrderDao,
+        private val clockMillis: () -> Long = System::currentTimeMillis,
+    ) : CustomerRepository {
+        override fun observeRecent(): Flow<List<Customer>> = customerDao.observeRecent().distinctUntilChanged().map { list -> list.map { it.toDomain() } }
+
+        override fun observeAll(): Flow<List<Customer>> = customerDao.observeAll().distinctUntilChanged().map { list -> list.map { it.toDomain() } }
+
+        override fun search(query: String): Flow<List<Customer>> {
+            val trimmed = query.trim()
+            if (trimmed.isEmpty()) return observeRecent()
+            val sanitized =
+                trimmed
+                    .split(" ")
+                    .asSequence()
+                    .filter { it.isNotBlank() }
+                    .joinToString(" ") { "$it*" }
+            return customerDao.search(sanitized).distinctUntilChanged().map { list -> list.map { it.toDomain() } }
+        }
+
+        override suspend fun findById(id: String): Customer? = customerDao.findById(id)?.toDomain()
+
+        override suspend fun save(
+            actor: AuthenticatedUser?,
+            input: CustomerInput,
+        ): Result<Customer> =
+            runCatching {
+                PermissionService.requirePermission(actor, UserPermission.MANAGE_CUSTOMERS)
+                val now = clockMillis()
+                val existing = input.id?.let { customerDao.findById(it) }
+                require(isValid(input)) { context.getString(R.string.error_customer_required_fields) }
+
+                val entity =
+                    CustomerEntity(
+                        id = existing?.id ?: UUID.randomUUID().toString(),
+                        type = input.type,
+                        firstName =
+                            input.firstName
+                                .trim()
+                                .capitalizeFirst()
+                                .ifBlank { null },
+                        lastName =
+                            input.lastName
+                                .trim()
+                                .capitalizeFirst()
+                                .ifBlank { null },
+                        companyName =
+                            input.companyName
+                                .trim()
+                                .capitalizeFirst()
+                                .ifBlank { null },
+                        vatNumber =
+                            input.vatNumber
+                                .trim()
+                                .uppercase()
+                                .ifBlank { null },
+                        taxCode =
+                            input.taxCode
+                                .trim()
+                                .uppercase()
+                                .ifBlank { null },
+                        phone = input.phone.trim().ifBlank { null },
+                        email =
+                            input.email
+                                .trim()
+                                .lowercase()
+                                .ifBlank { null },
+                        address =
+                            input.address
+                                .trim()
+                                .capitalizeFirst()
+                                .ifBlank { null },
+                        notes =
+                            input.notes
+                                .trim()
+                                .capitalizeFirst()
+                                .ifBlank { null },
+                        createdAt = existing?.createdAt ?: now,
+                        updatedAt = now,
+                    )
+                customerDao.upsert(entity)
+                entity.toDomain()
+            }
+
+        override suspend fun delete(
+            actor: AuthenticatedUser?,
+            id: String,
+        ): Result<Unit> =
+            runCatching {
+                PermissionService.requirePermission(actor, UserPermission.MANAGE_CUSTOMERS)
+                val hasOrders = repairOrderDao.hasOrdersForCustomer(id)
+                require(!hasOrders) { context.getString(R.string.catalog_error_used_by_order) }
+                customerDao.deleteById(id)
+            }
+
+        override fun isValid(input: CustomerInput): Boolean =
+            when (input.type) {
+                CustomerType.PRIVATE -> input.firstName.isNotBlank() || input.lastName.isNotBlank()
+                CustomerType.BUSINESS -> input.companyName.isNotBlank()
+            } &&
+                (input.phone.isNotBlank() || input.email.isNotBlank())
+    }

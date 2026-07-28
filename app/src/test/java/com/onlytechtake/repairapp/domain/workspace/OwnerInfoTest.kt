@@ -1,5 +1,6 @@
-package com.onlytechtake.repairapp.domain.workspace
+package com.onlytechtake.repairapp.domain.models
 
+import com.onlytechtake.repairapp.domain.models.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

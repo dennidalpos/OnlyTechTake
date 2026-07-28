@@ -7,10 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.mappers.toDomain
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
-import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
-import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
@@ -18,7 +14,11 @@ import com.onlytechtake.repairapp.domain.auth.LoginResult
 import com.onlytechtake.repairapp.domain.models.OrderDocument
 import com.onlytechtake.repairapp.domain.models.OrderDocumentType
 import com.onlytechtake.repairapp.domain.models.UserRole
-import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
+import com.onlytechtake.repairapp.domain.repositories.TemplateRepository
+import com.onlytechtake.repairapp.domain.usecases.GenerateOrderStatusPdfUseCase
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
@@ -86,7 +86,7 @@ class OrderDetailViewModelTest {
                 )
             val documentRepository =
                 FakeOrderDocumentRepository(initialEntity)
-            val orderRepository = mockk<OrderWorkflowRepository>()
+            val orderRepository = mockk<OrderRepository>()
             every { orderRepository.observeOrderDetail("order-1") } returns flowOf(null)
             coEvery {
                 orderRepository.recordPdfShared(
@@ -181,8 +181,22 @@ class OrderDetailViewModelTest {
         var markedDocumentId: String? = null
             private set
 
-        override suspend fun save(document: OrderDocumentEntity) {
-            documents[document.id] = document
+        override suspend fun save(document: OrderDocument) {
+            val entity =
+                OrderDocumentEntity(
+                    id = document.id,
+                    orderId = document.orderId,
+                    type = document.type,
+                    localPath = document.localPath,
+                    fileName = document.fileName,
+                    mimeType = document.mimeType,
+                    sizeBytes = document.sizeBytes,
+                    includesCustomerSignature = document.includesCustomerSignature,
+                    createdByUserId = document.createdByUserId,
+                    createdAt = document.createdAt,
+                    sharedAt = document.sharedAt,
+                )
+            documents[document.id] = entity
             documentsFlow.value = documents.values.toList()
         }
 

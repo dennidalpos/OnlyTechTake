@@ -34,12 +34,12 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.models.StagedOrderMedia
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
-import com.onlytechtake.repairapp.features.workspace.isImageAttachment
+import com.onlytechtake.repairapp.features.workspace.isStagedImage
 import java.io.File
 
 @Composable
@@ -87,7 +87,7 @@ fun QuickIntakeMediaSection(
                             modifier = Modifier.padding(RepairAppSpacing.compactGap),
                             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                         ) {
-                            if (media.isImageAttachment()) {
+                            if (media.isStagedImage()) {
                                 LocalImagePreview(
                                     path = media.localPath,
                                     description = media.fileName,

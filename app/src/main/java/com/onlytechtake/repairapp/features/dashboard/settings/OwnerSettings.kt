@@ -28,7 +28,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable

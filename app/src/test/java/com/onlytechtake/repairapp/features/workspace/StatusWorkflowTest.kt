@@ -4,15 +4,15 @@ import android.content.Context
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.mappers.toDomain
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
+import com.onlytechtake.repairapp.domain.logic.OrderStatusPolicy
+import com.onlytechtake.repairapp.domain.logic.availableOrderStatusActions
+import com.onlytechtake.repairapp.domain.logic.requiresConfirmation
+import com.onlytechtake.repairapp.domain.logic.statusTemplateAnchor
 import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
 import com.onlytechtake.repairapp.domain.models.OrderPriority
 import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
-import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
-import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
-import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
@@ -65,7 +65,6 @@ class StatusWorkflowTest {
     fun closingRequiresClosureReason() {
         assertThrows(IllegalArgumentException::class.java) {
             OrderStatusPolicy.requireAllowed(
-                context,
                 OrderStatus.READY_FOR_PICKUP,
                 OrderStatus.CLOSED,
             )

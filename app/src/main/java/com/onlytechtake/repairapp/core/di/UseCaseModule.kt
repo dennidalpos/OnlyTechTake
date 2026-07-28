@@ -4,16 +4,20 @@ import android.content.Context
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.orders.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
-import com.onlytechtake.repairapp.data.repositories.CatalogRepository
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
-import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.SignatureRepository
+import com.onlytechtake.repairapp.domain.repositories.CatalogRepository
 import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
-import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
-import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.domain.repositories.SignatureRepository
+import com.onlytechtake.repairapp.domain.repositories.UserRepository
+import com.onlytechtake.repairapp.domain.usecases.ChangeOrderStatusUseCase
+import com.onlytechtake.repairapp.domain.usecases.CreateIntakeOrderUseCase
+import com.onlytechtake.repairapp.domain.usecases.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.domain.usecases.RecordCustomerFeedbackUseCase
+import com.onlytechtake.repairapp.domain.usecases.RecordDiagnosisResultUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,7 +53,7 @@ object UseCaseModule {
         workflowRepository: OrderRepository,
         catalogRepository: CatalogRepository,
         documentRepository: OrderDocumentRepository,
-        userDao: UserDao,
+        userRepository: UserRepository,
         fileStorage: OrderDocumentFileStorage,
         ownerPreferences: OwnerPreferences,
     ): GenerateOrderStatusPdfUseCase =
@@ -58,8 +62,26 @@ object UseCaseModule {
             workflowRepository = workflowRepository,
             catalogRepository = catalogRepository,
             documentRepository = documentRepository,
-            userDao = userDao,
+            userRepository = userRepository,
             fileStorage = fileStorage,
             ownerPreferences = ownerPreferences,
         )
+
+    @Provides
+    @Singleton
+    fun provideChangeOrderStatusUseCase(
+        orderRepository: OrderRepository,
+    ): ChangeOrderStatusUseCase = ChangeOrderStatusUseCase(orderRepository)
+
+    @Provides
+    @Singleton
+    fun provideRecordDiagnosisResultUseCase(
+        orderRepository: OrderRepository,
+    ): RecordDiagnosisResultUseCase = RecordDiagnosisResultUseCase(orderRepository)
+
+    @Provides
+    @Singleton
+    fun provideRecordCustomerFeedbackUseCase(
+        orderRepository: OrderRepository,
+    ): RecordCustomerFeedbackUseCase = RecordCustomerFeedbackUseCase(orderRepository)
 }

@@ -2,14 +2,15 @@ package com.onlytechtake.repairapp.domain.repositories
 
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.models.ClosureReason
+import com.onlytechtake.repairapp.domain.models.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.models.FeedbackInput
 import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderDetail
+import com.onlytechtake.repairapp.domain.models.OrderFilter
+import com.onlytechtake.repairapp.domain.models.OrderListItem
+import com.onlytechtake.repairapp.domain.models.OrderPriority
 import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
-import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
-import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.domain.workspace.OrderListItem
-import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
+import com.onlytechtake.repairapp.domain.models.RepairOrderInput
 import kotlinx.coroutines.flow.Flow
 
 interface OrderRepository {

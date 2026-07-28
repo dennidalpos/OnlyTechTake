@@ -1,9 +1,7 @@
-package com.onlytechtake.repairapp.domain.workspace
+package com.onlytechtake.repairapp.domain.logic
 
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.models.UserPermission
-import com.onlytechtake.repairapp.domain.models.UserRole
+import com.onlytechtake.repairapp.domain.models.*
 import org.junit.Assert.assertThrows
 import org.junit.Test
 

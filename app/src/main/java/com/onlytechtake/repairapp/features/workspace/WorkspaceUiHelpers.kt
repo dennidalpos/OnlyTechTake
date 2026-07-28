@@ -36,13 +36,13 @@ import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.labelRes
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.models.Category
+import com.onlytechtake.repairapp.domain.models.OrderAttachmentCounts
+import com.onlytechtake.repairapp.domain.models.OrderListItem
 import com.onlytechtake.repairapp.domain.models.OrderMedia
 import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.models.Signature
-import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
-import com.onlytechtake.repairapp.domain.workspace.OrderListItem
+import com.onlytechtake.repairapp.domain.models.StagedOrderMedia
 
 fun attachmentCounts(
     media: List<OrderMedia>,
@@ -152,7 +152,7 @@ fun OrderSummaryRow(
     }
 }
 
-fun StagedOrderMedia.isImageAttachment(): Boolean =
+fun StagedOrderMedia.isStagedImage(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)

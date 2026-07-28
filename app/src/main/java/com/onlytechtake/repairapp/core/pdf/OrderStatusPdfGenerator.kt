@@ -12,9 +12,9 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import com.onlytechtake.repairapp.domain.models.Customer
 import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OwnerInfo
 import com.onlytechtake.repairapp.domain.models.Signature
 import com.onlytechtake.repairapp.domain.models.TimelineEvent
-import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat

@@ -7,10 +7,12 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
+import com.onlytechtake.repairapp.features.dashboard.DashboardNavRoute
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -58,7 +60,43 @@ class DashboardViewModel
             workspaceManager.triggerAutoSave()
         }
 
+        private val _pendingRoute = kotlinx.coroutines.flow.MutableStateFlow<DashboardNavRoute?>(null)
+        val pendingRoute = _pendingRoute.asStateFlow()
+
+        private val _pendingIsReset = kotlinx.coroutines.flow.MutableStateFlow(value = false)
+        val pendingIsReset = _pendingIsReset.asStateFlow()
+
+        private val _showUnsavedChangesDialog = kotlinx.coroutines.flow.MutableStateFlow(value = false)
+        val showUnsavedChangesDialog = _showUnsavedChangesDialog.asStateFlow()
+
         fun setFormDirty(dirty: Boolean) {
             workspaceManager.setFormDirty(dirty)
+        }
+
+        fun setPendingNavigation(
+            route: DashboardNavRoute?,
+            isReset: Boolean = false,
+        ) {
+            _pendingRoute.value = route
+            _pendingIsReset.value = isReset
+            _showUnsavedChangesDialog.value = true
+        }
+
+        fun dismissUnsavedChangesDialog() {
+            _showUnsavedChangesDialog.value = false
+            _pendingRoute.value = null
+            _pendingIsReset.value = false
+        }
+
+        fun confirmNavigation(performNavigation: (DashboardNavRoute, Boolean) -> Unit) {
+            val route = _pendingRoute.value
+            val isReset = _pendingIsReset.value
+            _showUnsavedChangesDialog.value = false
+            setFormDirty(false)
+            if (route != null) {
+                performNavigation(route, isReset)
+            }
+            _pendingRoute.value = null
+            _pendingIsReset.value = false
         }
     }

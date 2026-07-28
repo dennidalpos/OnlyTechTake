@@ -9,18 +9,20 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.orders.OrderFileCleanupService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.*
 import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.CustomerActionStatus
 import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
 import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
+import com.onlytechtake.repairapp.domain.models.FeedbackInput
 import com.onlytechtake.repairapp.domain.models.OrderPriority
 import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.models.TimelineEventType
 import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.models.UserRole
-import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -32,10 +34,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class OrderWorkflowRepositoryInstrumentedTest {
+class OrderRepositoryInstrumentedTest {
     private lateinit var database: RepairAppDatabase
     private lateinit var context: Context
-    private lateinit var repository: OrderWorkflowRepository
+    private lateinit var repository: DefaultOrderRepository
 
     @Before
     fun setUp() {
@@ -47,7 +49,7 @@ class OrderWorkflowRepositoryInstrumentedTest {
                 .build()
 
         repository =
-            OrderWorkflowRepository(
+            DefaultOrderRepository(
                 context = context,
                 repairOrderDao = database.repairOrderDao(),
                 customerDao = database.customerDao(),

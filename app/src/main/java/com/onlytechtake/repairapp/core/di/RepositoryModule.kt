@@ -5,22 +5,25 @@ import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.media.MediaOptimizer
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.data.auth.AdminUserRepository
+import com.onlytechtake.repairapp.data.auth.DefaultAuthRepository
+import com.onlytechtake.repairapp.data.backup.BackupRepository
+import com.onlytechtake.repairapp.data.backup.DataResetRepository
 import com.onlytechtake.repairapp.data.local.dao.*
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.orders.OrderDocumentFileStorage
+import com.onlytechtake.repairapp.data.orders.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.preferences.*
 import com.onlytechtake.repairapp.data.repositories.*
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
-import com.onlytechtake.repairapp.domain.repositories.OrderRepository
-import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
-import dagger.Binds
+import com.onlytechtake.repairapp.domain.repositories.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as CustomerRepositoryInterface
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -75,12 +78,18 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideUserRepository(
+        userDao: UserDao,
+    ): UserRepository = DefaultUserRepository(userDao)
+
+    @Provides
+    @Singleton
     fun provideCustomerRepository(
         @ApplicationContext context: Context,
         customerDao: CustomerDao,
         repairOrderDao: RepairOrderDao,
-    ): com.onlytechtake.repairapp.domain.repositories.CustomerRepository =
-        CustomerRepository(
+    ): CustomerRepository =
+        DefaultCustomerRepository(
             context = context,
             customerDao = customerDao,
             repairOrderDao = repairOrderDao,
@@ -91,7 +100,7 @@ object RepositoryModule {
     fun provideCatalogRepository(
         @ApplicationContext context: Context,
         categoryDao: OrderCategoryDao,
-    ): CatalogRepository = CatalogRepository(context, categoryDao)
+    ): CatalogRepository = DefaultCatalogRepository(context, categoryDao)
 
     @Provides
     @Singleton
@@ -107,7 +116,7 @@ object RepositoryModule {
         database: RepairAppDatabase,
         fileCleanupService: OrderFileCleanupService,
     ): OrderRepository =
-        OrderWorkflowRepository(
+        DefaultOrderRepository(
             context = context,
             repairOrderDao = repairOrderDao,
             customerDao = customerDao,
@@ -132,7 +141,7 @@ object RepositoryModule {
         database: RepairAppDatabase,
         mediaOptimizer: MediaOptimizer,
     ): OrderMediaRepository =
-        OrderMediaRepository(
+        DefaultOrderMediaRepository(
             context = context,
             repairOrderDao = repairOrderDao,
             orderMediaDao = orderMediaDao,
@@ -165,7 +174,7 @@ object RepositoryModule {
         auditLogDao: AuditLogDao,
         ownerPreferences: OwnerPreferences,
     ): TemplateRepository =
-        TemplateRepository(
+        DefaultTemplateRepository(
             context = context,
             templateDao = templateDao,
             orderDao = orderDao,
@@ -242,7 +251,7 @@ object RepositoryModule {
         fileCleanupService: OrderFileCleanupService,
         mediaStorageProvider: MediaStorageProvider,
     ): SignatureRepository =
-        SignatureRepository(
+        DefaultSignatureRepository(
             context = context,
             repairOrderDao = repairOrderDao,
             signatureDao = signatureDao,
@@ -252,4 +261,17 @@ object RepositoryModule {
             fileCleanupService = fileCleanupService,
             mediaStorageProvider = mediaStorageProvider,
         )
+
+    @Provides
+    @Singleton
+    fun provideOrderFileCleanupService(
+        @ApplicationContext context: Context,
+        mediaStorageProvider: MediaStorageProvider,
+    ): OrderFileCleanupService = OrderFileCleanupService(context, mediaStorageProvider)
+
+    @Provides
+    @Singleton
+    fun provideOrderDocumentFileStorage(
+        mediaStorageProvider: MediaStorageProvider,
+    ): OrderDocumentFileStorage = OrderDocumentFileStorage(mediaStorageProvider)
 }

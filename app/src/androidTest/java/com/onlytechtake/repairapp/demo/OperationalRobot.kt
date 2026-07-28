@@ -11,7 +11,7 @@ import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
 import java.io.File
 import com.onlytechtake.repairapp.test.R as TestR
 
