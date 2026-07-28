@@ -2,7 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.mappers.toDomain
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.models.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.categoryPath

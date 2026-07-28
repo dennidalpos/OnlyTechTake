@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.4.0",
-  "status": "Completato refactoring critico dell'architettura. Scomposti i panel monolitici (Customer, OrderDetail), centralizzato lo stato UI tramite ViewState e ripulito il grafo delle dipendenze (DI). Rimossi import legacy e binding duplicati. Build e Quality Check superati.",
-  "last_updated": "2026-07-28T19:55:00Z",
+  "version": "1.4.1",
+  "status": "Allineamento varianti (Full, Demo, Showcase) completato. Risolti tutti i conflitti nei test unitari derivanti dai precedenti refactoring. Rimossi riferimenti legacy e stringhe hardcoded. Build e test superati per tutti i flavor.",
+  "last_updated": "2026-07-28T20:25:00Z",
   "backlog": [
     {
       "priority": "MEDIUM",

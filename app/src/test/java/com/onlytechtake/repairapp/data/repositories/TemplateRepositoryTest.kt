@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.domain.models.MessageChannel
 import com.onlytechtake.repairapp.domain.models.OwnerInfo
 import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.models.UserRole
+import com.onlytechtake.repairapp.domain.repositories.TemplateRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -43,8 +44,8 @@ class TemplateRepositoryTest {
         mockk<OwnerPreferences>(relaxed = true) {
             every { ownerInfo } returns flowOf(OwnerInfo(name = "Test Owner"))
         }
-    private val repository =
-        TemplateRepository(
+    private val repository: TemplateRepository =
+        DefaultTemplateRepository(
             context = context,
             templateDao = templateDao,
             orderDao = mockk<RepairOrderDao>(relaxed = true),
@@ -64,8 +65,8 @@ class TemplateRepositoryTest {
             val orderDao = mockk<RepairOrderDao>(relaxed = true)
             val customerDao = mockk<CustomerDao>(relaxed = true)
             val categoryDao = mockk<OrderCategoryDao>(relaxed = true)
-            val repository =
-                TemplateRepository(
+            val repository: TemplateRepository =
+                DefaultTemplateRepository(
                     context = context,
                     templateDao = templateDao,
                     orderDao = orderDao,

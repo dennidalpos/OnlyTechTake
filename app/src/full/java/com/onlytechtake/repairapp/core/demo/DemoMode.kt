@@ -7,7 +7,8 @@ import com.onlytechtake.repairapp.domain.models.OwnerInfo
 
 @Suppress("SameReturnValue", "ConstPropertyName")
 object DemoMode {
-    const val isEnabled: Boolean = false
+    var isEnabled: Boolean = false
+        private set
     var disableAutoSeed: Boolean = false
 
     fun canEnable(): Boolean = false

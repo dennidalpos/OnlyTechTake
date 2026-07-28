@@ -1,5 +1,7 @@
-package com.onlytechtake.repairapp.data.repositories
+package com.onlytechtake.repairapp.data.messaging
 
+import com.onlytechtake.repairapp.data.messaging.ManualWhatsAppSender
+import com.onlytechtake.repairapp.data.messaging.WhatsAppOutgoingMessage
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -18,7 +18,10 @@ import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.repositories.TemplateRepository
+import com.onlytechtake.repairapp.domain.usecases.ChangeOrderStatusUseCase
 import com.onlytechtake.repairapp.domain.usecases.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.domain.usecases.RecordCustomerFeedbackUseCase
+import com.onlytechtake.repairapp.domain.usecases.RecordDiagnosisResultUseCase
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
@@ -131,6 +134,9 @@ class OrderDetailViewModelTest {
                     orderDocumentRepository = documentRepository,
                     templateRepository = mockk<TemplateRepository>(relaxed = true),
                     generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
+                    changeOrderStatusUseCase = mockk<ChangeOrderStatusUseCase>(relaxed = true),
+                    recordDiagnosisResultUseCase = mockk<RecordDiagnosisResultUseCase>(relaxed = true),
+                    recordCustomerFeedbackUseCase = mockk<RecordCustomerFeedbackUseCase>(relaxed = true),
                     shareDocumentIntentFactory = shareFactory,
                     workspaceManager = workspaceManager,
                     actionRunner = actionRunner,

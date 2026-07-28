@@ -7,6 +7,7 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.models.CategoryInput
 import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.models.UserRole
+import com.onlytechtake.repairapp.domain.repositories.CatalogRepository
 import io.mockk.mockk
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
@@ -42,7 +43,7 @@ class CatalogRepositoryTest {
         }
 
     private val context = mockk<Context>(relaxed = true)
-    private val repository = CatalogRepository(context, stubDao)
+    private val repository: CatalogRepository = DefaultCatalogRepository(context, stubDao)
     private val admin =
         AuthenticatedUser("1", "admin", "Admin", UserRole.ADMIN, UserPermission.entries.toSet())
     private val operator =

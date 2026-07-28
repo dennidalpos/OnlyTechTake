@@ -9,6 +9,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.res.stringResource
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.features.auth.AuthGateViewModel
 import com.onlytechtake.repairapp.features.auth.components.*
@@ -97,7 +99,7 @@ fun AuthNavHost(
         modifier = modifier,
     ) {
         composable<AuthRoute.Loading> {
-            AuthLoadingContent(text = "Inizializzazione...")
+            AuthLoadingContent(text = stringResource(R.string.auth_loading_initializing))
         }
         composable<AuthRoute.Setup> {
             SetupContent(
@@ -149,7 +151,7 @@ fun AuthNavHost(
         }
         composable<AuthRoute.Error> {
             AuthErrorContent(
-                error = authState.initializationError ?: "Errore sconosciuto",
+                error = authState.initializationError ?: stringResource(R.string.error_unknown_short),
                 onRetry = onAppDataRestored,
             )
         }

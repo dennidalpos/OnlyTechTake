@@ -590,8 +590,10 @@
     <string name="error_repairable_diagnosis_required">Solo una diagnosi riparabile può passare in riparazione</string>
     <string name="error_not_repairable_diagnosis_required">Il passaggio diretto al ritiro richiede una diagnosi non riparabile</string>
     <string name="error_unknown">Errore</string>
+    <string name="error_unknown_short">Errore sconosciuto</string>
     <string name="error_prefix">Errore: %s</string>
     <string name="error_log_generation_failed">Impossibile generare il file dei log</string>
+    <string name="auth_loading_initializing">Inizializzazione…</string>
     <string name="order_diagnosis_repairable">Riparabile</string>
     <string name="order_diagnosis_not_repairable">Non riparabile</string>
     <string name="template_diagnosis_not_repairable_reason">Diagnosi tecnica: non riparabile</string>

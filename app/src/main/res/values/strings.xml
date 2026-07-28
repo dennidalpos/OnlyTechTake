@@ -584,8 +584,10 @@
     <string name="error_repairable_diagnosis_required">Only a serviceable diagnosis can pass to processing</string>
     <string name="error_not_repairable_diagnosis_required">Direct transition to delivery requires a non-serviceable diagnosis</string>
     <string name="error_unknown">Error</string>
+    <string name="error_unknown_short">Unknown error</string>
     <string name="error_prefix">Error: %s</string>
     <string name="error_log_generation_failed">Failed to generate log file</string>
+    <string name="auth_loading_initializing">Initializing…</string>
     <string name="order_diagnosis_repairable">Serviceable</string>
     <string name="order_diagnosis_not_repairable">Not serviceable</string>
     <string name="template_diagnosis_not_repairable_reason">Technical diagnosis: not serviceable</string>

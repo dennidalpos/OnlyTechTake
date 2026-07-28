@@ -73,7 +73,7 @@ class WorkspaceUiHelpersTest {
     fun finalPhotosAreImageHistoryButNotIntakePhotos() {
         val media = media("FINAL_PHOTO", "image/jpeg").toDomain()
 
-        assertTrue(media.isStagedImage())
+        assertTrue(media.isImageAttachment())
         assertTrue(media.isFinalPhoto())
     }
 

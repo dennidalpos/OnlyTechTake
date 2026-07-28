@@ -49,7 +49,7 @@ class CreateIntakeOrderUseCaseTest {
             val order = order(customerId = customer.id).toDomain()
             val stagedMedia = listOf(stagedMedia())
             val customerRepository = mockk<CustomerRepository>()
-            val orderRepository = mockk<OrderWorkflowRepository>()
+            val orderRepository = mockk<OrderRepository>()
             val orderMediaRepository = mockk<OrderMediaRepository>()
             val signatureRepository = mockk<SignatureRepository>()
             coEvery { orderRepository.countAllOrders() } returns 0
@@ -66,7 +66,7 @@ class CreateIntakeOrderUseCaseTest {
             } returns Result.success(order)
             coEvery {
                 signatureRepository.saveSignature(actor, order.id, "Mario Rossi", true, true, any())
-            } returns Result.success(signature(order.id))
+            } returns Result.success(signature(order.id).toDomain())
             coEvery {
                 orderMediaRepository.attachStagedMedia(
                     actor,
