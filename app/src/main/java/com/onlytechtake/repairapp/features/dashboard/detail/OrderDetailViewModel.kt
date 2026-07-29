@@ -9,45 +9,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.di.IoDispatcher
-import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
-import com.onlytechtake.repairapp.domain.models.ClosureReason
-import com.onlytechtake.repairapp.domain.models.CustomerFeedbackType
-import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
-import com.onlytechtake.repairapp.domain.models.DiagnosisResultInput
-import com.onlytechtake.repairapp.domain.models.FeedbackInput
-import com.onlytechtake.repairapp.domain.models.OrderDetail
-import com.onlytechtake.repairapp.domain.models.OrderDocument
-import com.onlytechtake.repairapp.domain.models.OrderListItem
-import com.onlytechtake.repairapp.domain.models.OrderStatus
-import com.onlytechtake.repairapp.domain.models.PreparedMessage
+import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
+import com.onlytechtake.repairapp.domain.logic.RepairWorkflowEngine
+import com.onlytechtake.repairapp.domain.models.*
 import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
-import com.onlytechtake.repairapp.domain.repositories.SignatureRepository
 import com.onlytechtake.repairapp.domain.repositories.TemplateRepository
-import com.onlytechtake.repairapp.domain.usecases.ChangeOrderStatusUseCase
 import com.onlytechtake.repairapp.domain.usecases.GenerateOrderStatusPdfUseCase
-import com.onlytechtake.repairapp.domain.usecases.RecordCustomerFeedbackUseCase
-import com.onlytechtake.repairapp.domain.usecases.RecordDiagnosisResultUseCase
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
-import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -65,12 +45,10 @@ class OrderDetailViewModel
         private val orderDocumentRepository: OrderDocumentRepository,
         private val templateRepository: TemplateRepository,
         private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
-        private val changeOrderStatusUseCase: ChangeOrderStatusUseCase,
-        private val recordDiagnosisResultUseCase: RecordDiagnosisResultUseCase,
-        private val recordCustomerFeedbackUseCase: RecordCustomerFeedbackUseCase,
         private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
         private val workspaceManager: WorkspaceManager,
         private val actionRunner: AuthenticatedActionRunner,
+        private val workflowEngine: RepairWorkflowEngine,
         @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         private val _orderId = MutableStateFlow<String?>(savedStateHandle["orderId"])
@@ -140,18 +118,18 @@ class OrderDetailViewModel
                 signaturesExpandedFlow,
             ) { args ->
                 OrderDetailViewState(
-                    detail = args[0] as OrderDetail?,
-                    documents = args[1] as List<OrderDocument>,
-                    isProcessing = args[2] as Boolean,
-                    isGeneratingStatusPdf = args[3] as Boolean,
-                    statusPdfError = args[4] as String?,
-                    showPdfSentConfirmation = args[5] as Boolean,
-                    preparedMessage = args[6] as PreparedMessage?,
-                    preparedMessageBody = args[7] as String,
-                    notesExpanded = args[8] as Boolean,
-                    photosExpanded = args[9] as Boolean,
-                    timelineExpanded = args[10] as Boolean,
-                    signaturesExpanded = args[11] as Boolean,
+                    detail = args[0] as? OrderDetail,
+                    documents = (args[1] as? List<*>)?.filterIsInstance<OrderDocument>() ?: emptyList(),
+                    isProcessing = args[2] as? Boolean ?: false,
+                    isGeneratingStatusPdf = args[3] as? Boolean ?: false,
+                    statusPdfError = args[4] as? String,
+                    showPdfSentConfirmation = args[5] as? Boolean ?: false,
+                    preparedMessage = args[6] as? PreparedMessage,
+                    preparedMessageBody = args[7] as? String ?: "",
+                    notesExpanded = args[8] as? Boolean ?: false,
+                    photosExpanded = args[9] as? Boolean ?: false,
+                    timelineExpanded = args[10] as? Boolean ?: false,
+                    signaturesExpanded = args[11] as? Boolean ?: false,
                 )
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), OrderDetailViewState())
 
@@ -197,7 +175,7 @@ class OrderDetailViewModel
                 setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
-                changeOrderStatusUseCase(actor, id, status, note, closureReason)
+                orderRepository.changeStatus(actor, id, status, note, closureReason)
             }
         }
 
@@ -215,7 +193,7 @@ class OrderDetailViewModel
                 setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
-                recordDiagnosisResultUseCase(
+                orderRepository.recordResult(
                     actor,
                     id,
                     DiagnosisResultInput(summary, outcome, estimateMillis),
@@ -237,7 +215,7 @@ class OrderDetailViewModel
                 setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
-                recordCustomerFeedbackUseCase(actor, id, FeedbackInput(type, note, closureReason))
+                orderRepository.recordFeedback(actor, id, FeedbackInput(type, note, closureReason))
             }
         }
 
@@ -525,12 +503,12 @@ class OrderDetailViewModel
         }
 
         fun onActionClick(
-            action: com.onlytechtake.repairapp.domain.logic.OrderStatusAction,
+            action: OrderStatusAction,
             diagnosisOutcome: DiagnosisOutcome?,
             decision: com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision?,
             quoteRejectNote: String,
             requestConfirm: (String, String, () -> Unit) -> Unit,
-            openStatusAction: (com.onlytechtake.repairapp.domain.logic.OrderStatusAction, DiagnosisOutcome?) -> Unit,
+            openStatusAction: (OrderStatusAction, DiagnosisOutcome?) -> Unit,
             onSuccess: () -> Unit = {},
         ) {
             val detail = viewState.value.detail ?: return
@@ -538,20 +516,19 @@ class OrderDetailViewModel
             val isRepairable = diagnosisOutcome == DiagnosisOutcome.REPAIRABLE
             val isNotRepairable = diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE
 
-            // Logic from OrderDetailWorkspace.kt moved here
             val isActionMatchDecision =
                 (isResultStep && isRepairable && (decision != null)) &&
-                    (action == com.onlytechtake.repairapp.domain.logic.OrderStatusAction.START_REPAIR || action == com.onlytechtake.repairapp.domain.logic.OrderStatusAction.CLOSE_ORDER)
+                    (action == OrderStatusAction.START_REPAIR || action == OrderStatusAction.CLOSE_ORDER)
 
             val isActionMatchNotRepairable =
-                isResultStep && isNotRepairable && (action == com.onlytechtake.repairapp.domain.logic.OrderStatusAction.READY_FOR_PICKUP)
+                isResultStep && isNotRepairable && (action == OrderStatusAction.READY_FOR_PICKUP)
 
             when {
                 isActionMatchDecision -> {
                     if (decision == com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision.ACCEPTED) {
                         recordFeedback(
                             CustomerFeedbackType.ACCEPT,
-                            "Quote Accepted", // TODO: use string resource via context if needed, or just a key
+                            context.getString(R.string.order_quote_accepted_log),
                         ) {
                             prepareMessage(TemplateAnchor.WHATSAPP_REPAIRING)
                             onSuccess()
@@ -570,12 +547,12 @@ class OrderDetailViewModel
 
                 isActionMatchNotRepairable -> {
                     requestConfirm(
-                        "Confirm", // TODO: resources
-                        "Are you sure?",
+                        context.getString(R.string.dialog_confirm_title),
+                        context.getString(R.string.order_confirm_ready_not_repairable),
                     ) {
                         changeStatus(
                             status = OrderStatus.READY_FOR_PICKUP,
-                            note = "Not repairable",
+                            note = context.getString(R.string.order_not_repairable_title),
                         ) {
                             prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
                             onSuccess()
@@ -587,5 +564,19 @@ class OrderDetailViewModel
                     openStatusAction(action, diagnosisOutcome)
                 }
             }
+        }
+
+        fun getPrimaryActionOverride(quoteAccepted: Boolean?): OrderStatusAction? {
+            val detail = viewState.value.detail ?: return null
+            return workflowEngine.getPrimaryActionOverride(
+                detail.order.status,
+                detail.order.diagnosisOutcome,
+                quoteAccepted,
+            )
+        }
+
+        fun getWhatsAppAnchor(): TemplateAnchor {
+            val detail = viewState.value.detail ?: return TemplateAnchor.WHATSAPP_UPDATE
+            return workflowEngine.getWhatsAppTemplateForStatus(detail.order)
         }
     }

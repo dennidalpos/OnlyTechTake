@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.4.1",
-  "status": "Allineamento varianti (Full, Demo, Showcase) completato. Risolti tutti i conflitti nei test unitari derivanti dai precedenti refactoring. Rimossi riferimenti legacy e stringhe hardcoded. Build e test superati per tutti i flavor.",
-  "last_updated": "2026-07-28T20:25:00Z",
+  "version": "1.5.0",
+  "status": "Audit critico e refactoring completati. Consolidati i Repository eliminando indirezioni superflue. Rimosse le UseCase 'proxy' ridondanti. Introdotto RepairWorkflowEngine per centralizzare la logica di business. Risolto bug del silent session timeout che causava la scomparsa dei dati. Pulizia totale del debito tecnico e rimozione file legacy.",
+  "last_updated": "2026-07-29T01:45:00Z",
   "backlog": [
     {
       "priority": "MEDIUM",

@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import com.onlytechtake.repairapp.domain.logic.RepairWorkflowEngine
 import com.onlytechtake.repairapp.domain.models.OrderDocument
 import com.onlytechtake.repairapp.domain.models.OrderDocumentType
 import com.onlytechtake.repairapp.domain.models.UserRole
@@ -18,13 +19,9 @@ import com.onlytechtake.repairapp.domain.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.repositories.TemplateRepository
-import com.onlytechtake.repairapp.domain.usecases.ChangeOrderStatusUseCase
 import com.onlytechtake.repairapp.domain.usecases.GenerateOrderStatusPdfUseCase
-import com.onlytechtake.repairapp.domain.usecases.RecordCustomerFeedbackUseCase
-import com.onlytechtake.repairapp.domain.usecases.RecordDiagnosisResultUseCase
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
-import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -134,12 +131,10 @@ class OrderDetailViewModelTest {
                     orderDocumentRepository = documentRepository,
                     templateRepository = mockk<TemplateRepository>(relaxed = true),
                     generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
-                    changeOrderStatusUseCase = mockk<ChangeOrderStatusUseCase>(relaxed = true),
-                    recordDiagnosisResultUseCase = mockk<RecordDiagnosisResultUseCase>(relaxed = true),
-                    recordCustomerFeedbackUseCase = mockk<RecordCustomerFeedbackUseCase>(relaxed = true),
                     shareDocumentIntentFactory = shareFactory,
                     workspaceManager = workspaceManager,
                     actionRunner = actionRunner,
+                    workflowEngine = RepairWorkflowEngine(),
                     ioDispatcher = testDispatcher,
                 )
 

@@ -4,6 +4,9 @@ import android.app.Activity
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -29,6 +32,18 @@ fun RepairAppNavHost(
     val navController = rememberNavController()
     val context = LocalContext.current
     val authViewModel: AuthGateViewModel = hiltViewModel()
+    val authState by authViewModel.authState.collectAsState()
+
+    LaunchedEffect(authState.currentUser, authState.initialized) {
+        if (authState.initialized && authState.currentUser == null) {
+            val currentRoute = navController.currentDestination?.route
+            if (currentRoute != null && !currentRoute.contains("Auth")) {
+                navController.navigate(MainRoute.Auth) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+        }
+    }
 
     val onAppDataRestored = {
         RepairAppDatabase.closeInstance()

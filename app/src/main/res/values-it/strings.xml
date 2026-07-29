@@ -613,6 +613,7 @@
     <string name="order_timeline_tooltip">Cronologia di tutti gli eventi e cambiamenti di stato relativi a questa commessa.</string>
     <string name="order_quote_outcome">Esito preventivo</string>
     <string name="order_quote_accepted">Preventivo accettato</string>
+    <string name="order_quote_accepted_log">Preventivo Accettato</string>
     <string name="order_quote_rejected">Preventivo rifiutato</string>
     <string name="order_quote_reject_reason">Motivo rifiuto</string>
 
@@ -620,6 +621,9 @@
     <string name="order_pdf_sent_confirm_text">Hai completato l\'invio del PDF al cliente?</string>
     <string name="order_confirm_diagnosis_outcome_title">Cliente avvisato?</string>
     <string name="order_confirm_diagnosis_outcome_text">La commessa passerà a pronta per il ritiro.</string>
+    <string name="order_confirm_ready_not_repairable">Sei sicuro di voler segnare come pronta al ritiro? Il dispositivo non è riparabile.</string>
+
+    <string name="dialog_confirm_title">Conferma</string>
 
     <string name="template_wa_intake_title">WhatsApp presa in carico</string>
     <string name="template_wa_intake_body">Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novità.\n\n{{proprietario_nome}}</string>

@@ -55,26 +55,15 @@ class DefaultAuthRepository(
             inactivityTicker(),
         ) { adminCount, session, lastUsername, security, now ->
             val timeoutMillis = security.inactivityTimeoutMinutes * 60 * 1000L
-            val activeUser =
-                if ((session.user != null) &&
+            val isExpired =
+                (session.user != null) &&
                     (timeoutMillis > 0) &&
-                    (
-                        sessionStore.isExpired(
-                            now,
-                            timeoutMillis,
-                        )
-                    )
-                ) {
-                    sessionStore.clear()
-                    null
-                } else {
-                    session.user
-                }
+                    (sessionStore.isExpired(now, timeoutMillis))
 
             AuthState(
                 initialized = true,
                 configured = adminCount > 0,
-                currentUser = activeUser,
+                currentUser = if (isExpired) null else session.user,
                 lastUsername = lastUsername ?: "",
             )
         }.catch { e ->

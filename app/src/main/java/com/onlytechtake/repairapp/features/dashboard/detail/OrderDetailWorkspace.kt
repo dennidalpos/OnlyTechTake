@@ -3,22 +3,11 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,15 +20,8 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.AppButton
-import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
-import com.onlytechtake.repairapp.core.design.components.BannerType
-import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
-import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.templates.TemplateAnchor
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.domain.logic.OrderStatusAction
-import com.onlytechtake.repairapp.domain.logic.statusTemplateAnchor
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
 import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.models.UserPermission
@@ -58,7 +40,6 @@ fun OrderDetailWorkspace(
 
     val context = LocalContext.current
     val workspaceState = rememberOrderDetailWorkspaceState()
-    val decision = workspaceState.quoteDecision
     val shareStatusChooserTitle = stringResource(R.string.order_share_status_chooser)
 
     val canDeleteOrder = actor?.permissions?.contains(UserPermission.EDIT_ALL_ORDERS) == true
@@ -115,7 +96,7 @@ fun OrderDetailWorkspace(
         }
 
         if (state.isProcessing) {
-            androidx.compose.foundation.layout.Box(
+            Box(
                 modifier = Modifier.fillMaxWidth().padding(RepairAppSpacing.compactGap),
                 contentAlignment = Alignment.Center,
             ) {
@@ -136,18 +117,17 @@ fun OrderDetailWorkspace(
 
                 item(key = "actions") {
                     val isResultStep = selected.order.status == OrderStatus.RESULT
-                    val isRepairable = selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE
-                    val isNotRepairable = selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE
-
-                    val primaryOverride =
-                        when {
-                            isResultStep && isRepairable && decision == QuoteDecision.REJECTED -> OrderStatusAction.CLOSE_ORDER
-                            isResultStep && isNotRepairable -> OrderStatusAction.READY_FOR_PICKUP
+                    val quoteAccepted =
+                        when (workspaceState.quoteDecision) {
+                            QuoteDecision.ACCEPTED -> true
+                            QuoteDecision.REJECTED -> false
                             else -> null
                         }
 
+                    val primaryOverride = viewModel.getPrimaryActionOverride(quoteAccepted)
+
                     val primaryLabel =
-                        if (isResultStep && isRepairable && decision == QuoteDecision.REJECTED) {
+                        if (isResultStep && quoteAccepted == false) {
                             stringResource(R.string.action_close_order)
                         } else {
                             null
@@ -159,7 +139,7 @@ fun OrderDetailWorkspace(
                     OrderActionCard(
                         status = selected.order.status,
                         isPaid = selected.isPaid,
-                        whatsAppAnchor = statusTemplateAnchor(selected.order),
+                        whatsAppAnchor = viewModel.getWhatsAppAnchor(),
                         onActionClick = { action ->
                             viewModel.onActionClick(
                                 action = action,
@@ -185,7 +165,7 @@ fun OrderDetailWorkspace(
                             } else {
                                 null
                             },
-                        isPrimaryActionEnabled = if (isResultStep && isRepairable) decision != null else true,
+                        isPrimaryActionEnabled = if (isResultStep && selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) workspaceState.quoteDecision != null else true,
                         primaryActionLabel = primaryLabel,
                         primaryActionOverride = primaryOverride,
                         showSecondaryActions = !isResultStep,
@@ -311,10 +291,8 @@ private fun ExpandableHeader(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(RepairAppSpacing.tinyGap))
             if (showBadge) {
-                androidx.compose.foundation.layout
-                    .Spacer(Modifier.padding(4.dp))
-                com.onlytechtake.repairapp.core.design.components
-                    .AppBadge(text = badgeText ?: "!", containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+                Spacer(Modifier.padding(4.dp))
+                AppBadge(text = badgeText ?: "!", containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
             }
         }
         Text(if (isExpanded) stringResource(R.string.action_close) else stringResource(R.string.content_description_open), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)

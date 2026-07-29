@@ -607,6 +607,7 @@
     <string name="order_timeline_tooltip">History of all events and status changes related to this service order.</string>
     <string name="order_quote_outcome">Quote outcome</string>
     <string name="order_quote_accepted">Quote accepted</string>
+    <string name="order_quote_accepted_log">Quote Accepted</string>
     <string name="order_quote_rejected">Quote rejected</string>
     <string name="order_quote_reject_reason">Rejection reason</string>
 
@@ -614,6 +615,9 @@
     <string name="order_pdf_sent_confirm_text">Have you completed sending the PDF to the customer?</string>
     <string name="order_confirm_diagnosis_outcome_title">Customer notified?</string>
     <string name="order_confirm_diagnosis_outcome_text">The service order will pass to ready for delivery.</string>
+    <string name="order_confirm_ready_not_repairable">Are you sure you want to mark this as ready for pickup? Device is not repairable.</string>
+
+    <string name="dialog_confirm_title">Confirm</string>
 
     <string name="template_wa_intake_title">WhatsApp intake</string>
     <string name="template_wa_intake_body">Hello {{cliente}}, we have taken in charge the service order {{numero_commessa}}: {{titolo_commessa}}.\nCategory: {{categoria_percorso}}.\nWe will update you as soon as we have news.\n\n{{proprietario_nome}}</string>

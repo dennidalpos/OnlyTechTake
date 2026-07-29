@@ -54,7 +54,7 @@ class DefaultOrderMediaRepository
         private val timelineEventDao: TimelineEventDao,
         private val fileCleanupService: OrderFileCleanupService,
         private val mediaStorageProvider: MediaStorageProvider,
-        private val database: RepairAppDatabase? = null,
+        private val database: RepairAppDatabase,
         private val fileNamer: OrderMediaFileNamer = OrderMediaFileNamer(),
         private val attachmentPolicy: AttachmentImportPolicy = AttachmentImportPolicy(),
         private val mediaOptimizer: MediaOptimizer = MediaOptimizer(),
@@ -229,7 +229,7 @@ class DefaultOrderMediaRepository
                             createdAt = now,
                         )
 
-                    inTransaction {
+                    database.withTransaction {
                         orderMediaDao.upsert(media)
                         eventWriter.mediaAdded(
                             orderId,
@@ -275,7 +275,7 @@ class DefaultOrderMediaRepository
                             createdAt = now,
                         )
 
-                    inTransaction {
+                    database.withTransaction {
                         orderMediaDao.upsert(media)
                         eventWriter.mediaAdded(orderId, actor.id, timelineTitle, file.name, now)
                     }
@@ -346,7 +346,7 @@ class DefaultOrderMediaRepository
                         )
 
                     try {
-                        inTransaction {
+                        database.withTransaction {
                             orderMediaDao.upsert(media)
                             eventWriter.mediaAdded(
                                 orderId,
@@ -375,7 +375,7 @@ class DefaultOrderMediaRepository
                     requireWritableOrder(actor, media.orderId)
                     val now = clockMillis()
 
-                    inTransaction {
+                    database.withTransaction {
                         val deleted = orderMediaDao.deleteById(media.id)
                         require(deleted > 0) { context.getString(R.string.error_media_not_removed) }
                         eventWriter.mediaRemoved(media.orderId, actor.id, media.fileName, now)
@@ -412,7 +412,7 @@ class DefaultOrderMediaRepository
                             height = bounds.height,
                         )
 
-                    inTransaction {
+                    database.withTransaction {
                         orderMediaDao.upsert(updated)
                         eventWriter.mediaAdded(
                             media.orderId,
@@ -466,7 +466,7 @@ class DefaultOrderMediaRepository
                         }
 
                     try {
-                        inTransaction {
+                        database.withTransaction {
                             entities.forEach { media ->
                                 orderMediaDao.upsert(media)
                                 eventWriter.mediaAdded(
@@ -559,8 +559,6 @@ class DefaultOrderMediaRepository
                 PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
             }
         }
-
-        private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
         private fun copyToWithLimit(
             input: InputStream,

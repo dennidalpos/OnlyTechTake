@@ -5,6 +5,7 @@ import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.security.PasswordHash
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.data.auth.AdminUserRepository
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
@@ -12,7 +13,6 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.models.OperatorInput
 import com.onlytechtake.repairapp.domain.models.UserPermission
 import com.onlytechtake.repairapp.domain.models.UserRole
-import com.onlytechtake.repairapp.data.auth.AdminUserRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
