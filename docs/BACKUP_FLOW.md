@@ -1,56 +1,37 @@
-# Backup and Restore Flow - OnlyTechTake
+# Backup and restore — OnlyTechTake
 
-This document describes the structure and flow of the full backup and restore system as of July 2026.
+This describes the current source behavior. Full provides ZIP backup/restore and order XLSX export; Demo restricts these operations. Review this document before describing backup capabilities in a store listing.
 
-## 1. Full Backup (Export ZIP)
+## ZIP contents and protection
 
-The full backup generates an encrypted ZIP file (using Zip4j) containing all application data and settings.
+| Entry | Contents | Current protection |
+|---|---|---|
+| `metadata/backup.json` | Timestamp, database name and schema version | No ZIP encryption |
+| `config/configuration.json` | Categories, message templates and app settings | No ZIP encryption |
+| `database/` | SQLCipher database and matching journal/WAL files | SQLCipher at rest; optional ZIP password encryption |
+| `files/app_media/` | Photos, videos, signatures and documents | No ZIP encryption |
+| `files/datastore/` | Local preference files | No ZIP encryption |
 
-### File Structure inside ZIP:
-- `metadata/backup.json`: Contains backup metadata (timestamp, device info, app version, database version).
-- `config/configuration.json`: Contains exported app configurations (categories, message templates, app settings).
-- `database/`: Contains the SQLite database files (`repair_app.db` and its journals/wal).
-- `files/app_media/`: Contains all media files (photos, signatures, documents).
-- `files/datastore/`: Contains all Jetpack DataStore preference files (auth, security, owner, backup reminder).
+`BackupRepository.exportCompleteBackup` applies the configured password only to database entries. The ZIP is not fully password protected, even when backup encryption is enabled. Private app storage does not encrypt media or preferences. Treat exported archives as sensitive and do not rely on the ZIP password to protect all contents. Full archive protection remains pending in the tracker.
 
-### Process:
-1. User triggers "Run Full Backup".
-2. Optional password is retrieved from `SecurityPreferences`.
-3. ZIP is created via SAF (`CreateDocument`).
-4. Files are walked and added to the ZIP with the specified structure.
-5. Success/Failure is recorded in `BackupReminderPreferences`.
+The admin chooses an export destination through Android's document picker. A selected provider may store or synchronize the file in the cloud. The app records backup success/failure locally; this does not establish cloud retention or deletion guarantees.
 
-## 2. Restore Flow
+## Restore behavior and limits
 
-Restoration is an atomic operation that replaces the current app state with the one from the backup.
+1. Extract supported archive entries into an app-cache staging directory and validate metadata/schema version.
+2. Validate the SQLCipher database using the current installation's key.
+3. Close the database and snapshot its files and the media directory.
+4. Replace database, media and DataStore files; clear authentication/session state and attempt to record the restore event.
+5. On failure during replacement, attempt database/media rollback; clean temporary snapshots and staging files.
 
-### Process:
-1. User selects a ZIP file via SAF (`OpenDocument`).
-2. ZIP is extracted into a staging directory in `cacheDir`.
-3. **Validation**:
-    - Metadata is checked for compatibility (database version must match).
-    - Database file is validated.
-4. **Snapshot for Rollback**:
-    - Current database files and media directory are moved/copied to a temporary backup area in `cacheDir`.
-5. **Replacement**:
-    - Current database instance is closed.
-    - Database files are replaced with the ones from the backup.
-    - `files/app_media` and `files/datastore` are replaced.
-6. **Finalization**:
-    - `AuthPreferences` and `SessionStore` are cleared to force a clean state.
-    - Database is reopened and an Audit Log entry is created.
-    - If anything fails, a rollback is performed from the snapshots.
+This is not a guaranteed atomic restore: DataStore preferences are not included in rollback, and snapshots are deleted in finalization even if recovery fails. Do not use restore as a migration guarantee or the only copy of important data. Recovery failure coverage and preference rollback remain pending.
 
-## 3. Order Export (XLSX)
+The SQLCipher key is protected by the installation's Android Keystore and stored separately from archive contents. Matching app/schema versions alone do not enable restore on a new device or after loss of the original key. The current key manager replaces stored key material after a decryption failure; preservation and explicit recovery handling remain pending.
 
-This is a partial export of order data only, meant for external processing (Excel/Sheets).
-- It does NOT include media or preferences.
-- It is NOT used for restoration.
+## Other exports
 
-## 4. Technical Notes for Future Schema Changes
+Order XLSX export contains tabular order/customer data without media or preferences and cannot restore the application. The current writer is called without a password. Standalone PDF and configuration JSON exports also have no app-level password encryption. Copies exported or shared outside the app are not removed by a local reset.
 
-If the database schema or preference structure changes:
-- Update `RepairAppDatabase.DATABASE_VERSION`.
-- The restore flow checks for this version in `metadata/backup.json`.
-- Migration logic might be needed if cross-version restore is supported (currently it requires an exact match).
-- If preference file names change in `DataStore`, update `BackupArchive.restoreAppFiles`.
+## Schema changes
+
+`RepairAppDatabase.DATABASE_VERSION` is checked during restore; the current path requires the matching schema version. Any supported format or preference-layout change must update validation and restoration together, with recovery verification before migration claims.

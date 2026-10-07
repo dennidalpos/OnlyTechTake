@@ -1,55 +1,39 @@
-# Store Listing - Italiano
+# Store listing — Italiano
 
-## OnlyTechTake
+Bozze da revisionare in Play Console. Il codice configura Full e Demo come app separate; Showcase resta fuori store.
 
-**Nome app:** OnlyTechTake: Gestione Commesse
-**Descrizione breve:** Gestionale locale per commesse di lavoro e documentazione tecnica.
+## OnlyTechTake Pro
+
+**Nome app:** OnlyTechTake Pro
+**Descrizione breve:** Gestionale locale per commesse, clienti e documentazione tecnica.
+
 **Descrizione completa:**
-🚀 **Ottimizza il tuo business con OnlyTechTake!**
+OnlyTechTake gestisce il ciclo delle commesse di riparazione sul dispositivo Android: accettazione, diagnosi, preventivo, lavorazione e consegna.
 
-Hai bisogno di una soluzione affidabile per gestire le commesse e documentare la presa in carico di beni? OnlyTechTake è la soluzione "local-first" definitiva per gestire l'intero ciclo di vita delle tue attività professionali direttamente dal tuo dispositivo Android. Tieni traccia di ogni intervento, dalla presa in carico alla consegna finale.
+- Anagrafica clienti, ricerca e storico interventi.
+- Foto, video con audio e firme autografe sullo schermo.
+- PDF di accettazione e riepilogo, esportazione delle commesse in XLSX.
+- Template per messaggi WhatsApp aperti e inviati manualmente dall'utente.
+- Account admin e operatori con permessi locali.
+- Backup ZIP e ripristino locale con i limiti indicati sotto.
 
-OnlyTechTake è ideale per centri di assistenza tecnica, laboratori di riparazione e qualsiasi attività professionale che richieda documentazione fotografica e firme di accettazione.
+Il database è cifrato con SQLCipher. Media, documenti e preferenze sono conservati come file privati separati. Non sono presenti backend proprietari, sincronizzazione cloud automatica o analytics nel codice esaminato. Condivisioni ed esportazioni avvengono su richiesta dell'utente verso l'app o il provider scelto, che può anche essere un servizio cloud.
 
-🔒 **Privacy Totale e Sicurezza**
-Tutti i tuoi dati risiedono esclusivamente sul tuo dispositivo. Grazie al database cifrato SQLCipher e alla filosofia offline-first, le informazioni dei tuoi clienti e i dati aziendali sono protetti e sempre accessibili, anche senza connessione internet. Nessun cloud, nessun tracciamento, nessuna fuga di dati.
+**Limiti del backup:** La password ZIP attuale protegge solo le voci database; configurazione, media e preferenze restano in chiaro. XLSX/PDF/JSON esportati singolarmente non sono cifrati dall'app. Proteggere separatamente le copie esportate. Il ripristino richiede la chiave originale dell'installazione e lo schema compatibile: non è una migrazione garantita su un nuovo telefono. La qualificazione del ripristino e le correzioni di recupero restano necessarie prima del rilascio in produzione.
 
-✨ **Caratteristiche Principali:**
-- 📋 **Gestione Commesse Avanzata:** Traccia ogni fase (Aperta, Diagnosi, In Lavorazione, Pronta, Chiusa) con facilità.
-- 👥 **Anagrafica Clienti CRM Locale:** Gestisci contatti, preferenze privacy e storico interventi in un archivio sicuro.
-- ✍️ **Firma Digitale Integrata:** Acquisisci la firma per l'accettazione e la privacy direttamente sullo schermo.
-- 📸 **Documentazione Tecnica:** Allega foto e video per fornire prove documentali dello stato dei beni e ridurre le contestazioni.
-- 💬 **WhatsApp manuale:** Prepara messaggi pronti da controllare e inviare manualmente ai clienti.
-- 📄 **Report PDF Professionali:** Crea schede di accettazione e ricevute PDF con il tuo logo aziendale.
-- 📊 **Export XLSX e Backup:** Esporta i dati per la tua contabilità e crea backup ZIP cifrati.
-
-**Perché scegliere OnlyTechTake:**
-1. **Velocità Operativa:** Workflow guidato progettato per rendere semplice la presa in carico e il tracciamento.
-2. **Privacy First:** I dati del tuo business appartengono solo a te. Nessun abbonamento cloud o server di terze parti.
-3. **Comunicazione Chiara:** Template professionali per ogni aggiornamento di stato.
-4. **Immagine Professionale:** Fornisci ai tuoi clienti ricevute firmate e report PDF dettagliati.
-
-Trasforma il tuo modo di lavorare oggi stesso con OnlyTechTake!
-
-**Keyword ASO:**
-gestione commesse, ordini di lavoro, documentazione tecnica, CRM locale, firma digitale Android, registro interventi, gestione business, tracciamento lavori, presa in carico beni.
-
-**Categoria:** Business / Produttività.
-**Testo promozionale:** L'app local-first per professionisti. Gestione commesse sicura, evidenze tecniche e documentazione firmata.
+**Categoria proposta:** Business / Produttività.
 
 ## OnlyTechTake Demo
 
-**Nome app:** OnlyTechTake: Demo
-**Descrizione breve:** Prova gratuita del flusso di lavoro OnlyTechTake.
+**Nome app:** OnlyTechTake Demo
+**Descrizione breve:** Prova il flusso locale di gestione commesse OnlyTechTake.
+
 **Descrizione completa:**
-Scopri il potenziale del tuo business con la versione **Demo di OnlyTechTake**.
+Prova il flusso di accettazione e gestione di una commessa, con anagrafica clienti, foto/video e PDF dimostrativi.
 
-Questa versione ti permette di testare il flusso base del gestionale "local-first" prima di passare alla versione completa. Prova come gestire una commessa dimostrativa dalla presa in carico al completamento.
+- Massimo una commessa complessiva presente nell'app.
+- Admin locale e fino a tre operatori attivi.
+- Export XLSX/ZIP e ripristino riservati a Full.
+- PDF con watermark Demo.
 
-⚠️ **Limiti della Versione Demo:**
-- Massimo 1 commessa attiva per testare il flusso.
-- Account Operatori disabilitati (solo Admin locale).
-- Funzioni di Export (XLSX, Backup ZIP) bloccate.
-- PDF generati con watermark "VERSIONE DEMO".
-
-Ideale per i professionisti che vogliono toccare con mano la velocità e la sicurezza di OnlyTechTake prima di adottarlo nel proprio business quotidiano.
+Il limite conta anche le commesse chiuse, non soltanto quelle attive. La gestione locale e le condivisioni manuali seguono il modello descritto per Pro.

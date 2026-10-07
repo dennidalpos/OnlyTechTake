@@ -1,58 +1,60 @@
-# Google Play Release Checklist
+# Google Play release checklist
 
-Checklist operativa per pubblicare OnlyTechTake Pro (`full`) e OnlyTechTake Demo (`demo`) su Google Play. Showcase resta una build commerciale fuori store.
-Il backlog operativo corrente è `PROJECT_STATUS.json`; questa checklist non conserva storico dei task completati.
+Scope: Full (`com.onlytechtake.repairapp`) and Demo (`com.onlytechtake.repairapp.demo`). Showcase is outside Play distribution. The owner handles upload; local AAB preparation does not prove Play acceptance or device readiness. Pending work belongs only in `PROJECT_STATUS.json` as `todos` strings.
 
-## Fonti ufficiali verificate
+## Prepared local artifacts
 
-- [Target API level requirements for Google Play apps](https://support.google.com/googleplay/android-developer/answer/11926878?hl=en): dal 31 agosto 2025 nuove app e update devono targettare Android 15 / API 35 o superiore; il repo usa `targetSdk = 37`.
-- [Provide information for Google Play's Data safety section](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en): tutti gli sviluppatori devono completare il modulo Data Safety; "collect" significa trasmettere dati fuori dal dispositivo, mentre il solo trattamento locale on-device non va dichiarato come raccolta.
-- [Prepare your app for review](https://support.google.com/googleplay/android-developer/answer/9859455?hl=en): App content richiede privacy policy, ads, app access, target audience/content, permessi sensibili e content rating.
-- [Declare permissions for your app](https://support.google.com/googleplay/android-developer/answer/9214102?hl=en): Play valuta i permessi dopo il caricamento dell'AAB e può richiedere dichiarazioni per permessi ad alto rischio o sensibili.
-- [Use Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756?hl=en): per nuove app creare una upload key, firmare l'AAB e usare Play App Signing.
-- [Set up an open, closed, or internal test](https://support.google.com/googleplay/android-developer/answer/9845334?hl=en): Google raccomanda un test interno; l'internal test supporta fino a 100 tester e può partire prima della configurazione completa dell'app.
-- [Use a pre-launch report to identify issues](https://support.google.com/googleplay/android-developer/answer/9842757?hl=en): i pre-launch report vengono generati automaticamente quando si carica un AAB/APK e coprono stabilità, compatibilità, performance e accessibilità.
-- [Add preview assets to showcase your app](https://support.google.com/googleplay/android-developer/answer/9866151?hl=en): richiesti icon Play 512x512, feature graphic 1024x500 e almeno 2 screenshot; per raccomandazioni app servono almeno 4 screenshot a risoluzione minima 1080px.
-- [Manage target audience and app content settings](https://support.google.com/googleplay/android-developer/answer/9867159?hl=en): target audience e contenuti vanno dichiarati in App content, dopo ads, App Access e privacy policy.
+Current artifacts generated on 2026-10-07 using AGP 9.3.1. The dependency catalog now specifies AGP 9.4.1; that update has not been verified with a new build. Rebuild both variants and refresh hashes before uploading artifacts from the updated checkout. Both pass `bundletool` 1.18.3 validation and JDK 21 `jarsigner -verify`; both declare version 1.4.0 (code 1), min SDK 26, target SDK 37 and are non-debuggable. These files remain ignored build outputs; regenerating them may change their hashes.
 
-## Stato di pubblicazione
+| Flavor | Artifact relative to repository | SHA-256 |
+|---|---|---|
+| Full | `app/build/outputs/bundle/fullRelease/app-full-release.aab` | `C5ED22808F3BA8B1B30A5C2E133B2568B6A66EBBB8B972E6B102BA1E2DA0D299` |
+| Demo | `app/build/outputs/bundle/demoRelease/app-demo-release.aab` | `23F72BBEFF862A9B6672604B8B65493B100F4A9305C49E73F090CB07ED843581` |
 
-| Area | Confronto Play vs repo | Stato | Azione esatta | Comando o documento responsabile | Criterio di chiusura |
-|---|---|---:|---|---|---|
-| Package Pro/Demo release | Play fissa il package al primo upload; Pro usa `com.onlytechtake.repairapp` (19,99 EUR), Demo usa `com.onlytechtake.repairapp.demo` (Gratis). | OK | Creare due app Play separate: Pro paid e Demo free. Non caricare Showcase su produzione Play. | `app/build.gradle.kts` | Play Console mostra due app distinte con package corretti. |
-| Target API | Requisito ufficiale corrente: API 35+ per nuove app/update; repo `targetSdk = 37`, `compileSdk = 37`, `minSdk = 26`. | OK | Ricontrollare la pagina target API immediatamente prima dell'invio se la pubblicazione slitta oltre una nuova finestra annuale Play. | `app/build.gradle.kts`; fonte Target API Google | Nessun warning Play su target SDK; AAB dichiara target 37. |
-| Versione | Repo `versionCode = 1`, `versionName = "1.0.0"`; impostata come baseline per la prima release. | OK | Prima dell'upload verificare che non esista già una release Play con versionCode >= 1. | `app/build.gradle.kts`; Play Console > Latest releases and bundles | Play accetta l'AAB senza errore di versionCode duplicato o inferiore. |
-| Signing locale | Play richiede AAB firmato; il repository contiene solo `keystore.properties.example` e ignora configurazione e keystore reali. | Da verificare localmente | Creare o verificare `keystore.properties` non tracciato e la relativa upload key prima della build release. | `keystore.properties.example`; `README.md`; `.gitignore`; `app/build.gradle.kts` | `keystore.properties` esiste solo in locale, punta a un keystore valido e la build release non fallisce per signing. |
-| Play App Signing | Per nuove app Google consiglia Play App Signing con upload key separata. | Bloccante | In Play Console usare Play App Signing; caricare l'AAB firmato con upload key locale, lasciando a Google la app signing key salvo decisione owner diversa. | Play Console > App integrity / release upload; fonte Play App Signing Google | Play mostra app enrolata in Play App Signing e accetta l'AAB firmato. |
-| AAB Pro/Demo release | Play usa Android App Bundle per nuove app. | Bloccante | Generare AAB Full e Demo dopo signing e conservare gli output solo come artefatti locali/build. | `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab`; `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\build_installer.ps1 -Flavor Demo -BuildType Release -OutputType Aab` | AAB generati in `fullRelease` e `demoRelease` e accettati in Internal testing. |
-| Shrink/minify release | Repo ha `isMinifyEnabled = true` e `isShrinkResources = true` in release. | OK | Verificare che la release minificata avvii login/setup, CameraX, PDF, backup/export e share. | `app/build.gradle.kts`; test manuale/interno | Nessun crash o classe rimossa in smoke test release e Pre-launch Report. |
-| Check locale standard | Prima di Play servono lint, compile, unit test e build debug verdi. | Da fare | Eseguire controllo ambiente e check Full senza release signing se non ancora configurato. | `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1`; `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild` | Entrambi i comandi terminano con exit code 0; eventuali warning residui sono tracciati. |
-| Test strumentali / workflow GitHub | Play non sostituisce i test su device; eseguire test strumentali quando il cambio tocca UI, storage Android, permessi, SAF, CameraX, Room reale o flussi device. | Verifica manuale | Eseguire workflow GitHub `Android Instrumented Tests` oppure test locale con device/emulatore e adb funzionante quando richiesto dal perimetro. | `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests`; GitHub Actions | Report strumentale con 0 failure / 0 error; crash o warning accessibilità bloccanti diventano todo in `PROJECT_STATUS.json`. |
-| App Access | App richiede login locale; su installazione pulita il revisore deve creare admin locale. | Verifica manuale | In App content selezionare accesso limitato e incollare istruzioni chiare per il flavor Full. | `docs/play-store/PLAY_CONSOLE_GUIDE_IT.md` | Play Console salva App Access; revisore può entrare senza credenziali reali o dati produttivi. |
-| Privacy policy | Google richiede privacy policy per Data Safety; il documento nel repo è allineato al modello local-first. Non esiste sito sviluppatore da inserire. | OK | Verificare titolare, data e contatto nel documento finale prima di pubblicare la policy a URL HTTPS reale. Lasciare vuoto il campo website sviluppatore. | `docs/play-store/PRIVACY_POLICY_IT.md`; hosting privacy policy | URL privacy pubblico funzionante, senza placeholder, inserito in Play Console e coerente con app/data safety; nessun sito sviluppatore inventato. |
-| Data Safety | Repo è local-only: database SQLCipher e file privati; WhatsApp/PDF/SAF sono azioni manuali utente. La guida interna va letta con la semantica Play: locale on-device non è "collection" se non esce dal dispositivo. | Bloccante | Compilare Data Safety dichiarando solo ciò che l'app trasmette off-device o condivide secondo le definizioni Play; verificare che gli handoff manuali siano descritti come user-initiated e coerenti con privacy policy. | `docs/play-store/PLAY_CONSOLE_GUIDE_IT.md`; fonte Data Safety Google | Modulo Data Safety salvato e approvato; nessuna discrepanza tra dichiarazione, privacy policy, permessi e comportamento reale. |
-| Dati locali e cancellazione | App conserva dati cliente, foto, firme e audit localmente; ha reset totale admin. | Verifica manuale | Dichiarare correttamente la cancellazione dati disponibile nell'app e non promettere cancellazione remota o account cloud. | `docs/play-store/PLAY_CONSOLE_GUIDE_IT.md`; app Settings/Admin | Privacy policy e Data Safety spiegano che i dati sono locali e cancellabili dall'admin sul dispositivo. |
-| Backup/restore SQLCipher/Keystore | Restore ZIP e chiavi locali non vanno presentati come migrazione garantita su nuovo telefono. | Verifica manuale | Trattare backup/restore cross-device come limite noto: non venderlo come migrazione affidabile; testare solo gli scenari supportati e documentare il limite nei testi Play se la feature resta esposta. | [`../BACKUP_FLOW.md`](../BACKUP_FLOW.md); store listing IT/EN; `docs/play-store/PLAY_CONSOLE_GUIDE_IT.md` | Store listing, privacy policy e guida non promettono migrazione nuovo telefono; eventuali limiti restano coerenti con Data Safety e App content. |
-| Content Rating | Play richiede questionario per evitare app "Unrated"; repo ha bozza risposte. | Verifica manuale | Compilare Content Rating come app gestionale/produttività, niente contenuti adulti/offensivi, comunicazione solo tramite WhatsApp manuale. | `docs/play-store/PLAY_CONSOLE_GUIDE_IT.md`; Play Console > App content | Rating assegnato e nessun warning App content residuo. |
-| Target audience / Ads / App content | App gestionale per laboratori, non progettata per bambini, no ads. | Verifica manuale | In App content dichiarare no ads, target adulti/professionale, non news/COVID/governo; evitare asset/listing che sembrino rivolti a bambini. | `docs/play-store/PLAY_CONSOLE_GUIDE_IT.md`; fonte Target audience Google | App content completo e coerente con listing, immagini e policy Families. |
-| Permessi sensibili | Manifest release dichiara solo `android.permission.CAMERA`; camera feature non obbligatoria. Non risultano `READ_MEDIA_*`, `MANAGE_EXTERNAL_STORAGE` o `INTERNET`. | Verifica manuale | Dopo upload AAB controllare se Play mostra Permissions Declaration Form; se appare, dichiarare Camera come core per documentazione fotografica riparazioni e fornire istruzioni/video se richiesti. | `app/src/main/AndroidManifest.xml`; fonte Declare permissions Google | Nessun alert permessi in App content; richiesta CAMERA in app e privacy policy sono coerenti. |
-| Store listing IT/EN | Bozze IT/EN separate per Pro e Demo; Demo dichiara 1 commessa, 0 operatori, solo admin, export/restore bloccati e watermark PDF. | OK | Verificare i testi in Console e caricare le traduzioni per entrambe le app. | `docs/play-store/STORE_LISTING_IT.md`; `docs/play-store/STORE_LISTING_EN.md` | Listing salvati in Play Console senza sito sviluppatore. |
-| Icona Play e feature graphic | Asset statici Play separati da launcher icon; Pro e Demo devono restare distinti. | Verifica manuale | Caricare asset statici Pro/Demo corretti; non caricare Showcase su Play. | [`../../marketing/README.md`](../../marketing/README.md) | Icon PNG 512x512 <= 1024KB e feature graphic 1024x500 caricati e accettati per Pro e Demo. |
-| Screenshot | La pipeline è profile-aware e separa gli output ignorati da Git sotto `asset/generated-assets/<AssetProfile>`. | Da generare/verificare | Generare e revisionare `store-pro` con `Full` e `store-demo` con `Demo`; tutti gli asset social/video pubblici partono da `Full`. | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile store-pro -Flavor Full`; `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile store-demo -Flavor Demo`; [`../../scripts/powershell/assets/README.md`](../../scripts/powershell/assets/README.md) | Almeno 4 screenshot portrait 1080x1920 o equivalenti per app, leggibili, separati Pro/Demo e coerenti con UI corrente. |
-| Preview video | Non obbligatorio per app; la pipeline supporta registrazioni profile-aware. | Opzionale | Generare e pubblicare un video solo se revisionato; altrimenti lasciare vuoto il campo Play senza bloccare il rilascio. | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\record_demo_device.ps1 -AssetProfile store-pro`; `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\record_demo_device.ps1 -AssetProfile store-demo`; fonte preview assets Google | Video caricato e verificato, oppure campo lasciato vuoto. |
-| Internal testing | Google raccomanda test interno prima della produzione; internal test supporta fino a 100 tester. | Da fare | Creare lista tester, caricare AAB Full release, condividere opt-in link e far completare smoke test reali. | Play Console > Testing > Internal testing; fonte Internal testing Google | AAB installato da Play Store interno su almeno un device target; feedback critico risolto. |
-| Pre-launch Report | Il report parte dopo upload AAB/APK e copre stabilità, compatibilità, performance e accessibilità. | Bloccante | Attendere report sull'AAB caricato in internal test; correggere crash/errori bloccanti e valutare warning accessibilità. | Play Console > Testing > Pre-launch report; fonte Pre-launch Report Google | Nessun crash o errore bloccante nel report; warning accettati o tracciati con motivazione. |
-| Release notes | Il repository è a `1.0.0`; le note devono descrivere app e limiti noti senza claim privacy non verificati. | Da fare | Finalizzare le note Play 1.0.0 includendo il limite backup/restore se rilevante per il testo pubblico. | `docs/release/release-notes-1.0.0.md`; Play Console release notes | Note release salvate per IT/EN o lingua scelta, coerenti con listing e policy. |
-| Segreti e path locali | Repo ignora `keystore.properties`; non vanno tracciati segreti, password, keystore o path personali. | OK | Prima di commit/upload verificare diff e status; non aggiungere output temporanei o build artifacts. | `git status --short`; `.gitignore` | Diff contiene solo documenti/codice atteso; nessun segreto o path personale in file tracciati. |
-| `PROJECT_STATUS.json` | Contiene solo i blocchi attivi B11 (pubblicazione Play) e B12 (test strumentati su device fisico). | Verifica manuale | Non chiudere blocchi finché criteri reali non sono soddisfatti; aggiungere solo residui concreti emersi da Play o da test device. | `PROJECT_STATUS.json` | Blocchi chiusi solo con evidenza; nuovi residui registrati come todo azionabili con `identified_residual` e `plan`. |
+Merged permissions include camera, microphone, wake lock, network-state access, boot receiver, foreground service and each package's internal dynamic-receiver permission; neither artifact requests `INTERNET`. Network-state access is not Internet access.
 
-## Bloccanti prima della produzione
+The signer is self-signed and has no timestamp; `jarsigner` reports these warnings while verifying both signatures. Google Play upload-key matching/enrollment remains to be checked in Console. Use the [official bundletool guidance](https://developer.android.com/tools/bundletool) for repeat inspection. Gradle release vital-lint checks passed during both builds; device tests and Play acceptance were not performed.
+## Official references
 
-1. `keystore.properties` reale e upload key validi, senza segreti tracciati.
-2. AAB Full Release firmato, caricato e accettato in Internal testing.
-3. Screenshot Full e Demo generati e revisionati con la pipeline flavor-aware.
-4. Test strumentali Full verdi e flusso dinamico `Torna su` verificato su device fisico come da `PROJECT_STATUS.json` blocco `B12`.
-5. Pre-launch Report senza crash/errori bloccanti.
-6. Privacy policy definitiva con titolare, data, contatto e URL HTTPS pubblico per la policy; campo sito sviluppatore vuoto.
-7. Data Safety coerente con app local-only, condivisioni manuali e privacy policy.
-8. Backup/restore presentato come funzione locale con rischio noto, non come migrazione affidabile su nuovo telefono.
+Checked on 2026-10-07:
+
+- [Target API requirements](https://support.google.com/googleplay/android-developer/answer/11926878?hl=en): new mobile apps and updates require API 36 or higher from 2026-08-31.
+- [Data Safety](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en): on-device processing is excluded from collection; qualifying user-initiated transfers are excluded from sharing. Internal-only testing is exempt from this section.
+- [App review preparation](https://support.google.com/googleplay/android-developer/answer/9859455?hl=en): privacy policy, reviewer access and other App content declarations must match app behavior.
+- [Internal testing](https://support.google.com/googleplay/android-developer/answer/9845334?hl=en): start with an internal test before wider distribution; acceptance and testing happen in Play Console.
+
+## Local configuration
+
+Read release values from `app/build.gradle.kts`: `versionCode = 1`, `versionName = "1.4.0"`, `compileSdk = 37`, `targetSdk = 37`, `minSdk = 26`, JVM toolchain 21. Do not alter package, SDK or versionCode to work around a Console error without the owner's decision.
+
+The main manifest requests `CAMERA` and `RECORD_AUDIO`; no `INTERNET` or broad storage permission is declared there. Check the merged release manifest for SDK contributions. Demo allows one order and up to three active operators; exports and restore are restricted, and PDFs have a watermark. Confirm these limits against the final artifact.
+
+Signing uses local ignored `keystore.properties` and its referenced keystore. Never copy their contents into documentation, logs or Git. Keep the upload key available for future updates.
+
+If the installed Android Studio JBR is unsupported by the wrapper, set process `JAVA_HOME` to an existing JDK 21 before running it. A cached Gradle JDK is suitable if verified; the wrapper does not search that cache automatically. No system environment change is required.
+
+Generate the two artifacts in sequence:
+
+```powershell
+./scripts/powershell/android/build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab -NonInteractive
+./scripts/powershell/android/build_installer.ps1 -Flavor Demo -BuildType Release -OutputType Aab -NonInteractive
+```
+
+Expected outputs:
+
+- `app/build/outputs/bundle/fullRelease/app-full-release.aab`
+- `app/build/outputs/bundle/demoRelease/app-demo-release.aab`
+
+Before handoff, verify each archive's package/version, merged permissions and signature. Record SHA-256 hashes for the exact files handed off. A successful bundle build does not validate runtime flows, Play signing enrollment or whether versionCode 1 has already been used.
+
+## Owner upload and release checks
+
+1. Select the correct separate Play apps and confirm package identifiers and unused versionCode. Enroll/verify Play App Signing and upload-key acceptance.
+2. Upload the corresponding signed AAB to the chosen track. Use internal testing first unless a different release plan is agreed.
+3. Use [reviewer instructions](PLAY_CONSOLE_GUIDE_IT.md) and the canonical [Data Safety guide](DATA_SAFETY_GUIDE.md). Complete App content and Data Safety when required by the track.
+4. Finalize publisher privacy contact and a working public HTTPS policy URL, with policy access from the app. The [policy draft](PRIVACY_POLICY_IT.md) needs these publisher details. The landing privacy page still requires alignment before publication.
+5. Review separate Full/Demo listing text and assets using [marketing assets](../../marketing/README.md). Use [release notes](../release/release-notes-1.4.0.md) matching the built version.
+6. Install via Play on target devices and exercise setup/login, operators, photo/video permissions, PDF, manual WhatsApp/share and supported backup/restore. Review actual pre-launch findings; record actionable failures in the tracker.
+7. Resolve the backup/key protection issues tracked as P1 before describing the release as production ready. Media/configuration/DataStore backup entries currently remain unencrypted, cross-device restore is unsupported, and restore rollback does not cover preferences. See [backup flow](../BACKUP_FLOW.md).
+
+Close the upload task only after direct Console acceptance evidence. Remove verified completed entries immediately; retain unresolved tasks without completed history or metadata objects.

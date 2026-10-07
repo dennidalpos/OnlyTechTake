@@ -1,44 +1,32 @@
-# Guida Play Console (Questionari e Risposte)
+# Guida Play Console
 
-Documento di riferimento per la compilazione dei questionari obbligatori su Google Play Console per OnlyTechTake Pro e OnlyTechTake Demo. Non inserire un sito web sviluppatore: al momento non esiste. Dove Google richiede una privacy policy pubblica, usare un URL HTTPS pubblico reale solo quando sara' disponibile.
+Riferimento per Full e Demo. La preparazione locale non compila i moduli in Console. Usare le [fonti e la checklist release](release-checklist.md), verificate il 2026-10-07.
 
-## 1. Accesso all'app (App Access)
-- **Opzione:** Tutte o alcune parti dell'app sono limitate.
-- **Istruzioni per i revisori:**
-  - Per OnlyTechTake Pro, spiegare che al primo avvio pulito il revisore deve creare un admin locale e poi usare quelle credenziali.
-  - Per OnlyTechTake Demo, spiegare che al primo avvio pulito il revisore deve creare un admin locale oppure usare il pulsante `Avvia modalità demo`; il flavor Demo consente 1 sola commessa, nessun operatore, export/restore bloccati e PDF con watermark.
-  - Showcase non e' una pubblicazione Play: usarlo solo per presentazioni commerciali fuori store.
-  - Esempio Full: "L'app richiede un login locale. Su installazione pulita viene mostrato il setup admin; creare un admin locale e accedere. L'app non richiede connessione internet per il login."
+## Accesso all'app
 
-## 2. Annunci (Ads)
-- **Risposta:** No, l'app non contiene annunci.
+Selezionare accesso limitato e spiegare il login locale. Su installazione pulita Full mostra il setup: il revisore crea un admin locale e accede con le credenziali appena create. Non fornire credenziali di negozi reali; non è richiesto un account su un server.
 
-## 3. Classificazione dei contenuti (Content Rating)
-- **Categoria:** Utility, Productivity, Communication o Altro.
-- **Domande chiave:**
-  - L'app permette di acquistare beni digitali? **No**.
-  - L'app condivide la posizione fisica dell'utente? **No**.
-  - L'app permette agli utenti di comunicare? **Sì**, tramite l'integrazione con l'app WhatsApp installata sul dispositivo (invio manuale di messaggi).
-  - L'app contiene contenuti offensivi o per adulti? **No**.
+Demo consente setup admin oppure il pulsante di avvio demo. Il codice configura una commessa e fino a tre operatori attivi; export e restore sono limitati e i PDF hanno watermark. Showcase è destinato a presentazioni fuori Play. Ricontrollare l'effettivo flusso sull'AAB installato prima di salvare App Access.
 
-## 4. Sicurezza dei dati (Data Safety)
-OnlyTechTake gestisce i dati esclusivamente in locale, ma Google richiede di dichiarare come vengono trattati.
+## Annunci, pubblico e classificazione
 
-| Tipo di Dato | Raccolto | Condiviso | Scopo |
-| :--- | :--- | :--- | :--- |
-| Nome/Email/Telefono Cliente | Sì (Locale) | No | Gestione commesse |
-| Foto/Video | Sì (Locale) | No | Documentazione riparazione |
-| Informazioni finanziarie (Importi) | Sì (Locale) | No | Preventivi |
-| Identificatori dispositivo | No | No | - |
+- Annunci: assenti nel codice esaminato.
+- Pubblico previsto: professionisti e laboratori; confermare le fasce effettive in Console.
+- Content Rating: gestionale/produttività, con apertura manuale di WhatsApp. Rispondere al questionario effettivo senza equiparare questa apertura a un servizio chat proprietario.
+- News, COVID e servizi governativi: non sono funzionalità dell'app.
 
-**Note per il modulo:**
-- Backend proprietario: assente. L'app non sincronizza dati verso server OnlyTechTake.
-- Dati in transito: non dichiarare un trasferimento app-server proprietario. WhatsApp, email, Drive o altri provider sono aperti manualmente dall'utente tramite app/SAF di terze parti.
-- Dati a riposo: il database locale usa SQLCipher; ZIP/XLSX possono essere cifrati con password se l'admin abilita l'opzione. PDF e configurazione JSON esportati singolarmente non sono cifrati dall'app.
-- L'utente può richiedere l'eliminazione dei dati? **Sì**, l'admin può eliminare singoli record, cancellare tutte le commesse o eseguire il reset totale dall'app.
+## Data Safety
 
-## 5. App di monitoraggio (News/COVID-19/Gov)
-- **Risposte:** No a tutte (l'app non è un'app di news, né legata al COVID-19 o a enti governativi).
+Seguire soltanto la [guida canonica](DATA_SAFETY_GUIDE.md). Il trattamento locale non si dichiara come "raccolta locale". La risposta proposta è "No" a raccolta/condivisione solo dopo aver confermato il comportamento degli SDK release e l'eccezione per i trasferimenti manuali.
 
-## 6. Sicurezza e Privacy (Handoff Hacking)
-L'app utilizza `android:hasFragileUserData="true"` per suggerire al sistema di conservare i dati durante gli aggiornamenti, ma è fondamentale ricordare all'utente che la disinstallazione completa può comportare la perdita dei dati se non è stato eseguito un backup ZIP manuale.
+Non dichiarare cifratura in transito sulla base del database SQLCipher. La password ZIP attuale cifra solo il database; configurazione, media e DataStore restano in chiaro, mentre XLSX/PDF/JSON singoli non sono cifrati dal percorso di export. I limiti sono descritti nel [flusso backup](../BACKUP_FLOW.md).
+
+Il reset admin riguarda dati locali, non copie esportate o condivise. Gli account operatori sono locali. Per un'app distribuita esclusivamente nel test interno, Google esenta dalla sezione Data Safety; ricontrollare i requisiti prima di cambiare canale.
+
+## Privacy policy e permessi
+
+Finalizzare contatto privacy del publisher e URL HTTPS pubblico reale nella [bozza policy](PRIVACY_POLICY_IT.md), con accesso alla policy anche dall'app. Non inserire URL o dati del titolare inventati. Un sito sviluppatore è un campo distinto dall'URL policy.
+
+Il manifest principale richiede fotocamera e microfono (`CAMERA`, `RECORD_AUDIO`) per foto e video con audio. Non richiede permessi generali di storage o `INTERNET`. Controllare il manifest release unito e le eventuali dichiarazioni richieste da Console dopo l'upload.
+
+`android:hasFragileUserData="true"` può offrire la conservazione dei dati durante la disinstallazione sui sistemi supportati; non garantisce recupero o migrazione. La chiave SQLCipher dipende dal Keystore locale: non promettere ripristino su un altro dispositivo o dopo perdita della chiave.

@@ -20,7 +20,7 @@
 
 ## 📱 Overview
 
-**OnlyTechTake** is a powerful local-first solution for job management, goods intake, and technical documentation. Designed for maximum privacy and speed, the app handles the entire lifecycle of service orders, from initial intake to final delivery, without ever sending sensitive data to the cloud.
+**OnlyTechTake** is a powerful local-first solution for job management, goods intake, and technical documentation. Designed for maximum privacy and speed, the app handles the entire lifecycle of service orders, from initial intake to final delivery, with sharing and exports initiated explicitly by the user.
 
 The app is ideal for technical assistance centers, repair labs, and any business that needs to document the intake of customer goods and track intervention activities.
 
@@ -73,7 +73,7 @@ The project includes a modern and responsive landing page located in `/landing`.
 | **Database** | SQLCipher v4 (Encrypted) |
 | **Build Flavors** | `full`, `demo`, `showcase` |
 | **Localization** | 🇺🇸 English (Default), 🇮🇹 Italian |
-| **Status** | 🟢 Production Ready (v1.0.0) - Baseline Audit July 2026 |
+| **Status** | v1.4.0 configured; local release preparation; production qualification pending |
 
 ---
 
@@ -84,7 +84,7 @@ OnlyTechTake/
 │   ├── src/
 │   │   ├── main/             # Core logic and shared resources
 │   │   ├── full/             # Pro version specific features
-│   │   ├── demo/             # Trial version (1 order limit)
+│   │   ├── demo/             # Trial version (1 stored order limit)
 │   │   └── showcase/         # Internal demo build with preloaded data
 │   └── build.gradle.kts
 ├── docs/                     # Play Store guides and technical docs
@@ -101,14 +101,14 @@ OnlyTechTake/
 - **UI Framework**: [Jetpack Compose](https://developer.android.com/jetpack/compose) (Material 3)
 - **Local Storage**: [Room](https://developer.android.com/training/data-storage/room) + [SQLCipher](https://www.zetetic.net/sqlcipher/) (Encrypted at rest)
 - **Asynchrony**: Coroutines & Flow
-- **Dependency Injection**: Manual DI (Container Pattern for zero-overhead)
+- **Dependency Injection**: Hilt
 - **Media**: CameraX (Photo/Video evidence)
 - **Navigation**: Jetpack Navigation Compose
 
 ---
 
 ## 🛡️ Privacy & Security Model
-- **Local-First**: No data leaves the device. No cloud sync, no telemetry, no analytics.
+- **Local-First**: No proprietary backend, automatic cloud sync, telemetry or analytics in the inspected code. Users can share documents or export to a chosen provider, including cloud storage.
 - **Encrypted Storage**: The database is encrypted using SQLCipher.
 - **Scoped Storage**: All media and documents are stored in private app directories.
 - **Digital Trust**: Signature capture and photo/video attachments provide documented evidence for interventions, helping to reduce disputes.
@@ -120,7 +120,7 @@ OnlyTechTake/
 ### Environment Requirements
 - **OS**: Windows 11 (Optimized for PowerShell)
 - **IDE**: Android Studio Ladybug (or newer)
-- **JDK**: Java 17 (Managed via Gradle)
+- **JDK**: Java 21 (JVM toolchain; set process JAVA_HOME if needed)
 - **Android SDK**: API 37
 
 ### Local Setup
@@ -147,7 +147,7 @@ OnlyTechTake/
 
 We use a suite of PowerShell wrappers to maintain code quality:
 
-- **Quality Suite**: Runs Spotless (formatting) and Unit Tests.
+- **Quality Suite**: Runs Spotless formatting checks and Android Lint.
   ```powershell
   ./scripts/powershell/project/quality.ps1
   ```
@@ -160,7 +160,7 @@ We use a suite of PowerShell wrappers to maintain code quality:
   ./scripts/powershell/assets/create_demo_assets.ps1
   ```
 
-For AI agent operational guidelines, see [AGENTS.md](AGENTS.md).
+For release preparation and limitations, see the [release checklist](docs/play-store/release-checklist.md) and [backup flow](docs/BACKUP_FLOW.md). For agent guidelines, see [AGENTS.md](AGENTS.md).
 
 ---
 

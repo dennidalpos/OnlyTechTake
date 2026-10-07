@@ -1,14 +1,10 @@
 {
-  "project_name": "OnlyTechTake",
-  "version": "1.5.0",
-  "status": "Audit critico e refactoring completati. Consolidati i Repository eliminando indirezioni superflue. Rimosse le UseCase 'proxy' ridondanti. Introdotto RepairWorkflowEngine per centralizzare la logica di business. Risolto bug del silent session timeout che causava la scomparsa dei dati. Pulizia totale del debito tecnico e rimozione file legacy.",
-  "last_updated": "2026-07-29T01:45:00Z",
-  "backlog": [
-    {
-      "priority": "MEDIUM",
-      "id": "B11",
-      "task": "GOOGLE PLAY: Caricamento AAB. Utilizzare DATA_SAFETY_GUIDE.md per compilare il modulo."
-    }
-  ],
-  "completed_recently": []
+  "todos": [
+    "P1: Encrypt all sensitive ZIP backup entries when password protection is enabled; BackupRepository currently leaves configuration, media and DataStore entries unencrypted. Add regression coverage for archive entry encryption.",
+    "P1: Make failed backup restores recover DataStore preferences as well as database and media; retain rollback snapshots if recovery fails. Verify failure paths on an Android device.",
+    "P1: Preserve the existing SQLCipher key material on decryption failure instead of replacing it in DatabaseKeyManager; provide an explicit recovery error and regression coverage.",
+    "P1: Finalize the publisher privacy contact and public HTTPS privacy-policy URL, expose the policy in the app, and align the landing privacy page with actual permissions and backup limitations.",
+    "P2: Verify and rebuild signed Full and Demo release AABs with the updated AGP 9.4.1 catalog, then refresh artifact hashes before upload; the existing validated bundles were built with AGP 9.3.1.",
+    "P2: Upload signed Full and Demo AABs to Google Play, confirm package and versionCode availability, complete App content and Data Safety where required, and review device smoke tests and pre-launch findings before production. Owner handles upload."
+  ]
 }

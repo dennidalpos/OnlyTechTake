@@ -1,18 +1,15 @@
 ---
 name: project-management-agents
-description: Rules for project tracking and versioning in OnlyTechTake.
+description: Active task tracking for OnlyTechTake.
 ---
 
-# Project Management (Agents)
+# Project management
 
-AI Agents must adhere to strict tracking and versioning rules.
+- `PROJECT_STATUS.json` contains exactly one key, `todos`, whose value is an array of pending task strings.
+- Remove a task as soon as its completion is verified. Add concrete unresolved findings as actionable strings; order them by priority.
+- Keep evidence and completed-task history out of the tracker. Report verification results in the conversation or an explicitly requested commit.
+- Update the relevant document in `docs/` with each completed task and remove obsolete guidance.
+- Do not change package identifiers, `versionCode`, or SDK configuration without approval. Read current values from `app/build.gradle.kts`.
+- Upload acceptance, device qualification and public privacy-policy availability require direct evidence; local preparation alone does not complete publication.
 
-## Core Rules
-1. **PROJECT_STATUS.json**: This is the source of truth. Update `last_updated` and `backlog` with every significant change.
-2. **Versioning**: `versionCode = 1` and `targetSdk = 37` are locked. Do NOT increment without explicit approval.
-3. **Task Completion**: Clear `completed_recently` frequently to keep the file concise.
-4. **SDK Consistency**: Use `gradle/libs.versions.toml` for all dependency management.
-
-## References
-- [PROJECT_STATUS.json](file:///D:/GITHUB/OnlyTechTake/PROJECT_STATUS.json)
-- [AGENTS.md](file:///D:/GITHUB/OnlyTechTake/AGENTS.md)
+See [project instructions](../AGENTS.md) and the [release checklist](../docs/play-store/release-checklist.md).

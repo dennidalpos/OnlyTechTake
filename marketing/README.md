@@ -6,7 +6,7 @@ Questa cartella contiene gli asset e i testi approvati per la pubblicazione e la
 - `registered-assets/`: Icone, loghi e grafiche ufficiali.
 - `screenshots/`: Screenshot dell'applicazione per il Play Store e annunci.
 - `videos/`: Video dimostrativi e promozionali.
-- `copy/`: Testi per lo store listing e campagne pubblicitarie.
+- `copy/`: Testi per campagne pubblicitarie. I testi store canonici sono in [Italiano](../docs/play-store/STORE_LISTING_IT.md) e [English](../docs/play-store/STORE_LISTING_EN.md).
 
 ## Regole
 - Utilizzare solo asset presenti in questa cartella per le pubblicazioni ufficiali.
