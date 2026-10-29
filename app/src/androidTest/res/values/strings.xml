@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="demo_admin_display_name">Demo Admin</string>
+    <string name="demo_operator_display_name">Bench Operator</string>
+    <string name="demo_customer_name">Customer %d</string>
+    <string name="demo_customer_business_name">Company %d Ltd</string>
+    <string name="demo_customer_notes">Demo customer for presentations (ID: %d).</string>
+    <string name="demo_order_title_1">Asus ROG Strix - Cleaning and Paste</string>
+    <string name="demo_order_title_n">Service %d</string>
+    <string name="demo_order_desc">Demo service order description %d.</string>
+    <string name="demo_order_notes">Demo internal notes %d.</string>
+    <string name="demo_photo_label">Object photo</string>
+    <string name="demo_signature_label">Customer signature</string>
+    <string name="demo_privacy_snapshot">Demo privacy notice.</string>
+    <string name="demo_terms_snapshot">Demo service intake terms.</string>
+    <string name="demo_event_title_created">Service order created</string>
+    <string name="demo_event_desc_created">Demo intake with photo and customer signature.</string>
+    <string name="demo_template_body">Update {{numero_commessa}}: {{stato_commessa}} for {{cliente}}.</string>
+
+    <string name="demo_wizard_customer_first_name">Mark</string>
+    <string name="demo_wizard_customer_last_name">White</string>
+    <string name="demo_wizard_customer_phone">+1 555&#8211;010&#8211;9988</string>
+    <string name="demo_wizard_customer_email">m.white@example.invalid</string>
+    <string name="demo_wizard_order_title">Samsung Galaxy S23 - Broken screen</string>
+    <string name="demo_wizard_order_desc">The customer reports a broken display after an accidental drop.</string>
+    <string name="demo_wizard_diagnosis_result">Damaged power connector.</string>
+
+    <string name="demo_event_title_diagnosis">Diagnosis started</string>
+    <string name="demo_event_desc_diagnosis">The device is currently under technical evaluation.</string>
+    <string name="demo_photo_detail_label">Detail photo</string>
+
+    <string name="demo_template_privacy_title">Privacy Policy (Short)</string>
+    <string name="demo_template_privacy_body">Information on the processing of personal data for the management of technical service orders at OnlyTechTake. Data is processed for technical and accounting purposes.</string>
+    <string name="demo_template_terms_title">Service Terms</string>
+    <string name="demo_template_terms_body">The customer authorizes the technical diagnosis. Repairs are performed only after acceptance of the quote. OnlyTechTake is not responsible for data loss.</string>
+
+    <string name="demo_template_wa_intake_title">WhatsApp: Order Intake</string>
+    <string name="demo_template_wa_intake_body">Hello {{cliente}}, we have taken in charge service order {{numero_commessa}}: {{titolo_commessa}}.\nCategory: {{categoria_percorso}}.\nWe will update you soon.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_diagnosis_title">WhatsApp: Diagnosis</string>
+    <string name="demo_template_wa_diagnosis_body">Hello {{cliente}}, order {{numero_commessa}} is currently in diagnosis.\nWe will provide a technical outcome and quote shortly.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_result_title">WhatsApp: Technical Outcome</string>
+    <string name="demo_template_wa_result_body">Hello {{cliente}}, we completed the diagnosis for order {{numero_commessa}}.\nOutcome: {{esito_diagnosi}}.\nStatus: {{stato_commessa}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_quote_title">WhatsApp: Repair Quote</string>
+    <string name="demo_template_wa_quote_body">Hello {{cliente}}, for order {{numero_commessa}} the quote is {{importo_preventivo}}.\nPlease confirm to proceed with the repair.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_ready_title">WhatsApp: Ready for Pickup</string>
+    <string name="demo_template_wa_ready_body">Hello {{cliente}}, service order {{numero_commessa}} is completed and ready for pickup!\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_pdf_title">WhatsApp: Status Report PDF</string>
+    <string name="demo_template_wa_pdf_body">Hello {{cliente}}, attached is the progress report for order {{numero_commessa}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_update_title">WhatsApp: Order Update</string>
+    <string name="demo_template_wa_update_body">Service order {{numero_commessa}} update: current status {{stato_commessa}} for {{cliente}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_not_repairable_title">WhatsApp: Not Repairable</string>
+    <string name="demo_template_wa_not_repairable_body">Hello {{cliente}}, after diagnosis of order {{numero_commessa}}, we found it is not repairable.\nDetails: {{esito_diagnosi}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_repairing_title">WhatsApp: Repair in Progress</string>
+    <string name="demo_template_wa_repairing_body">Hello {{cliente}}, we started working on order {{numero_commessa}}.\nWe will notify you as soon as it is ready.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_completed_title">WhatsApp: Service Completed</string>
+    <string name="demo_template_wa_completed_body">Hello {{cliente}}, the repair of order {{numero_commessa}} has been successfully completed.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_operator_name_junior">Junior Operator</string>
+    <string name="demo_operator_username_junior">op_junior</string>
+    <string name="demo_operator_password_junior">Pass12345</string>
+    <string name="demo_template_ready_code">new_status_ready</string>
+    <string name="demo_template_ready_title">Device ready</string>
+    <string name="demo_template_ready_body">Dear {{cliente}}, your device is ready.</string>
+    <string name="demo_admin_name_default">John Doe</string>
+    <string name="demo_shop_name_default">OnlyTechTake LLC</string>
+    <string name="demo_shop_vat_default">US123456789</string>
+    <string name="demo_shop_address_default">123 Tech Avenue, New York</string>
+    <string name="demo_shop_email_default">info@onlytechtake.invalid</string>
+    <string name="demo_shop_phone_default">+1 555&#8211;123&#8211;4567</string>
+    <string name="demo_order_summary_ssd">Faulty SSD</string>
+    <string name="demo_order_desc_ssd">The drive is not detected by the BIOS.</string>
+    <string name="demo_diagnosis_result_ssd">SSD replacement required.</string>
+    <string name="demo_closure_note_ssd">Replaced 500GB SSD.</string>
+
+    <string name="demo_order_summary_s23">Samsung Galaxy S23 - Broken screen</string>
+    <string name="demo_order_desc_s23">Original display replacement after accidental drop.</string>
+    <string name="demo_diagnosis_result_s23">Samsung original AMOLED display.</string>
+    <string name="demo_estimate_s23">249.00</string>
+
+    <string name="demo_order_summary_overheating">Gaming Laptop - Overheating</string>
+    <string name="demo_order_desc_overheating">Sudden shutdowns during gaming sessions.</string>
+    <string name="demo_diagnosis_result_overheating">Issue resolved with OS restore and cleaning.</string>
+    <string name="demo_estimate_overheating">89.00</string>
+
+    <string name="demo_closure_note_completed">Repair successfully completed.</string>
+    <string name="demo_customer_name_john">John Doe</string>
+
+    <string name="demo_customer_name_julia">Julia</string>
+    <string name="demo_customer_phone_julia">+1 555&#8211;010&#8211;2020</string>
+    <string name="demo_customer_email_julia">julia.white@example.invalid</string>
+    <string name="demo_order_summary_not_turning_on">Laptop won\'t turn on</string>
+    <string name="demo_order_desc_not_turning_on">The customer reports sudden shutdown after accidental drop.</string>
+    <string name="demo_cat_handheld">Handheld Console</string>
+    <string name="demo_cat_handheld_desc">Portable console repairs, displays and batteries.</string>
+    <string name="demo_template_social_code">whatsapp_demo_social</string>
+    <string name="demo_template_social_title">Social update</string>
+    <string name="demo_template_social_body">Hi {{cliente}}, the order {{numero_commessa}} is now in status {{stato_commessa}}.</string>
+    <string name="demo_customer_first_name_luke">Luke</string>
+    <string name="demo_customer_last_name_red">Red</string>
+    <string name="demo_customer_tax_code_luke">REDLKU90A01F205X</string>
+    <string name="demo_customer_phone_luke">+1 555&#8211;010&#8211;3030</string>
+    <string name="demo_customer_email_luke">luke.red@example.invalid</string>
+    <string name="demo_customer_company_name_lab">Demo Lab LLC</string>
+    <string name="demo_customer_vat_lab">US123456789</string>
+    <string name="demo_customer_phone_lab">+1 555&#8211;010&#8211;4040</string>
+    <string name="demo_customer_email_lab">admin@example.invalid</string>
+    <string name="demo_customer_address_lab">24 Demo Way, New York</string>
+
+    <string name="social_caption_home">Everything under control: your repair shop in one app.</string>
+    <string name="social_caption_intake">Fast and professional intake with guided workflow.</string>
+    <string name="social_caption_diagnosis">Precise diagnosis and automated status updates.</string>
+    <string name="social_caption_media">High-quality technical documentation with photos and videos.</string>
+    <string name="social_caption_signature">Digital signature for privacy and service terms.</string>
+    <string name="social_caption_whatsapp">Notify customers instantly via WhatsApp integration.</string>
+    <string name="social_caption_closed">Professional closure with PDF report generation.</string>
+
+    <plurals name="demo_error_order_limit">
+        <item quantity="one">Demo Limit reached. The Demo version allows only %1$d service order and use only with admin account. To continue without limits, activate the Full version.</item>
+        <item quantity="other">Demo Limit reached. The Demo version allows %1$d service orders and use only with admin account. To continue without limits, activate the Full version.</item>
+    </plurals>
+</resources>

@@ -1,0 +1,25 @@
+{
+  "id": "social-pro",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow6_SocialPro",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/social-pro",
+  "pulledDirectoryName": "social-pro",
+  "cases": [
+    {
+      "id": "multichannel",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "subDir": "highlights" }
+      ],
+      "expectedFiles": [
+        "01-stories-dashboard.png",
+        "02-reel-intake.png",
+        "03-carousel-category.png",
+        "04-stories-signature.png",
+        "05-carousel-status.png",
+        "06-reel-pdf.png"
+      ]
+    }
+  ]
+}

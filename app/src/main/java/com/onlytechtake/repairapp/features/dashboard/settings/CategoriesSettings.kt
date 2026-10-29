@@ -1,0 +1,475 @@
+package com.onlytechtake.repairapp.features.dashboard.settings
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.domain.models.Category
+import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
+import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+
+@Composable
+fun ColumnScope.CategoriesSettings(
+    viewModel: SettingsViewModel,
+    isAdmin: Boolean,
+    fromIntake: Boolean = false,
+    onRequestConfirm: (String, String, () -> Unit) -> Unit,
+    onBack: () -> Unit,
+) {
+    val categories by viewModel.categories.collectAsState()
+
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var showEditCard by rememberSaveable { mutableStateOf(value = false) }
+    var categoryId by rememberSaveable { mutableStateOf<String?>(null) }
+    var categoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
+    var currentCategoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
+    var categoryName by rememberSaveable { mutableStateOf("") }
+    var categoryDescription by rememberSaveable { mutableStateOf("") }
+    var categoryActive by rememberSaveable { mutableStateOf(value = true) }
+
+    fun loadNewCategory() {
+        categoryId = null
+        categoryParentId = currentCategoryParentId
+        categoryName = ""
+        categoryDescription = ""
+        categoryActive = true
+        showEditCard = true
+    }
+
+    fun selectCategoryForEdit(category: Category) {
+        categoryId = category.id
+        categoryParentId = category.parentId
+        categoryName = category.name
+        categoryDescription = category.description.orEmpty()
+        categoryActive = category.active
+        showEditCard = true
+    }
+
+    fun openCategoryBranch(categoryId: String?) {
+        currentCategoryParentId = categoryId
+        showEditCard = false
+        searchQuery = ""
+    }
+
+    val currentParent =
+        currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
+
+    BackHandler(enabled = ((currentCategoryParentId != null) || showEditCard || searchQuery.isNotEmpty())) {
+        when {
+            showEditCard -> {
+                showEditCard = false
+                viewModel.setFormDirty(dirty = false)
+            }
+
+            searchQuery.isNotEmpty() -> {
+                searchQuery = ""
+            }
+
+            currentCategoryParentId != null -> {
+                currentCategoryParentId = currentParent?.parentId
+            }
+        }
+    }
+
+    val visibleCategories =
+        remember(categories, currentCategoryParentId, searchQuery) {
+            if (searchQuery.isNotBlank()) {
+                categories.filter { it.name.contains(searchQuery, ignoreCase = true) }
+            } else {
+                categories.filter { it.parentId == currentCategoryParentId }
+            }
+        }
+
+    LazyColumn(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
+                .testTag("categories_list"),
+        contentPadding =
+            PaddingValues(
+                horizontal = RepairAppSpacing.screenHorizontal,
+                vertical = RepairAppSpacing.screenHorizontal,
+            ),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+    ) {
+        item {
+            SectionTitle(
+                text = stringResource(R.string.config_hub_categories_title),
+                tooltip = stringResource(R.string.config_category_tooltip),
+            )
+
+            Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Min),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                ) {
+                    AppTextField(
+                        modifier = Modifier.weight(1f),
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        label = stringResource(R.string.config_category_search_label),
+                        singleLine = true,
+                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                        trailingIcon = {
+                            if (searchQuery.isNotEmpty()) {
+                                AppIconButton(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.content_description_clear),
+                                    onClick = { searchQuery = "" },
+                                )
+                            }
+                        },
+                    )
+
+                    if (!showEditCard &&
+                        searchQuery.isBlank() &&
+                        isAdmin &&
+                        (
+                            currentParent?.level
+                                ?: -1
+                        ) < 3
+                    ) {
+                        Surface(
+                            onClick = ::loadNewCategory,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RepairAppShapes.button,
+                            modifier =
+                                Modifier
+                                    .fillMaxHeight()
+                                    .width(RepairAppSizes.buttonDefault)
+                                    .testTag(RepairAppTestTags.ConfigCategoryNewButton),
+                            tonalElevation = 0.dp,
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription =
+                                        if (currentCategoryParentId == null) {
+                                            stringResource(R.string.config_category_new_root)
+                                        } else {
+                                            stringResource(R.string.config_category_new_sub)
+                                        },
+                                    tint = MaterialTheme.colorScheme.onPrimary,
+                                    modifier = Modifier.size(RepairAppIconSizes.standard),
+                                )
+                            }
+                        }
+                    }
+                }
+
+                if (searchQuery.isBlank()) {
+                    CategoryBreadcrumb(categories, currentCategoryParentId)
+                    if (currentCategoryParentId != null) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                        ) {
+                            AppButton(
+                                text = stringResource(R.string.config_category_root),
+                                leadingIcon = Icons.Default.Folder,
+                                variant = AppButtonVariant.Secondary,
+                                size = AppButtonSize.Compact,
+                                modifier = Modifier.weight(1f),
+                                onClick = { openCategoryBranch(null) },
+                            )
+                            AppButton(
+                                text = stringResource(R.string.config_category_up),
+                                leadingIcon = Icons.Default.ArrowUpward,
+                                variant = AppButtonVariant.Secondary,
+                                size = AppButtonSize.Compact,
+                                modifier = Modifier.weight(1f),
+                                onClick = { openCategoryBranch(currentParent?.parentId) },
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        if (showEditCard) {
+            item {
+                StandardCard(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                    highlight = true,
+                ) {
+                    Column(
+                        modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text =
+                                    if (categoryId == null) {
+                                        stringResource(R.string.config_category_dialog_title_new)
+                                    } else {
+                                        stringResource(
+                                            R.string.config_category_dialog_title_edit,
+                                        )
+                                    },
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                            AppIconButton(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.action_close),
+                                onClick = {
+                                    showEditCard = false
+                                    viewModel.setFormDirty(dirty = false)
+                                },
+                            )
+                        }
+
+                        AppTextField(
+                            categoryName,
+                            {
+                                categoryName = it
+                                viewModel.setFormDirty(dirty = true)
+                            },
+                            stringResource(R.string.config_category_name_label),
+                            testTag = RepairAppTestTags.ConfigCategoryNameField,
+                        )
+                        AppTextField(
+                            categoryDescription,
+                            {
+                                categoryDescription = it
+                                viewModel.setFormDirty(dirty = true)
+                            },
+                            stringResource(R.string.config_category_description_label),
+                            showOptional = true,
+                            testTag = RepairAppTestTags.ConfigCategoryDescriptionField,
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                if (categoryActive) {
+                                    stringResource(R.string.config_category_active)
+                                } else {
+                                    stringResource(
+                                        R.string.config_category_archived,
+                                    )
+                                },
+                            )
+                            Switch(
+                                checked = categoryActive,
+                                enabled = isAdmin,
+                                onCheckedChange = {
+                                    categoryActive = it
+                                    viewModel.setFormDirty(dirty = true)
+                                },
+                            )
+                        }
+                        ActionRow {
+                            AppButton(
+                                text = stringResource(R.string.customer_cancel),
+                                variant = AppButtonVariant.Secondary,
+                                onClick = {
+                                    showEditCard = false
+                                    viewModel.setFormDirty(dirty = false)
+                                },
+                            )
+                            if ((categoryId == null) || isAdmin) {
+                                val confirmTitle =
+                                    stringResource(R.string.config_category_confirm_save_title)
+                                val confirmText =
+                                    stringResource(R.string.config_category_confirm_save_text)
+                                AppButton(
+                                    text = stringResource(R.string.config_category_save),
+                                    leadingIcon = Icons.Default.Check,
+                                    testTag = RepairAppTestTags.ConfigCategorySaveButton,
+                                    onClick = {
+                                        onRequestConfirm(confirmTitle, confirmText) {
+                                            viewModel.saveCategory(
+                                                id = categoryId,
+                                                parentId = categoryParentId,
+                                                name = categoryName,
+                                                description = categoryDescription,
+                                                active = categoryActive,
+                                            )
+                                            showEditCard = false
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        items(visibleCategories) { category ->
+            val confirmTitle = stringResource(R.string.config_category_confirm_delete_title)
+            val confirmText =
+                stringResource(R.string.config_category_confirm_delete_specific_text).format(
+                    category.name,
+                )
+            StandardCard(
+                onClick = { openCategoryBranch(category.id) },
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            StatusDot(category.active)
+                            Text(
+                                text = category.name,
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.testTag("category_name_${category.id}"),
+                            )
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            if (isAdmin) {
+                                AppIconButton(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.content_description_edit),
+                                    onClick = { selectCategoryForEdit(category) },
+                                )
+                            }
+                            AppIconButton(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = stringResource(R.string.content_description_open),
+                                onClick = { openCategoryBranch(category.id) },
+                            )
+                            if (isAdmin) {
+                                AppIconButton(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.content_description_delete),
+                                    tint = MaterialTheme.colorScheme.error,
+                                    onClick = {
+                                        onRequestConfirm(
+                                            confirmTitle,
+                                            confirmText,
+                                        ) {
+                                            viewModel.deleteCategory(category.id)
+                                            loadNewCategory()
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                    category.description?.takeIf { it.isNotBlank() }?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+        }
+        if (visibleCategories.isEmpty()) {
+            item {
+                AppEmptyState(
+                    title = stringResource(R.string.config_category_empty_title),
+                    body = stringResource(R.string.config_category_empty_branch),
+                    actionLabel =
+                        stringResource(R.string.config_category_new_sub).takeIf {
+                            isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3
+                        },
+                    onAction =
+                        ::loadNewCategory.takeIf {
+                            isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3
+                        },
+                )
+            }
+        }
+
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                AppButton(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = RepairAppSpacing.screenHorizontal),
+                    text = stringResource(R.string.config_category_close),
+                    variant = AppButtonVariant.Secondary,
+                    onClick = onBack,
+                )
+                if (fromIntake) {
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.config_category_return_to_intake),
+                        variant = AppButtonVariant.Primary,
+                        onClick = onBack,
+                    )
+                }
+            }
+        }
+    }
+}

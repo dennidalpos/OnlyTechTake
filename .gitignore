@@ -1,0 +1,42 @@
+# Local build output
+.gradle/
+.kotlin/
+build/
+app/build/
+.cxx/
+app/.cxx/
+.externalNativeBuild/
+app/.externalNativeBuild/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+captures/
+
+# Local environment
+local.properties
+*.keystore
+*.jks
+keystore.properties
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Generated local outputs (temporary)
+/asset/
+/logs/
+/tmp/
+/demo/recordings/
+/demo/screenshots/
+/demo/videos/
+
+# Assets to be committed are in /marketing/ (NOT ignored)
+# Ensure binary files in marketing/ are tracked
+!/marketing/**/*.png
+!/marketing/**/*.jpg
+!/marketing/**/*.svg
+!/marketing/**/*.mp4
+*.apk
+*.aab
+*.ap_

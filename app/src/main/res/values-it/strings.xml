@@ -1,0 +1,969 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="order_created_title">Commessa creata</string>
+    <string name="status_updated_title">Stato aggiornato</string>
+    <string name="closure_reason_prefix">Motivo chiusura: %s</string>
+    <string name="order_reassigned_title">Commessa riassegnata</string>
+    <string name="unassigned">Non assegnata</string>
+    <string name="internal_note_added_title">Nota interna aggiunta</string>
+    <string name="customer_feedback_recorded_title">Feedback cliente registrato</string>
+    <string name="media_removed_title">Media rimosso</string>
+    <string name="signature_captured_title">Firma acquisita</string>
+    <string name="pdf_shared_title">PDF condiviso con cliente</string>
+    <string name="customer_action_status_updated_title">Stato azione cliente aggiornato</string>
+    <string name="payment_received_title">Pagamento ricevuto</string>
+    <string name="payment_removed_title">Pagamento stornato</string>
+    <string name="timeline_writer_not_configured">Timeline writer non configurato</string>
+    <string name="audit_writer_not_configured">Audit writer non configurato</string>
+
+    <string name="loading_init_db">Avvio database locale…</string>
+    <string name="loading_verify_session">Verifica credenziali sessione…</string>
+    <string name="loading_load_workspace">Caricamento ambiente di lavoro…</string>
+    <string name="loading_system_ready">Sistema pronto!</string>
+
+
+    <string name="status_open">Aperta</string>
+    <string name="status_in_progress">In lavorazione</string>
+    <string name="status_diagnosis">Diagnosi</string>
+    <string name="status_result">Risultato</string>
+    <string name="status_repairing">Intervento</string>
+    <string name="status_ready_for_pickup">Pronta al ritiro</string>
+    <string name="status_closed">Chiusa</string>
+
+    <string name="action_start_progress">Prendi in carico</string>
+    <string name="action_start_diagnosis">Avvia diagnosi</string>
+    <string name="action_record_result">Registra risultato</string>
+    <string name="action_start_repair">Avvia intervento</string>
+    <string name="action_ready_for_pickup">Pronta al ritiro</string>
+    <string name="action_close_order">Chiudi</string>
+    <string name="action_none_label">Nessuna azione</string>
+    <string name="action_wait_quote">Attendere accettazione o rifiuto preventivo</string>
+    <string name="action_notify_not_repairable">Avvisare il cliente e preparare il ritiro</string>
+    <string name="action_record_quote_outcome">Registra esito preventivo</string>
+
+    <string name="anchor_step_intake">Ingresso</string>
+    <string name="anchor_step_update">Aggiornamento</string>
+    <string name="anchor_step_diagnosis">Diagnosi</string>
+    <string name="anchor_step_quote">Preventivo</string>
+    <string name="anchor_step_outcome">Esito</string>
+    <string name="anchor_step_repair">Intervento</string>
+    <string name="anchor_step_pickup">Ritiro</string>
+    <string name="anchor_step_docs">Documenti</string>
+    <string name="anchor_step_closed">Chiuso</string>
+    <string name="anchor_step_legal">Legale</string>
+
+    <string name="anchor_label_wa_intake">WA: Presa in carico</string>
+    <string name="anchor_label_wa_update">WA: Aggiornamento</string>
+    <string name="anchor_label_wa_diagnosis">WA: Diagnosi in corso</string>
+    <string name="anchor_label_wa_quote">WA: Preventivo pronto</string>
+    <string name="anchor_label_wa_not_repairable">WA: Non riparabile</string>
+    <string name="anchor_label_wa_repairing">WA: In intervento</string>
+    <string name="anchor_label_wa_ready">WA: Pronto ritiro</string>
+    <string name="anchor_label_wa_completed">WA: Intervento completato</string>
+    <string name="anchor_label_wa_pdf">WA: Invio PDF Stato</string>
+    <string name="anchor_label_legal_privacy">Legale: Privacy</string>
+    <string name="anchor_label_legal_terms">Legale: Termini e Condizioni</string>
+
+    <string name="anchor_desc_wa_intake">Inviato quando una nuova commessa viene aperta.</string>
+    <string name="anchor_desc_wa_update">Inviato per comunicare cambi di stato generici.</string>
+    <string name="anchor_desc_wa_diagnosis">Inviato quando l\'oggetto entra in fase di diagnosi.</string>
+    <string name="anchor_desc_wa_quote">Inviato quando il preventivo è pronto per l\'accettazione.</string>
+    <string name="anchor_desc_wa_not_repairable">Inviato quando l\'oggetto non risulta riparabile.</string>
+    <string name="anchor_desc_wa_repairing">Inviato quando inizia l\'intervento tecnico.</string>
+    <string name="anchor_desc_wa_ready">Inviato quando il dispositivo può essere ritirato.</string>
+    <string name="anchor_desc_wa_completed">Inviato quando l\'intervento tecnico è terminato e chiuso.</string>
+    <string name="anchor_desc_wa_pdf">Accompagna l\'invio del documento PDF dello stato avanzamento.</string>
+    <string name="anchor_desc_legal_privacy">Testo dell\'informativa privacy mostrato in fase di accettazione.</string>
+    <string name="anchor_desc_legal_terms">Condizioni di presa in carico mostrate in fase di accettazione.</string>
+
+    <string name="pdf_title">OnlyTechTake – Stato avanzamento commessa</string>
+    <string name="pdf_label_order_number">Commessa N:</string>
+    <string name="pdf_label_date">Data:</string>
+    <string name="pdf_label_generated_by">Generato da:</string>
+    <string name="pdf_section_customer">CLIENTE</string>
+    <string name="pdf_label_customer_name">Nominativo:</string>
+    <string name="pdf_label_customer_contact">Contatto:</string>
+    <string name="pdf_section_device_details">DETTAGLI DISPOSITIVO</string>
+    <string name="pdf_label_category">Categoria:</string>
+    <string name="pdf_label_object">Oggetto:</string>
+    <string name="pdf_label_problem">Problema:</string>
+    <string name="pdf_section_current_status">STATO ATTUALE</string>
+    <string name="pdf_label_status">Stato:</string>
+    <string name="pdf_label_estimate">Preventivo:</string>
+    <string name="pdf_section_timeline">STORICO EVENTI (visibili al cliente)</string>
+    <string name="pdf_section_signature">FIRMA CLIENTE</string>
+    <string name="pdf_label_signer">Firmatario: %s</string>
+    <string name="pdf_label_signed_at">Data firma: %s</string>
+    <string name="pdf_label_privacy_accepted">Privacy: Accettata (v%1$d)</string>
+    <string name="pdf_label_terms_accepted">Condizioni: Accettate (v%1$d)</string>
+    <string name="pdf_no_description">Nessuna descrizione</string>
+
+
+    <string name="error_destination_unavailable">Destinazione non disponibile</string>
+    <string name="error_diagnosis_only_during">La diagnosi può essere registrata solo durante o dopo la diagnosi</string>
+    <string name="timeline_result_summary">Sintesi risultato: %s</string>
+    <string name="timeline_diagnosis_outcome">Esito diagnosi: %s</string>
+    <string name="timeline_repair_amount">Importo intervento: %s</string>
+
+    <string name="error_customer_required">Cliente obbligatorio</string>
+    <string name="error_customer_required_fields">Inserisci i dati cliente obbligatori</string>
+    <string name="error_customer_not_found">Cliente non trovato</string>
+    <string name="error_customer_phone_missing">Telefono cliente mancante</string>
+    <string name="error_problem_required">Problema obbligatorio</string>
+    <string name="error_category_required">Categoria obbligatoria</string>
+    <string name="error_note_empty">Nota vuota</string>
+    <string name="error_name_required">Nome obbligatorio</string>
+    <string name="error_username_required">Username obbligatorio</string>
+    <string name="error_password_too_short">Password troppo corta</string>
+    <string name="error_username_exists">Username già esistente</string>
+    <string name="error_media_required">Almeno una foto od allegato obbligatorio</string>
+    <string name="error_privacy_required">Privacy e firma obbligatorie</string>
+    <string name="error_positive_estimate_required">Importo preventivo positivo obbligatorio</string>
+    <string name="error_reject_reason_required">Motivo rifiuto obbligatorio</string>
+    <string name="error_result_summary_required">Sintesi risultato obbligatoria</string>
+    <string name="error_feedback_requires_result">Il feedback preventivo richiede una commessa in attesa cliente</string>
+    <string name="error_feedback_only_repairable">Accettazione o rifiuto sono disponibili solo per una diagnosi riparabile</string>
+    <string name="error_user_not_found">Utente non trovato</string>
+    <string name="error_admin_cannot_be_deactivated">L\'account Admin non può essere disattivato</string>
+    <string name="error_admin_cannot_be_deleted">L\'account Admin non può essere eliminato</string>
+    <string name="error_admin_permissions_immutable">I permessi dell\'admin non possono essere modificati</string>
+    <string name="timeline_photo_attached">Foto allegata</string>
+    <string name="timeline_video_attached">Video allegato</string>
+    <string name="timeline_attachment_added">Allegato aggiunto</string>
+    <string name="timeline_image_modified">Immagine modificata</string>
+
+    <string name="error_photo_not_saved">Foto non salvata</string>
+    <string name="label_repair_order">commessa</string>
+    <string name="label_media">media</string>
+    <string name="label_media_photo">Foto</string>
+    <string name="label_media_video">Video</string>
+    <string name="label_signature">firma</string>
+    <string name="label_document">documento</string>
+    <string name="label_attachment">allegato</string>
+    <string name="label_photos_count">Foto %d</string>
+    <string name="label_videos_count">Video %d</string>
+    <string name="label_documents_count">Documenti %d</string>
+    <string name="label_signatures_count">Firme %d</string>
+    <string name="label_final_photos_count">Lavoro finito %d</string>
+    <string name="error_attachment_unavailable">Allegato non disponibile</string>
+    <string name="error_attachment_empty">Allegato vuoto o non salvato</string>
+    <string name="error_media_not_found">Media non trovato</string>
+    <string name="error_media_not_removed">Media non rimosso</string>
+    <string name="error_not_an_image">Il media selezionato non è un\'immagine</string>
+    <string name="error_invalid_modified_image">Immagine modificata non valida</string>
+    <string name="error_image_save_failed">Salvataggio immagine non riuscito</string>
+    <string name="error_intake_file_unavailable">File presa in carico non disponibile: %s</string>
+    <string name="timeline_media_intake">Media presa in carico</string>
+    <string name="error_media_move_failed">Spostamento media non riuscito</string>
+    <string name="error_order_not_found">Commessa non trovata</string>
+    <string name="error_signature_not_found">Firma non trovata</string>
+    <string name="error_signature_exists">Firma già presente per questa commessa</string>
+    <string name="error_attachment_too_large">Allegato troppo grande: massimo %s</string>
+    <string name="error_invalid_db_backup">Backup database non valido</string>
+    <string name="error_unsupported_app_files">Backup contiene file app non supportati</string>
+    <string name="error_backup_metadata_missing">Metadata backup mancanti</string>
+    <string name="error_backup_db_missing">Database backup mancante</string>
+    <string name="error_invalid_zip_backup">Backup ZIP non valido</string>
+    <string name="error_invalid_backup_path">Percorso backup non valido</string>
+    <string name="error_type_reset_to_confirm">Digita %s per confermare</string>
+    <string name="error_unrecognized_attachment_type">Tipo allegato non riconosciuto</string>
+    <string name="error_attachment_type_not_allowed">Tipo allegato non consentito: %s</string>
+    <string name="error_critical_db_error">Errore critico database</string>
+    <string name="error_first_admin_exists">L\'admin principale è già presente</string>
+    <string name="error_current_password_incorrect">Password attuale non corretta</string>
+    <string name="error_new_password_too_short">Nuova password troppo corta</string>
+    <string name="error_recovery_kit_not_configured">Recovery Kit non configurato</string>
+    <string name="error_recovery_code_invalid">Codice di recupero non valido</string>
+    <string name="error_no_admin_found">Nessun account admin trovato</string>
+    <string name="error_document_not_found">Documento non trovato</string>
+    <string name="error_privacy_consent_required">Consenso privacy obbligatorio</string>
+    <string name="error_terms_acceptance_required">Accettazione condizioni obbligatoria</string>
+    <string name="error_invalid_signature">Firma non valida</string>
+    <string name="error_signature_save_failed">Salvataggio firma non riuscito</string>
+    <string name="error_closure_reason_required">Motivo chiusura obbligatorio</string>
+    <string name="error_admin_creation_failed">Creazione admin non riuscita</string>
+    <string name="error_init_failed">Errore durante l\'inizializzazione: %s</string>
+    <string name="error_init_title">Errore di Inizializzazione</string>
+    <string name="error_template_not_found">Template non trovato</string>
+    <string name="error_template_code_required">Codice template obbligatorio</string>
+    <string name="error_template_title_required">Titolo template obbligatorio</string>
+    <string name="error_template_body_required">Corpo template obbligatorio</string>
+    <string name="action_retry">Riprova</string>
+    <string name="error_enter_username_password">Inserisci username e password</string>
+    <string name="error_user_deactivated">Utente disattivato</string>
+    <string name="error_invalid_credentials">Credenziali non valide</string>
+    <string name="error_too_many_attempts">Troppi tentativi: riprova più tardi</string>
+    <string name="error_enter_recovery_code">Inserisci il codice di recupero</string>
+    <string name="error_password_min_length">La password deve avere almeno 8 caratteri</string>
+    <string name="error_passwords_mismatch">Le password non coincidono</string>
+    <string name="success_password_reset">Password resettata con successo. Effettua il login.</string>
+    <string name="error_recovery_failed">Errore durante il recupero</string>
+    <string name="success_password_changed_login">Password cambiata, effettua il login</string>
+    <string name="error_change_password_failed">Errore durante il cambio password</string>
+    <string name="error_enter_admin_name">Inserisci il nome admin</string>
+    <string name="error_enter_admin_username">Inserisci lo username admin</string>
+    <string name="error_session_expired">Sessione scaduta. Accedi di nuovo.</string>
+    <string name="success_operation_completed">Operazione completata</string>
+    <string name="success_association_updated">Associazione aggiornata</string>
+    <string name="success_templates_restored">Template ripristinati</string>
+    <string name="success_orphaned_files_cleaned">Pulizia file orfani completata</string>
+
+    <string name="config_backup_logs_title">Log Diagnostici</string>
+    <string name="config_backup_logs_tooltip">Raccoglie i log degli errori per l\'assistenza tecnica.</string>
+    <string name="config_backup_logs_size_label">Spazio occupato dai log: %s</string>
+    <string name="config_backup_logs_send_whatsapp">Invia Log via WhatsApp</string>
+    <string name="config_backup_logs_clear">Svuota Log</string>
+    <string name="config_backup_logs_clear_confirm_title">Svuota Log</string>
+    <string name="config_backup_logs_clear_confirm_text">Sei sicuro di voler eliminare tutti i log diagnostici? Questa operazione libererà spazio.</string>
+    <string name="config_backup_logs_send_confirm_title">Invia Log</string>
+    <string name="config_backup_logs_send_confirm_text">Verrà generato un file compresso con i dati tecnici da inviare via WhatsApp.</string>
+
+    <string name="error_feature_pro_only">Funzione disponibile nella versione Full</string>
+    <string name="error_restore_area_unavailable">Area ripristino non disponibile</string>
+    <string name="error_backup_unavailable">Backup non disponibile</string>
+    <string name="error_backup_incompatible">Versione backup non compatibile</string>
+    <string name="error_db_missing_in_backup">Database mancante nel backup</string>
+
+    <string name="common_cat_smartphone">Smartphone</string>
+    <string name="common_cat_smartphone_desc">Assistenza dispositivi mobili</string>
+    <string name="common_cat_apple">Apple</string>
+    <string name="common_cat_apple_desc">iPhone, iPad, Watch</string>
+    <string name="common_cat_iphone">iPhone</string>
+    <string name="common_cat_iphone_desc">Tutti i modelli iPhone</string>
+    <string name="common_cat_samsung">Samsung</string>
+    <string name="common_cat_samsung_desc">Galaxy S, A, Z</string>
+    <string name="common_cat_galaxy_s">Serie Galaxy S</string>
+    <string name="common_cat_galaxy_s_desc">Top di gamma Samsung</string>
+    <string name="common_cat_console">Console</string>
+    <string name="common_cat_console_desc">Hardware da gioco</string>
+    <string name="common_cat_sony">Sony</string>
+    <string name="common_cat_sony_desc">Mondo PlayStation</string>
+    <string name="common_cat_ps5">PS5</string>
+    <string name="common_cat_ps5_desc">Console Next-Gen</string>
+    <string name="common_cat_nintendo">Nintendo</string>
+    <string name="common_cat_nintendo_desc">Switch, Lite, OLED</string>
+    <string name="common_cat_switch">Switch</string>
+    <string name="common_cat_switch_desc">Console ibrida</string>
+
+    <string name="common_cat_joycon">Joy-Con</string>
+    <string name="common_cat_dualsense">DualSense</string>
+    <string name="common_cat_ipad_pro">iPad Pro</string>
+    <string name="common_cat_iphone_13">iPhone 13</string>
+    <string name="common_cat_iphone_14_pro">iPhone 14 Pro</string>
+    <string name="common_cat_s23_ultra">S23 Ultra</string>
+    <string name="common_cat_asus_zenbook">Asus Zenbook OLED</string>
+    <string name="common_cat_windows_laptop">Laptop Windows</string>
+    <string name="common_cat_windows_laptop_desc">Asus, HP, Lenovo, Dell</string>
+    <string name="common_cat_iphone_14_pro_desc">Intervento display e vetro posteriore</string>
+    <string name="common_cat_iphone_13_desc">Sostituzione batteria e connettore</string>
+    <string name="common_cat_s23_ultra_desc">Intervento schermo curvo e S-Pen</string>
+    <string name="common_cat_asus_zenbook_desc">Intervento cerniere e display</string>
+    <string name="common_cat_ipad_pro_desc">Modelli 11\" e 12.9\"</string>
+
+
+    <string name="common_cat_tablet">Tablet</string>
+    <string name="common_cat_tablet_desc">Interventi iPad e tablet Android</string>
+    <string name="common_cat_ipad">iPad</string>
+    <string name="common_cat_ipad_desc">Tablet Apple</string>
+
+    <string name="common_cat_pc">Computer &amp; Laptop</string>
+    <string name="common_cat_pc_desc">Servizi tecnici hardware e software</string>
+    <string name="common_cat_notebook">Notebook</string>
+    <string name="common_cat_notebook_desc">Portatili e Ultrabook</string>
+    <string name="common_cat_gaming">Gaming Laptop</string>
+    <string name="common_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
+    <string name="common_cat_rog_strix">Asus ROG Strix</string>
+    <string name="common_cat_rog_strix_desc">Pulizia interna e pasta termica</string>
+
+    <string name="demo_customer_first_name">Marco</string>
+    <string name="demo_customer_last_name">Rossi</string>
+    <string name="demo_customer_phone">+39 333 000 0000</string>
+    <string name="demo_customer_email">marco.rossi@example.com</string>
+    <string name="demo_customer_address">Via Roma 1, Milano</string>
+    <string name="demo_customer_notes">Cliente abituale.</string>
+
+    <string name="demo_cat_display_service">Riparazione Display</string>
+    <string name="demo_cat_glass_service">Riparazione Vetro</string>
+    <string name="demo_cat_drift_service">Riparazione Drift</string>
+    <string name="demo_cat_analog_service">Sostituzione Analogico</string>
+
+    <string name="priority_low">Bassa</string>
+    <string name="priority_normal">Normale</string>
+    <string name="priority_high">Alta</string>
+    <string name="priority_urgent">Urgente</string>
+
+
+    <string name="reason_completed">Completata</string>
+    <string name="reason_customer_declined">Rifiutata dal cliente</string>
+    <string name="reason_not_repairable">Non riparabile</string>
+    <string name="reason_cancelled">Annullata</string>
+    <string name="reason_other">Altro</string>
+
+    <string name="action_none">Nessuna</string>
+    <string name="action_to_notify">Da avvisare</string>
+    <string name="action_waiting_acceptance">In attesa accettazione</string>
+    <string name="action_accepted">Accettato</string>
+    <string name="action_rejected">Rifiutato</string>
+    <string name="action_asked_info">Chiesto info</string>
+    <string name="action_call_requested">Richiesto contatto</string>
+    <string name="action_notified">Avvisato</string>
+
+    <string name="share_pdf_text">In allegato lo stato avanzamento della commessa.</string>
+
+
+    <string name="auth_system_ready">Sistema pronto</string>
+    <string name="auth_password_change_top">Cambio password obbligatorio</string>
+    <string name="auth_security_title">Sicurezza account</string>
+    <string name="auth_security_subtitle">È richiesto il cambio password al primo accesso</string>
+    <string name="auth_update_password">Aggiorna password</string>
+    <string name="auth_recovery_top">Recupero account admin</string>
+    <string name="auth_recovery_title">Ripristino credenziali</string>
+    <string name="auth_recovery_subtitle">Inserisci il codice master per impostare una nuova password admin</string>
+    <string name="auth_reset_admin_password">Reimposta password admin</string>
+    <string name="auth_setup_top">Configurazione admin</string>
+    <string name="auth_setup_title">Primo avvio</string>
+    <string name="auth_setup_subtitle">Account admin locale</string>
+    <string name="auth_create_admin">Crea admin</string>
+    <string name="auth_login_title">Accesso</string>
+    <string name="auth_login_submit">Accedi</string>
+    <string name="auth_close_app">Chiudi app</string>
+    <string name="auth_admin_name">Nome admin</string>
+    <string name="auth_username">Username</string>
+    <string name="auth_inactivity_timeout_title">Timeout attività</string>
+    <string name="auth_inactivity_timeout_label">Timeout (minuti)</string>
+    <string name="auth_inactivity_timeout_disabled">Disattivato</string>
+    <string name="auth_inactivity_timeout_tooltip">Disconnette automaticamente gli operatori dopo un periodo di inattività. 0 per disattivare. Default: 10 min.</string>
+    <string name="auth_recovery_code">Codice di recupero</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_confirm_password">Conferma password</string>
+    <string name="auth_recovery_action">Problemi di accesso? Recupero admin</string>
+
+    <string name="auth_show_password">Mostra password</string>
+    <string name="auth_hide_password">Nascondi password</string>
+
+    <string name="dashboard_home">Home</string>
+    <string name="dashboard_new">Nuova</string>
+    <string name="dashboard_orders">Commesse</string>
+    <string name="dashboard_config">Setup</string>
+    <string name="settings_select_section_title">Seleziona una sezione</string>
+    <string name="settings_select_section_body">Scegli una voce del setup per modificare catalogo, template, backup o preferenze operative.</string>
+
+    <string name="logout">Esci</string>
+
+    <string name="dashboard_role_admin">Admin</string>
+    <string name="dashboard_role_operator">Operatore</string>
+    <string name="dashboard_unsaved_title">Dati non salvati</string>
+    <string name="dashboard_unsaved_text">Ci sono modifiche non salvate. Uscire e perdere i dati oppure continuare la compilazione?</string>
+    <string name="dashboard_unsaved_leave">Esci e perdi i dati</string>
+    <string name="dashboard_unsaved_continue">Continua la compilazione</string>
+
+    <string name="home_queues_title">Code operative</string>
+    <string name="home_title">Banco commesse</string>
+    <string name="home_pro_cta_new">NUOVA COMMESSA</string>
+    <string name="home_pro_status_operational">BANCO OPERATIVO</string>
+
+    <string name="home_metric_operators">Operatori</string>
+    <string name="home_metric_active">Attive</string>
+    <string name="queue_open">1. Accettazione</string>
+    <string name="queue_processing">2. Presa in carico</string>
+    <string name="queue_diagnosis">3. Diagnosi</string>
+    <string name="queue_result">4. Esito</string>
+    <string name="queue_repair">5. Intervento</string>
+    <string name="queue_ready">6. Ritiro</string>
+    <string name="queue_closed">7. Chiuse</string>
+    <string name="home_new_order">Nuova commessa</string>
+    <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
+    <string name="home_empty_queues_title">Nessuna coda attiva</string>
+    <string name="home_empty_queues_body">Quando una commessa entra in accettazione, diagnosi, intervento o ritiro apparirà qui con la prossima azione.</string>
+    <string name="home_open_queue">Apri coda</string>
+    <string name="home_backup_reminder_title">Backup consigliato</string>
+    <string name="home_backup_reminder_settings">Setup backup</string>
+
+
+    <string name="backup_run_full_zip">Esegui backup ZIP completo</string>
+    <string name="backup_status_never">Mai eseguito</string>
+    <plurals name="backup_status_days_ago">
+        <item quantity="one">%1$d giorno fa</item>
+        <item quantity="many" tools:ignore="UnusedQuantity">%1$d giorni fa</item>
+        <item quantity="other">%1$d giorni fa</item>
+    </plurals>
+    <string name="backup_status_failed">Ultimo tentativo fallito</string>
+
+    <string name="action_back">Indietro</string>
+    <string name="action_next">Avanti</string>
+    <string name="action_close">Chiudi</string>
+    <string name="action_confirm">Conferma</string>
+    <string name="nav_cancel_and_close">Annulla e chiudi</string>
+    <string name="content_description_info">Informazioni</string>
+    <string name="content_description_delete">Elimina</string>
+    <string name="content_description_delete_order">Elimina</string>
+    <string name="action_delete_confirm_title">Eliminare %1$s?</string>
+    <string name="action_delete_confirm_text">%1$s verrà rimosso permanentemente. Questa azione non è reversibile.</string>
+    <string name="order_not_repairable_note">Cliente avvisato: dispositivo non riparabile</string>
+    <string name="content_description_edit">Modifica</string>
+    <string name="content_description_open">Apri</string>
+    <string name="content_description_clear">Pulisci</string>
+    <string name="camera_preview_description">Anteprima camera per acquisire una foto</string>
+    <string name="camera_grant_permission">Concedi permesso camera</string>
+    <string name="camera_permission_denied">Permesso camera negato</string>
+    <string name="camera_capture_photo">Acquisisci foto</string>
+    <string name="camera_capture_video">Registra video</string>
+    <string name="camera_stop_video">Ferma registrazione</string>
+    <string name="camera_unavailable">Camera non disponibile</string>
+    <string name="camera_capture_failed">Scatto non riuscito</string>
+    <string name="camera_file_error">File foto non disponibile</string>
+    <string name="signature_canvas_description">Area firma cliente. Traccia la firma con dito o pennino.</string>
+
+    <string name="signature_form_title">Foto e firma digitale</string>
+    <string name="signature_signer_label">Firma %s</string>
+    <string name="signature_empty">Nessuna firma acquisita.</string>
+    <string name="signature_section_title">Firme</string>
+    <string name="signature_image_description">Firma %s</string>
+    <string name="signature_info_main">%1$s – %2$s</string>
+    <string name="signature_info_meta">%1$s – %2$s – privacy v%3$d</string>
+    <string name="signature_privacy_accepted">Privacy accettata</string>
+    <string name="signature_privacy_rejected">Privacy NON accettata</string>
+    <string name="signature_read_privacy">Leggi informativa privacy</string>
+    <string name="signature_read_terms">Leggi condizioni di presa in carico</string>
+    <string name="signature_accept_privacy">Accetta informativa privacy</string>
+    <string name="signature_accept_terms">Accetta condizioni di presa in carico</string>
+    <string name="signature_clear">Pulisci firma</string>
+    <string name="signature_privacy_title">Informativa privacy</string>
+    <string name="signature_terms_title">Condizioni di presa in carico</string>
+    <string name="signature_default_signer">Cliente</string>
+    <string name="signature_business_signer_label">Chi ha firmato? (opzionale)</string>
+
+    <string name="image_preview_unavailable">Anteprima non disponibile</string>
+    <string name="image_edit_rotate">Ruota</string>
+    <string name="image_edit_crop">Ritaglio</string>
+    <string name="image_edit_arrow">Freccia</string>
+    <string name="image_edit_undo_arrow">Annulla freccia</string>
+    <string name="image_edit_clear_crop">Cancella ritaglio</string>
+    <string name="image_replace_confirm_title">Sostituire foto?</string>
+    <string name="image_replace_confirm_text">La foto modificata sostituirà l\'immagine originale.</string>
+    <string name="image_replace_confirm_action">Sostituisci</string>
+
+    <string name="label_optional">opzionale</string>
+    <string name="label_required_suffix"> *</string>
+    <string name="label_optional_format">%1$s (%2$s)</string>
+    <string name="label_separator">: </string>
+    <string name="storage_size_zero">0 B</string>
+    <string name="time_format_24h">%1$02d:%2$02d</string>
+    <string name="label_bytes">bytes</string>
+    <string name="label_order_fallback">commessa</string>
+
+    <string name="state_expanded">Espanso</string>
+    <string name="state_collapsed">Compresso</string>
+    <string name="state_selected">Selezionato</string>
+    <string name="state_not_selected">Non selezionato</string>
+
+    <string name="customer_type_private">Privato</string>
+    <string name="customer_type_business">Azienda</string>
+    <string name="customer_unnamed_private">Privato senza nome</string>
+    <string name="customer_unnamed_business">Azienda senza nome</string>
+
+    <string name="label_customers">Clienti</string>
+    <string name="label_search_customer">Cerca cliente</string>
+    <string name="customer_new">Nuovo cliente</string>
+    <string name="customer_edit">Modifica cliente</string>
+    <string name="customer_recent">Clienti recenti</string>
+    <string name="customer_search_results">Risultati ricerca</string>
+    <string name="customer_search_hint">Inizia a digitare per cercare un cliente…</string>
+    <string name="customer_search_empty_title">Cerca nell\'archivio clienti</string>
+    <string name="customer_no_results">Nessun cliente trovato per questa ricerca.</string>
+    <string name="customer_no_results_title">Nessun risultato</string>
+    <string name="customer_save">Salva cliente</string>
+    <string name="customer_update">Aggiorna cliente</string>
+    <string name="customer_cancel">Annulla</string>
+    <string name="customer_confirm_save_title">Salvare cliente?</string>
+    <string name="customer_confirm_update_title">Aggiornare cliente?</string>
+    <string name="customer_confirm_save_text">Salvare il cliente?</string>
+    <string name="customer_confirm_update_text">Aggiornare i dati del cliente selezionato?</string>
+    <string name="customer_select">Seleziona cliente</string>
+
+    <string name="customer_select_detail_hint">Seleziona un cliente per vedere i dettagli</string>
+    <string name="customer_select_detail_title">Nessun cliente selezionato</string>
+
+    <string name="customer_detail_edit">Modifica</string>
+    <string name="customer_open_orders">Step attivi (%1$d)</string>
+    <string name="customer_closed_orders">Storico chiuse (%1$d)</string>
+    <string name="customer_no_open_orders">Nessuna commessa aperta</string>
+    <string name="customer_no_closed_orders">Nessuna commessa chiusa</string>
+    <string name="customer_show_all">Mostra tutti i clienti</string>
+    <string name="customer_scroll_to_top">Torna su</string>
+
+    <string name="customer_field_company_name">Ragione sociale</string>
+    <string name="customer_field_vat_number">P.IVA</string>
+    <string name="customer_field_first_name">Nome</string>
+    <string name="customer_field_last_name">Cognome</string>
+    <string name="customer_field_tax_code">Codice fiscale</string>
+    <string name="customer_field_phone">Telefono</string>
+    <string name="customer_field_email">Email</string>
+    <string name="customer_field_address">Indirizzo</string>
+    <string name="customer_field_notes">Note</string>
+
+    <string name="new_order_title">Nuova commessa</string>
+    <string name="intake_step_customer">Cliente</string>
+    <string name="intake_step_category">Categoria</string>
+    <string name="intake_category_select_hint">Naviga fino all\'ultimo livello per selezionare la categoria finale.</string>
+    <string name="intake_category_step_hint">Seleziona una sottocategoria per continuare.</string>
+    <string name="intake_step_problem">Dettagli commessa</string>
+    <string name="intake_step_media">Foto e allegati</string>
+    <string name="intake_step_privacy">Foto e firma digitale</string>
+
+
+    <string name="intake_selected_customer">Cliente selezionato: %s</string>
+    <string name="intake_change_customer">Cambia cliente</string>
+    <string name="intake_insert_new_customer">Inserisci nuovo cliente</string>
+    <string name="intake_no_active_categories">Nessuna categoria attiva.</string>
+    <string name="config_category_empty_title">Nessuna categoria qui</string>
+    <string name="intake_create_category">Crea categoria</string>
+    <string name="intake_add_missing_category">Nuova categoria</string>
+    <string name="intake_confirm_all_steps">Confermare tutti gli step</string>
+    <string name="intake_media_empty">Aggiungi almeno una foto o un allegato.</string>
+    <string name="intake_media_take_photo">Scatta foto</string>
+    <string name="intake_media_take_video">Registra video</string>
+    <string name="intake_media_attach_file">Allega file</string>
+    <string name="intake_media_remove">Rimuovi</string>
+    <string name="intake_media_summary">%1$s – %2$d KB</string>
+
+    <string name="intake_submit_missing">Mancano: %s</string>
+    <string name="intake_submit_create">Crea commessa in carico</string>
+    <string name="intake_help">Compila i passaggi per creare una nuova commessa. Puoi salvare una bozza e riprendere in seguito.</string>
+    <string name="intake_category_selected">Selezionata: %s</string>
+    <string name="intake_category_open">Apri categoria</string>
+    <string name="intake_category_selected_icon">Categoria selezionata</string>
+    <string name="intake_category_branch_state">Ramo categoria</string>
+    <string name="intake_category_selected_state">Categoria selezionata</string>
+    <string name="intake_category_not_selected_state">Categoria non selezionata</string>
+    <string name="intake_problem_title">Titolo lavorazione</string>
+    <string name="intake_problem_description">Descrizione</string>
+
+
+    <string name="orders_filter_title">Filtri</string>
+    <string name="orders_title">Commesse</string>
+    <string name="orders_empty_title">Nessuna commessa trovata</string>
+    <string name="orders_empty_body">Modifica ricerca o filtri, oppure crea una nuova commessa dal banco.</string>
+
+    <string name="orders_customer_unavailable">Cliente non disponibile</string>
+    <string name="orders_order_reference">%1$s – %2$s</string>
+    <string name="orders_customer_reference">%1$s</string>
+
+    <string name="orders_next_action_label">Prossima azione: %s</string>
+
+    <string name="orders_filter_active">Filtro attivo: %s</string>
+    <string name="orders_filter_all">Tutte</string>
+    <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
+    <string name="orders_select_detail_title">Nessuna commessa selezionata</string>
+    <string name="orders_category_unavailable">Categoria non disponibile</string>
+
+
+    <string name="order_exit_confirm_title">Uscire dalla scheda?</string>
+    <string name="order_exit_confirm_text">Nota non salvata od anteprima WhatsApp verranno scartate.</string>
+
+    <string name="order_internal_notes">Note interne</string>
+    <string name="order_new_note">Nuova nota</string>
+    <string name="order_save_note">Salva nota</string>
+    <string name="order_customer_documents">Documenti cliente</string>
+    <string name="order_images_title">Immagini</string>
+    <string name="order_generate_status_pdf">Genera PDF stato avanzamento</string>
+
+    <string name="order_document_history">Storico documenti:</string>
+    <string name="order_document_generated">Generato: %s</string>
+    <string name="order_share">Condividi</string>
+    <string name="order_whatsapp_send">Invia stato WhatsApp</string>
+    <string name="order_wa_preview_title">Anteprima WhatsApp</string>
+    <string name="order_wa_prepared_timeline_title">WhatsApp preparato</string>
+    <string name="order_wa_sent_timeline_title">WhatsApp confermato</string>
+    <string name="order_wa_message_label">Messaggio</string>
+    <string name="order_wa_template_label">Template: %s</string>
+    <string name="order_wa_open">Apri WhatsApp</string>
+    <string name="order_wa_sent">Inviato</string>
+    <string name="order_wa_close_preview">Chiudi anteprima</string>
+    <string name="order_timeline">Cronologia</string>
+    <string name="order_confirm_status_update">Aggiornare lo stato della commessa?</string>
+    <string name="order_result_summary">Sintesi risultato</string>
+    <string name="order_loading_detail">Caricamento commessa…</string>
+    <string name="order_share_status_chooser">Invia stato avanzamento</string>
+    <string name="share_title_document">Documento %s</string>
+    <string name="error_repairable_diagnosis_required">Solo una diagnosi riparabile può passare in riparazione</string>
+    <string name="error_not_repairable_diagnosis_required">Il passaggio diretto al ritiro richiede una diagnosi non riparabile</string>
+    <string name="error_unknown">Errore</string>
+    <string name="error_unknown_short">Errore sconosciuto</string>
+    <string name="error_prefix">Errore: %s</string>
+    <string name="error_log_generation_failed">Impossibile generare il file dei log</string>
+    <string name="auth_loading_initializing">Inizializzazione…</string>
+    <string name="order_diagnosis_repairable">Riparabile</string>
+    <string name="order_diagnosis_not_repairable">Non riparabile</string>
+    <string name="template_diagnosis_not_repairable_reason">Diagnosi tecnica: non riparabile</string>
+    <string name="order_estimate_amount">Importo preventivo (€)</string>
+
+    <string name="order_closure_note_label">Nota chiusura</string>
+    <string name="order_closure_reason_title">Motivo chiusura</string>
+    <string name="order_paid_button">Pagato</string>
+    <string name="order_paid_badge">PAGATO</string>
+    <string name="order_next_action_title">Prossima azione</string>
+    <string name="order_secondary_actions_title">Altre azioni</string>
+    <string name="order_not_repairable_title">Esito diagnosi</string>
+    <string name="order_not_repairable_body">Il dispositivo non è riparabile. Avvisa il cliente prima di preparare il ritiro.</string>
+    <string name="order_updated_label">Aggiornata</string>
+    <string name="order_operator_label">Operatore</string>
+    <string name="order_wa_sending_to">Inviando a: %s</string>
+    <string name="order_timeline_tooltip">Cronologia di tutti gli eventi e cambiamenti di stato relativi a questa commessa.</string>
+    <string name="order_quote_outcome">Esito preventivo</string>
+    <string name="order_quote_accepted">Preventivo accettato</string>
+    <string name="order_quote_accepted_log">Preventivo Accettato</string>
+    <string name="order_quote_rejected">Preventivo rifiutato</string>
+    <string name="order_quote_reject_reason">Motivo rifiuto</string>
+
+    <string name="order_pdf_sent_confirm_title">Conferma invio</string>
+    <string name="order_pdf_sent_confirm_text">Hai completato l\'invio del PDF al cliente?</string>
+    <string name="order_confirm_diagnosis_outcome_title">Cliente avvisato?</string>
+    <string name="order_confirm_diagnosis_outcome_text">La commessa passerà a pronta per il ritiro.</string>
+    <string name="order_confirm_ready_not_repairable">Sei sicuro di voler segnare come pronta al ritiro? Il dispositivo non è riparabile.</string>
+
+    <string name="dialog_confirm_title">Conferma</string>
+
+    <string name="template_wa_intake_title">WhatsApp presa in carico</string>
+    <string name="template_wa_intake_body">Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novità.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_update_title">WhatsApp aggiornamento</string>
+    <string name="template_wa_update_body">Aggiornamento commessa {{numero_commessa}}: stato attuale {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_diagnosis_title">WhatsApp diagnosi</string>
+    <string name="template_wa_diagnosis_body">Ciao {{cliente}}, la commessa {{numero_commessa}} è in diagnosi.\nOggetto: {{titolo_commessa}}.\nTi comunicheremo esito e preventivo prima di procedere.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_result_title">WhatsApp esito</string>
+    <string name="template_wa_result_body">Ciao {{cliente}}, abbiamo completato la diagnosi per la commessa {{numero_commessa}}.\nEsito: {{esito_diagnosi}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_quote_title">WhatsApp preventivo intervento</string>
+    <string name="template_wa_quote_body">Ciao {{cliente}}, per la commessa {{numero_commessa}} abbiamo completato la diagnosi.\nPreventivo intervento: {{importo_preventivo}}.\nRispondi confermando o rifiutando il preventivo: procederemo solo dopo la tua conferma.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_not_repairable_title">WhatsApp non riparabile</string>
+    <string name="template_wa_not_repairable_body">Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l\'oggetto risulta non riparabile.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_repairing_title">WhatsApp intervento</string>
+    <string name="template_wa_repairing_body">Ciao {{cliente}}, l\'intervento per la commessa {{numero_commessa}} è in corso.\nTi aggiorneremo quando sarà pronta.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_completed_title">WhatsApp completamento</string>
+    <string name="template_wa_completed_body">Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} è completata.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_ready_title">WhatsApp pronto ritiro</string>
+    <string name="template_wa_ready_body">Ciao {{cliente}}, la commessa {{numero_commessa}} è pronta per il ritiro.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_pdf_status_title">WhatsApp stato avanzamento PDF</string>
+    <string name="template_wa_pdf_status_body">Ciao {{cliente}}, ti inviamo in allegato lo stato avanzamento della commessa {{numero_commessa}}: {{titolo_commessa}}.\n\nStato attuale: {{stato_commessa}}\nProssima azione: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
+    <string name="legal_privacy_fallback">Informativa Privacy sintetica GDPR: I dati sono trattati per presa in carico, diagnosi, preventivo, riparazione, consegna, comunicazioni operative e obblighi di legge. Il cliente può esercitare i diritti GDPR e proporre reclamo al Garante Privacy.</string>
+    <string name="legal_terms_fallback">Il cliente autorizza la presa in carico, la custodia e la diagnosi tecnica dell\'oggetto. Ogni riparazione con importo stimato viene eseguita solo dopo conferma del cliente.</string>
+    <string name="template_privacy_short_title">Informativa privacy sintetica</string>
+    <string name="template_privacy_short_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o via: {{proprietario_email}} {{proprietario_telefono}}.\nFinalità: presa in carico e gestione della commessa, diagnosi, preventivo, intervento tecnico, consegna, assistenza post-intervento e adempimenti fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse. Per comunicazioni WhatsApp non indispensabili, il consenso si ritiene conferito con il rilascio del numero di contatto.\nDati trattati: identificativi, fiscali, informazioni sull\'oggetto, foto, firme e cronologia.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge (10 anni per fini fiscali).\nDestinatari: personale autorizzato e fornitori tecnici strettamente necessari.\nDiritti: accesso, rettifica, cancellazione, limitazione, opposizione e reclamo al Garante Privacy.</string>
+    <string name="template_terms_title">Condizioni di presa in carico</string>
+    <string name="template_terms_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi può richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verrà gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} – {{proprietario_indirizzo}}</string>
+
+
+    <string name="order_pdf_missing_signature_title">Firma mancante</string>
+    <string name="order_pdf_missing_signature_text">Il documento non conterrà la firma del cliente. Proseguire?</string>
+    <string name="yes_confirmed">Sì, confermato</string>
+    <string name="no_cancel">No, annulla</string>
+
+    <string name="admin_close">Chiudi Utenti e Operatori</string>
+    <string name="admin_search_operators_label">Cerca operatori…</string>
+    <string name="admin_only_section">Sezione disponibile solo per admin.</string>
+    <string name="admin_create_operator">Crea operatore</string>
+    <string name="admin_field_temp_password">Password temporanea</string>
+    <string name="admin_confirm_create_title">Creare operatore?</string>
+    <string name="admin_confirm_create_text">Il nuovo operatore verrà salvato nel database locale.</string>
+    <string name="admin_users_title">Utenti</string>
+    <string name="admin_no_users_title">Nessun operatore</string>
+    <string name="admin_no_users_body">Crea almeno un operatore per separare accessi, permessi e responsabilità sulle commesse.</string>
+    <string name="admin_user_active_description">L\'operatore può accedere al sistema</string>
+    <string name="admin_user_inactive_description">L\'operatore non può effettuare il login</string>
+    <string name="admin_user_active">Attivo</string>
+    <string name="admin_user_inactive">Disattivo</string>
+    <string name="admin_confirm_activate_title">Attivare operatore?</string>
+    <string name="admin_confirm_deactivate_title">Disattivare operatore?</string>
+    <string name="admin_confirm_activate_text">Vuoi attivare l\'operatore %s? Potrà riprendere a gestire le commesse.</string>
+    <string name="admin_confirm_deactivate_text">Vuoi disattivare l\'operatore %s? Non potrà più accedere all\'app finché non verrà riattivato.</string>
+    <string name="admin_confirm_delete_user_title">Eliminare operatore?</string>
+    <string name="admin_confirm_delete_user_text">L\'operatore %s verrà rimosso permanentemente dal sistema. Non sarà più possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
+    <string name="admin_reset_password">Reset password</string>
+    <string name="admin_confirm_reset_title">Resettare password?</string>
+    <string name="admin_confirm_reset_text">La password temporanea inserita verrà salvata per %s.</string>
+    <string name="admin_total_reset">Reset totale dati</string>
+    <string name="admin_confirm_total_reset_title">Reset totale?</string>
+    <string name="admin_confirm_total_reset_text">Questa azione elimina i dati locali dell\'app e riporta al primo setup admin.</string>
+    <string name="admin_delete_all_orders">Cancella tutte le commesse</string>
+    <string name="admin_confirm_delete_all_orders_title">Cancellazione totale commesse?</string>
+    <string name="admin_confirm_delete_all_orders_text">Tutte le commesse, timeline, messaggi, foto, firme e documenti verranno eliminati permanentemente.</string>
+    <string name="admin_access_security">Accessi e sicurezza</string>
+    <string name="admin_recovery_kit">Kit di recupero admin</string>
+    <string name="admin_recovery_generate">Genera nuovo kit di recupero</string>
+    <string name="admin_recovery_master_code">Codice master:</string>
+    <string name="admin_recovery_hide">Fatto, nascondi codice</string>
+    <string name="admin_permissions_title">Aree e permessi</string>
+    <string name="admin_permission_create_orders">Creazione commesse</string>
+    <string name="admin_permission_edit_own_orders">Modifica proprie commesse</string>
+    <string name="admin_permission_edit_all_orders">Modifica tutte le commesse</string>
+    <string name="admin_permission_close_orders">Chiusura commesse</string>
+    <string name="admin_permission_manage_customers">Gestione anagrafica clienti</string>
+    <string name="admin_permission_manage_categories">Gestione catalogo categorie</string>
+    <string name="admin_permission_manage_templates">Gestione template messaggi</string>
+    <string name="admin_permission_manage_payments">Gestione pagamenti</string>
+    <string name="admin_permission_export_data">Esportazione dati (Excel/PDF)</string>
+    <string name="admin_permission_manage_storage">Pulizia cache e statistiche</string>
+    <string name="admin_permission_record_video">Registrazione video</string>
+    <string name="admin_recovery_offline_warning">Scrivi questo codice e conservalo offline. Scomparirà al riavvio della schermata.</string>
+    <string name="admin_new_password">Nuova password</string>
+    <string name="admin_change_password">Cambia password</string>
+    <string name="admin_recovery_tooltip">Il kit di recupero consente di reimpostare la password admin. Conservalo in un luogo sicuro fuori dal dispositivo.</string>
+    <string name="admin_current_password">Password attuale</string>
+    <string name="admin_delete_all_orders_tooltip">Elimina permanentemente commesse, timeline, messaggi, foto, firme e documenti.</string>
+    <string name="admin_total_reset_tooltip">Rimuove account, clienti, configurazioni e commesse, riportando l\'app allo stato iniziale.</string>
+    <string name="admin_delete_all_orders_field_short">Digita %s</string>
+    <string name="admin_total_reset_field">Digita %s</string>
+    <string name="admin_delete_all_orders_confirmation_value">CANCELLA TUTTO</string>
+    <string name="admin_total_reset_confirmation_value">RESET</string>
+
+    <string name="config_hub_categories_title">Categorie</string>
+    <string name="config_hub_categories_subtitle">Catalogo commesse</string>
+    <string name="config_hub_templates_title">Gestione Template</string>
+    <string name="config_hub_templates_subtitle_admin">Testi e messaggi</string>
+    <string name="config_hub_template_mapping_title">Associazione Template</string>
+    <string name="config_hub_template_mapping_subtitle">Attivatori e placeholder</string>
+    <string name="config_template_tooltip">Personalizza i messaggi predefiniti per ogni fase della lavorazione e le informative legali.</string>
+    <string name="config_template_association_tooltip">Collega i template ai momenti chiave dell\'app (es. apertura commessa, preventivo).</string>
+    <string name="config_template_default_label">Default (%s)</string>
+    <string name="config_template_step_prefix">Step %1$d</string>
+    <string name="config_template_legal_step">Legale</string>
+    <string name="config_template_status_default">Sistema</string>
+    <string name="config_template_status_associated">Associato</string>
+    <string name="config_template_status_free">Libero</string>
+    <string name="config_template_status_missing">Mancante</string>
+    <string name="config_template_status_not_configured">Non configurato</string>
+    <string name="config_template_reset_defaults">Ripristina template default</string>
+    <string name="config_template_reset_confirm_title">Ripristinare template default?</string>
+    <string name="config_template_reset_confirm_text">I template di sistema torneranno ai testi predefiniti e le associazioni personalizzate verranno rimosse. I template personalizzati resteranno disponibili ma non associati.</string>
+    <string name="config_template_new">Nuovo Template</string>
+    <string name="config_template_general">Generale</string>
+    <string name="config_template_close">Chiudi Setup Template</string>
+    <string name="config_template_associated_warning">Attenzione: questo template è associato a: %s. Archiviarlo ripristinerà i default per questi punti.</string>
+    <string name="config_template_associate_with">Associa a %s</string>
+    <string name="config_template_edit_title">Modifica Template</string>
+    <string name="config_template_code_value">Codice: %s</string>
+    <string name="config_template_step_label">Step associato</string>
+    <string name="config_template_variables_tooltip">{{numero_commessa}}, {{stato_commessa}}, {{categoria_percorso}}, {{cliente}}, {{esito_diagnosi}}, {{importo_preventivo}}, {{ancora_label}}, {{ancora_id}}, {{template_codice}}</string>
+
+    <string name="config_hub_templates_subtitle_user">Area admin</string>
+    <string name="config_hub_whatsapp_title">WhatsApp</string>
+    <string name="config_hub_whatsapp_subtitle">Invio manuale</string>
+    <string name="config_hub_owner_title">Dati Proprietario</string>
+    <string name="config_hub_owner_subtitle">Informazioni per PDF e messaggi</string>
+    <string name="config_owner_tooltip">Configura i dati da includere nei report e nelle comunicazioni.</string>
+    <string name="config_ui_tooltip">Personalizza l\'aspetto dell\'applicazione.</string>
+    <string name="config_ui_dark_theme">Tema Scuro</string>
+    <string name="config_ui_close">Chiudi setup interfaccia</string>
+    <string name="owner_field_name">Ragione Sociale / Nome</string>
+    <string name="owner_field_vat">P.IVA / Codice Fiscale</string>
+    <string name="owner_field_address">Indirizzo / Sede Legale</string>
+    <string name="owner_field_email">Email</string>
+    <string name="owner_field_phone">Telefono</string>
+    <string name="owner_save_success">Dati proprietario salvati con successo.</string>
+    <string name="owner_close">Chiudi Setup Proprietario</string>
+
+    <string name="config_hub_admin_title">Utenti e Operatori</string>
+    <string name="config_hub_admin_subtitle">Gestione operatori e kit di recupero</string>
+    <string name="config_hub_ui_title">Interfaccia</string>
+    <string name="config_hub_ui_subtitle">Tema e aspetto</string>
+    <string name="config_hub_backup_title">Backup e Manutenzione</string>
+    <string name="config_hub_backup_subtitle">Export, reset e ripristino</string>
+    <string name="config_hub_storage_subtitle">Spazio disco e monitoraggio</string>
+    <string name="config_hub_about_title">Informazioni</string>
+    <string name="config_hub_about_subtitle">Versione e contatti dell\'app</string>
+    <string name="about_tooltip">Dettagli sulla versione dell\'applicazione e contatti per lo sviluppo.</string>
+    <string name="about_app_name">OnlyTechTake</string>
+    <string name="app_slogan">Gestisci, traccia, documenta.</string>
+    <string name="about_version">Versione: %1$s (Baseline %2$d)</string>
+    <string name="about_build_type">Build Type: %s</string>
+    <string name="about_links_title">Link e Privacy</string>
+    <string name="about_home_page">Sito Web</string>
+    <string name="about_privacy_policy">Informativa Privacy</string>
+    <string name="about_description_title">Descrizione</string>
+    <string name="about_description_text">OnlyTechTake è un gestionale locale per la gestione di commesse e documentazione tecnica. Tutti i tuoi dati restano sul dispositivo per garantirti massima privacy e velocità.</string>
+    <string name="about_copyright">© 2026 OnlyTechTake</string>
+    <string name="about_github">GitHub: dennidalpos</string>
+    <string name="about_url_github">https://github.com/dennidalpos</string>
+    <string name="about_url_home">https://inventoveritas.mine.nu/index.html</string>
+    <string name="about_url_privacy">https://inventoveritas.mine.nu/privacy.html</string>
+    <string name="about_close">Chiudi Informazioni</string>
+    <string name="about_license_apache">Apache License 2.0</string>
+    <string name="about_license_bsd">BSD 3-Clause License</string>
+    <string name="about_legal_credits_title">Crediti Open Source</string>
+    <string name="about_legal_credits_text">Questa applicazione utilizza le seguenti librerie: SQLCipher per la crittografia, Room per il database locale, Jetpack Compose per la UI, e Zip4j per i backup.</string>
+    <string name="about_development">Sviluppo</string>
+
+    <string name="config_category_root">Tutte</string>
+    <string name="config_category_up">Su</string>
+    <string name="config_category_name_label">Nome categoria</string>
+    <string name="config_category_description_label">Descrizione</string>
+    <string name="config_category_active">Categoria attiva</string>
+    <string name="config_category_archived">Categoria archiviata</string>
+    <string name="config_category_return_to_intake">Torna alla commessa</string>
+
+    <string name="config_category_tooltip">Organizza il catalogo delle commesse. Puoi creare una gerarchia di categorie e sottocategorie.</string>
+    <string name="config_category_search_label">Cerca categorie…</string>
+    <string name="config_category_new_root">Nuova Categoria principale</string>
+    <string name="config_category_new_sub">Nuova Sottocategoria</string>
+    <string name="config_category_dialog_title_new">Nuova Categoria</string>
+    <string name="config_category_dialog_title_edit">Modifica Categoria</string>
+
+    <string name="config_category_save">Salva categoria</string>
+
+    <string name="config_category_confirm_save_title">Salvare categoria?</string>
+    <string name="config_category_confirm_save_text">La categoria verrà aggiornata nel catalogo locale.</string>
+
+    <string name="config_category_confirm_delete_title">Eliminare categoria?</string>
+    <string name="config_category_close">Chiudi Categorie</string>
+
+
+    <string name="config_category_confirm_delete_specific_text">La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non è possibile eliminare categorie usate in commesse esistenti.</string>
+
+    <string name="config_category_empty_branch">Nessuna categoria in questo ramo.</string>
+    <string name="config_template_code_label">Codice</string>
+    <string name="config_template_title_label">Titolo</string>
+    <string name="config_template_body_label">Testo</string>
+    <string name="config_template_variables">Variabili</string>
+    <string name="config_template_active">Template attivo</string>
+    <string name="config_template_archived">Template archiviato</string>
+    <string name="config_template_save">Salva template</string>
+    <string name="config_template_confirm_save_title">Salvare template?</string>
+    <string name="config_template_confirm_save_risky">La modifica può interrompere i flussi che usano questo codice. Le firme salvate non cambiano.</string>
+    <string name="config_template_confirm_save_new_version">Verrà salvata una nuova versione.</string>
+    <string name="config_template_empty">Nessun template configurato.</string>
+    <string name="config_whatsapp_mode">Modalità: %1$s</string>
+    <string name="config_whatsapp_manual">Manuale</string>
+    <string name="config_whatsapp_tooltip">Configura la modalità di invio dei messaggi ai clienti. Attualmente è supportato l\'invio manuale tramite WhatsApp.</string>
+    <string name="config_whatsapp_close">Chiudi Setup WhatsApp</string>
+    <string name="config_whatsapp_confirm_manual_title">Impostare modalità manuale?</string>
+    <string name="config_whatsapp_confirm_manual_text">La modalità WhatsApp verrà salvata.</string>
+    <string name="config_backup_title">Backup e Ripristino</string>
+    <string name="config_backup_reminder_disabled_warning">Attenzione: con il promemoria disattivato non riceverai notifiche per eseguire il backup periodico consigliato.</string>
+    <string name="config_backup_reminder_enabled">Promemoria backup attivo</string>
+    <string name="config_backup_interval_days">Intervallo promemoria (giorni)</string>
+    <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: %3$s\nFile: %4$s</string>
+    <plurals name="config_backup_reminder_interval">
+        <item quantity="one">ogni %1$d giorno</item>
+        <item quantity="many" tools:ignore="UnusedQuantity">ogni %1$d giorni</item>
+        <item quantity="other">ogni %1$d giorni</item>
+    </plurals>
+    <string name="config_backup_last_success_none">Nessuno</string>
+    <string name="config_backup_last_file_none">Non disponibile</string>
+    <string name="config_backup_security_title">Sicurezza ed Encryption</string>
+    <string name="config_backup_encrypt_label">Cifra backup (ZIP/XLSX)</string>
+    <string name="config_backup_password_label">Password cifratura</string>
+    <string name="config_backup_unencrypted_warning">File non cifrati: usare solo destinazioni protette.</string>
+    <string name="config_backup_password_modal_title">Impostazioni Cifratura</string>
+    <string name="config_backup_password_modal_text">Imposta una password per proteggere i tuoi backup. Se impostata, verrà utilizzata per tutti i backup e richiesta per il ripristino.</string>
+    <string name="config_backup_restore_password_title">Backup Cifrato</string>
+    <string name="config_backup_restore_password_text">Questo backup è cifrato. Inserisci la password per procedere con il ripristino.</string>
+    <string name="config_backup_password_confirm_error">Le password non corrispondono</string>
+    <string name="config_backup_password_change">Cambia Password Cifratura</string>
+    <string name="config_backup_password_set">Imposta Password Cifratura</string>
+    <string name="config_backup_password_remove">Rimuovi Password</string>
+    <string name="config_backup_status_encrypted">Backup cifrati</string>
+    <string name="config_backup_status_unencrypted">Backup non cifrati</string>
+
+    <string name="config_backup_tooltip">Gestisci promemoria e file tramite il selettore documenti Android.</string>
+    <string name="config_backup_close">Chiudi setup backup</string>
+
+    <string name="config_backup_export_xlsx">Export commesse XLSX</string>
+    <string name="config_backup_confirm_export_xlsx_title">Esportare commesse?</string>
+    <string name="config_backup_confirm_export_xlsx_text">Verrà creato un file XLSX tramite selettore di sistema.</string>
+
+    <string name="config_backup_confirm_export_zip_title">Esegui backup completo?</string>
+    <string name="config_backup_confirm_export_zip_text">Verrà creato un file ZIP tramite selettore di sistema.</string>
+    <string name="config_backup_restore_zip">Ripristina ZIP</string>
+    <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
+    <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituirà database e file locali dell\'app. Dopo il ripristino sarà richiesto un nuovo login.</string>
+
+    <string name="config_backup_auto_title">Backup Automatico</string>
+    <string name="config_backup_auto_destination">Destinazione backup</string>
+    <string name="config_backup_auto_select_destination">Seleziona destinazione</string>
+    <string name="config_backup_auto_select_time">Seleziona orario</string>
+    <string name="config_backup_auto_schedule">Pianificazione</string>
+    <string name="config_backup_auto_time">Orario di esecuzione</string>
+    <string name="config_backup_auto_info">Percorso: %s</string>
+    <string name="config_backup_auto_not_set">Non impostato</string>
+    <string name="config_backup_auto_running">Backup in corso…</string>
+    <string name="config_backup_auto_running_detail">L\'app tornerà disponibile al termine dell\'operazione. Per favore non chiudere l\'app.</string>
+    <string name="config_backup_auto_confirm_title">Avviare backup automatico?</string>
+    <string name="config_backup_auto_confirm_text">L\'app non sarà disponibile fino al completamento del backup. Procedere?</string>
+    <string name="config_backup_auto_battery_low">Batteria troppo scarica (%d%%). Collega il caricabatterie per procedere con il backup.</string>
+    <string name="config_backup_mode_label">Modalità backup</string>
+    <string name="config_backup_mode_manual">Manuale con avvisi</string>
+    <string name="config_backup_mode_auto">Automatico pianificato</string>
+    <string name="error_no_backup_path">Percorso backup non configurato</string>
+    <string name="error_could_not_create_file">Impossibile creare il file di backup</string>
+    <string name="error_backup_failed">Backup fallito</string>
+
+
+    <string name="export_xlsx_header_order_number">Numero commessa</string>
+    <string name="export_xlsx_header_title">Titolo</string>
+    <string name="export_xlsx_header_status">Stato</string>
+    <string name="export_xlsx_header_priority">Priorità</string>
+    <string name="export_xlsx_header_customer">Cliente</string>
+    <string name="export_xlsx_header_customer_type">Tipo cliente</string>
+    <string name="export_xlsx_header_phone">Telefono</string>
+    <string name="export_xlsx_header_email">Email</string>
+    <string name="export_xlsx_header_category">Categoria</string>
+    <string name="export_xlsx_header_operator">Operatore</string>
+    <string name="export_xlsx_header_signer">Firmatario</string>
+    <string name="export_xlsx_header_description">Descrizione</string>
+    <string name="export_xlsx_header_internal_notes">Note interne</string>
+    <string name="export_xlsx_header_diagnosis_outcome">Esito diagnosi</string>
+    <string name="export_xlsx_header_payment">Pagamento</string>
+    <string name="export_xlsx_header_estimate_amount">Importo preventivo</string>
+    <string name="export_xlsx_header_final_amount">Importo finale</string>
+    <string name="export_xlsx_header_created_at">Creata</string>
+    <string name="export_xlsx_header_updated_at">Aggiornata</string>
+    <string name="export_xlsx_header_closed_at">Chiusa</string>
+    <string name="export_xlsx_header_closure_reason">Motivo chiusura</string>
+
+    <string name="export_xlsx_value_paid">Pagato</string>
+    <string name="export_xlsx_value_not_paid">Non pagato</string>
+
+
+    <string name="storage_title">Archiviazione</string>
+    <string name="storage_free_device">Spazio libero dispositivo</string>
+    <string name="storage_total_device">Capacità totale dispositivo</string>
+    <string name="storage_app_used">Spazio usato dall\'app</string>
+    <string name="storage_db_size">Database</string>
+    <string name="storage_media_size">Media e Foto</string>
+    <string name="storage_docs_size">Documenti e Firme</string>
+    <string name="storage_cache_size">Cache e Staging</string>
+    <string name="storage_status_ok">Stato: OK</string>
+    <string name="storage_status_warning">Stato: ATTENZIONE</string>
+    <string name="storage_status_critical">Stato: CRITICO</string>
+    <string name="storage_refresh">Aggiorna</string>
+    <string name="storage_deep_maintenance">Manutenzione profonda</string>
+
+    <string name="storage_cleanup_cache">Svuota cache</string>
+    <string name="storage_cleanup_cache_tooltip">Elimina i file temporanei e i dati memorizzati nella cache. Non influisce su commesse o documenti.</string>
+    <string name="storage_cleanup_orphans">Pulisci file orfani</string>
+    <string name="storage_cleanup_orphans_tooltip">Rimuove permanentemente i file non più referenziati nel database (es. foto di commesse eliminate).</string>
+    <string name="storage_tooltip">Monitora l\'uso della memoria e pulisci i file temporanei per liberare spazio.</string>
+    <string name="storage_loading">Caricamento statistiche…</string>
+    <string name="storage_free_percentage">Spazio libero: %1$d%% (%2$s)</string>
+    <string name="storage_app_detail_title">Dettaglio uso App</string>
+    <string name="storage_close">Chiudi setup memoria</string>
+
+    <string name="catalog_path_separator">\u0020&gt;\u0020</string>
+
+    <string name="catalog_error_name_required">Nome categoria obbligatorio</string>
+    <string name="catalog_error_duplicate_name">Categoria già presente in questo ramo</string>
+
+    <string name="catalog_error_not_found">Categoria non trovata</string>
+    <string name="catalog_error_used_by_order">Categoria usata da una commessa</string>
+    <string name="catalog_error_cycle_detected">Il ramo categorie contiene un ciclo</string>
+    <string name="catalog_error_self_parent">Una categoria non può essere padre di se stessa</string>
+    <string name="catalog_error_parent_not_found">Categoria padre non trovata</string>
+    <string name="catalog_error_depth_limit">Profondità massima raggiunta (4 livelli)</string>
+
+    <string name="error_restore_failed">Ripristino fallito</string>
+    <string name="action_restore_confirm_title">Ripristina Backup</string>
+    <string name="action_restore_confirm_text">Tutti i dati attuali verranno sostituiti dal backup. L\'operazione non è annullabile. Inserisci la password se il backup è cifrato.</string>
+    <string name="auth_password_backup">Password backup (opzionale)</string>
+    <string name="error_reset_confirmation_invalid">Digita la parola corretta per confermare</string>
+
+</resources>
