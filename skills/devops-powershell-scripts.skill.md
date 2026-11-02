@@ -19,5 +19,5 @@ Automation is handled via PowerShell wrappers located in `scripts/powershell/`.
 - Verify environment (Windows 11 + PowerShell) before execution.
 
 ## References
-- [AGENTS.md](file:///D:/GITHUB/OnlyTechTake/AGENTS.md)
-- [scripts/](file:///D:/GITHUB/OnlyTechTake/scripts/)
+- [AGENTS.md](../AGENTS.md)
+- [scripts/](../scripts/)
