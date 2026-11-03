@@ -19,4 +19,4 @@ OnlyTechTake uses the Robot pattern to decouple test logic from UI implementatio
 
 ## References
 - [Testing layouts with Jetpack Compose](https://developer.android.com/develop/ui/compose/testing)
-- [TestUtils.kt](../app/src/androidTest/java/com/example/app/TestUtils.kt) (Example path, adjust as needed)
+- `TestUtils.kt` (example path `app/src/androidTest/java/com/example/app/TestUtils.kt`, adjust as needed)
