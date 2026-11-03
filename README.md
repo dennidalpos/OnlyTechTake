@@ -90,8 +90,7 @@ OnlyTechTake/
 ├── docs/                     # Play Store guides and technical docs
 ├── landing/                  # Product landing page (HTML/CSS)
 ├── marketing/                # Approved assets, screenshots, and copy
-├── scripts/powershell/       # Dev automation (CI/CD, environment)
-└── 02-areas/products/OnlyTechTake/tracker.json (nel dossier SecondBrain)       # Active backlog and project health
+└── scripts/powershell/       # Dev automation (CI/CD, environment)
 ```
 
 ---
@@ -161,6 +160,14 @@ We use a suite of PowerShell wrappers to maintain code quality:
   ```
 
 For release preparation and limitations, see the [release checklist](docs/play-store/release-checklist.md) and [backup flow](docs/BACKUP_FLOW.md). For agent guidelines, see [AGENTS.md](AGENTS.md).
+
+---
+
+## 🔒 Security and License
+
+See [SECURITY.md](SECURITY.md) to report a vulnerability. The repository contains Android CI workflows, but GitHub Actions are disabled: build and test locally with the scripts above.
+
+Proprietary, all rights reserved. See [LICENSE](LICENSE).
 
 ---
 
