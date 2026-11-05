@@ -1,176 +1,69 @@
-<p align="center">
-  <img src="marketing/registered-assets/brand/social/github-cover.svg" width="100%" alt="OnlyTechTake Cover">
-</p>
+<p align="center"><img src="marketing/registered-assets/brand/social/github-cover.svg" width="100%" alt="OnlyTechTake"></p>
 
 # OnlyTechTake
-**Gestisci, traccia, documenta.** | *Manage, track, document.*
 
-<p align="center">
-  <img src="marketing/registered-assets/brand/identity/onlytechtake-logo.svg" alt="OnlyTechTake Logo" width="400">
-</p>
+Android application for repair shops and technical assistance teams: manage service orders, record goods intake, attach photos and videos, capture signatures on screen, and create PDF documents. Data is stored locally; sharing and exports are initiated by the user.
 
-<p align="center">
-  <a href="https://android.com"><img src="https://img.shields.io/badge/Platform-Android-green.svg" alt="Platform"></a>
-  <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Language-Kotlin-blue.svg" alt="Language"></a>
-  <a href="https://developer.android.com/jetpack/compose"><img src="https://img.shields.io/badge/UI-Jetpack%20Compose-orange.svg" alt="UI"></a>
-  <img src="https://img.shields.io/badge/License-Proprietary-red.svg" alt="License">
-</p>
+The interface supports English and Italian. Full, Demo and Showcase are separate build flavors. The repository's configured version is 1.4.0; local build preparation does not establish production readiness or Google Play acceptance.
 
----
+## Features and limits
 
-## 📱 Overview
+- Customers, service orders, operators and local audit history.
+- CameraX photos and videos, signatures drawn on screen, and PDF reports.
+- SQLCipher database encryption. Media, preferences and exported documents have separate protection limits; see [backup and restore](docs/BACKUP_FLOW.md).
+- Explicit WhatsApp, Android sharing and document-picker exports. The selected app or provider may transfer files outside the device.
+- Full supports backup/restore and XLSX export. Demo allows one stored order and up to three active operators, restricts exports and restore, and watermarks PDFs. Showcase provides synthetic demonstration data.
 
-**OnlyTechTake** is a powerful local-first solution for job management, goods intake, and technical documentation. Designed for maximum privacy and speed, the app handles the entire lifecycle of service orders, from initial intake to final delivery, with sharing and exports initiated explicitly by the user.
+A captured signature is an image/trace used in the workflow; this README does not establish a legally qualified digital signature. Backup ZIP passwords currently protect database entries only. Restore is not guaranteed atomic, and moving a backup to a new installation does not transfer the installation's Android Keystore key.
 
-The app is ideal for technical assistance centers, repair labs, and any business that needs to document the intake of customer goods and track intervention activities.
+## Requirements
 
-The app uses **English** as the default fallback language and includes full localization in **Italian**.
+- Windows with PowerShell and Android Studio for the supplied automation.
+- JDK 21 for the configured JVM toolchain. The environment helper searches supported JDK 17/21 installations; finding JDK 17 alone does not satisfy the project's toolchain requirement.
+- Android SDK platform 37 and Android Build Tools. The app targets API 37 and supports Android 8.0/API 26 and newer.
+- The repository's Gradle wrapper. Release signing needs the owner's local, ignored signing configuration.
 
-### ✨ Key Features
-- 🛠️ **Job Management**: Real-time tracking of service orders (Open, Diagnosis, In Progress, Ready, Closed) with expanded operator permissions.
-- 👤 **Customer CRM**: Local database optimized for quick search and intervention history.
-- ✍️ **Digital Signature**: Secure signature capture for terms, privacy, and intake acceptance directly on screen.
-- 📸 **Technical Documentation**: Photo and video attachments of goods status integrated into the order for complete evidence.
-- 📄 **PDF Reports**: Instant generation of intake forms, status receipts, and intervention reports.
-- 🔄 **Smart Templates**: WhatsApp and legal templates that auto-switch language (English/Italian) unless customized by the user.
-- 🔐 **Total Privacy**: SQLCipher encrypted database and offline storage.
-- 🌐 **Multi-language**: Native support for English (Default) and Italian.
+## Quick start
 
----
-
-## 🖼️ Visual Showcase
-
-### Screenshots (Pro Version)
-<p align="center">
-  <img src="marketing/screenshots/play-store/pro/01-dashboard-pro.png" width="200" alt="Dashboard">
-  <img src="marketing/screenshots/play-store/pro/02-nuova-commessa-pro.png" width="200" alt="New Order">
-  <img src="marketing/screenshots/play-store/pro/03-foto-firma-pro.png" width="200" alt="Signature">
-  <img src="marketing/screenshots/play-store/pro/05-whatsapp-pdf-pro.png" width="200" alt="PDF Export">
-</p>
-
-### 🎥 Video Demo
-[▶️ Watch the Full Workflow](marketing/videos/play-store/pro-workflow.mp4)
-
----
-
-## 🌐 Landing Page & Presence
-
-The project includes a modern and responsive landing page located in `/landing`.
-- **Technologies**: HTML5, CSS3 (Modern Material 3 Design), Lucide Icons.
-- **Features**: Interactive gallery, Dark/Light mode toggle, mobile optimization.
-- **Local URL**: Open `landing/index.html` in your browser.
-- **Note**: Currently, Google Play Store links are dormant. The landing page points to a local APK for the Demo version and a contact email for the Pro version.
-
----
-
-## 📊 Project Metrics & Status
-
-| Metric | Value |
-|:---|:---|
-| **Target SDK** | 37 |
-| **Min SDK** | 26 (Android 8.0) |
-| **Architecture** | Clean Architecture / MVI |
-| **Database** | SQLCipher v4 (Encrypted) |
-| **Build Flavors** | `full`, `demo`, `showcase` |
-| **Localization** | 🇺🇸 English (Default), 🇮🇹 Italian |
-| **Status** | v1.4.0 configured; local release preparation; production qualification pending |
-
----
-
-## 🏗️ Project Structure
-```text
-OnlyTechTake/
-├── app/                      # Main Android module
-│   ├── src/
-│   │   ├── main/             # Core logic and shared resources
-│   │   ├── full/             # Pro version specific features
-│   │   ├── demo/             # Trial version (1 stored order limit)
-│   │   └── showcase/         # Internal demo build with preloaded data
-│   └── build.gradle.kts
-├── docs/                     # Play Store guides and technical docs
-├── landing/                  # Product landing page (HTML/CSS)
-├── marketing/                # Approved assets, screenshots, and copy
-└── scripts/powershell/       # Dev automation (CI/CD, environment)
+```powershell
+git clone https://github.com/dennidalpos/OnlyTechTake.git
+Set-Location OnlyTechTake
+./scripts/powershell/android/check_env.ps1 -NonInteractive
+./scripts/powershell/project/check_project.ps1 -Flavor Full -SkipReleaseBuild -NonInteractive
 ```
 
----
+The environment check detects JDK/SDK configuration. The project check runs lint, Kotlin compilation, unit tests and a debug APK build for the selected flavor. It skips signing with `-SkipReleaseBuild`; it does not install or exercise the app on a device unless instrumented testing is explicitly selected. See the [Android scripts](scripts/powershell/android/README.md) and [project checks](scripts/powershell/project/README.md).
 
-## 🛠️ Tech Stack
-- **Language**: [Kotlin](https://kotlinlang.org/)
-- **UI Framework**: [Jetpack Compose](https://developer.android.com/jetpack/compose) (Material 3)
-- **Local Storage**: [Room](https://developer.android.com/training/data-storage/room) + [SQLCipher](https://www.zetetic.net/sqlcipher/) (Encrypted at rest)
-- **Asynchrony**: Coroutines & Flow
-- **Dependency Injection**: Hilt
-- **Media**: CameraX (Photo/Video evidence)
-- **Navigation**: Jetpack Navigation Compose
+To build a debug APK without installing it:
 
----
+```powershell
+./scripts/powershell/android/build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk -NonInteractive
+```
 
-## 🛡️ Privacy & Security Model
-- **Local-First**: No proprietary backend, automatic cloud sync, telemetry or analytics in the inspected code. Users can share documents or export to a chosen provider, including cloud storage.
-- **Encrypted Storage**: The database is encrypted using SQLCipher.
-- **Scoped Storage**: All media and documents are stored in private app directories.
-- **Digital Trust**: Signature capture and photo/video attachments provide documented evidence for interventions, helping to reduce disputes.
+The wrappers write Gradle caches and module build outputs locally. Managed agents must run verification in their isolated runtime work area and preserve its outputs. Do not use cleanup or public-asset regeneration scripts as part of ordinary verification.
 
----
+## Configuration and common tasks
 
-## 🚀 Getting Started
+Open the project in Android Studio and use the `full`, `demo` or `showcase` variant. First launch creates a local administrator; do not use real customer information for demonstrations or tests. Configure the shop, operators, templates and backup destination in the app. Backup encryption does not encrypt every ZIP entry.
 
-### Environment Requirements
-- **OS**: Windows 11 (Optimized for PowerShell)
-- **IDE**: Android Studio Ladybug (or newer)
-- **JDK**: Java 21 (JVM toolchain; set process JAVA_HOME if needed)
-- **Android SDK**: API 37
+```powershell
+./scripts/powershell/project/quality.ps1 -Flavor Full -NonInteractive
+```
 
-### Local Setup
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/dennidalpos/OnlyTechTake.git
-   ```
-2. **Environment Check**: Run the diagnostic script to ensure your SDK/JDK are correctly configured.
-   ```powershell
-   ./scripts/powershell/android/check_env.ps1
-   ```
-3. **Build & Sync**: Open in Android Studio and wait for Gradle sync.
+The quality wrapper checks Spotless formatting and Android Lint. `-Apply` changes files and requires a separate intentional formatting step. Physical-device tests, Play upload, release signing and public asset distribution are separate operations; see the [release checklist](docs/play-store/release-checklist.md).
 
-### Build Flavors
-| Flavor | Purpose | Constraints |
-|:---|:---|:---|
-| `full` | **Pro Production** | Unlimited orders, full export capabilities. |
-| `demo` | **Public Trial** | Limited to 1 active order, watermarked PDFs. |
-| `showcase`| **Internal Demo** | Preloaded with sample data for quick presentations. |
+## Documentation and repository layout
 
----
+- [Documentation index](docs/README.md): operations, release preparation and store guidance.
+- [Backup flow](docs/BACKUP_FLOW.md): encryption, key and rollback limitations.
+- `app/src/main/`: shared Kotlin/Compose application code and resources.
+- `app/src/full/`, `app/src/demo/`, `app/src/showcase/`: flavor-specific behavior.
+- `marketing/`: reviewed brand assets, screenshots, videos and copy.
+- `landing/`: product page source; public links and claims need review before deployment.
+- [Asset tools](scripts/powershell/assets/README.md): capture from the real app using synthetic data.
 
-## 🧪 Quality & Automation
+## Help, security and license
 
-We use a suite of PowerShell wrappers to maintain code quality:
+Use the repository's issue forms for reproducible bugs and requests. Report vulnerabilities through [SECURITY.md](SECURITY.md). GitHub Actions workflows are present but Actions are disabled; checks run locally.
 
-- **Quality Suite**: Runs Spotless formatting checks and Android Lint.
-  ```powershell
-  ./scripts/powershell/project/quality.ps1
-  ```
-- **Full Project Check**: Compiles the specified flavor and runs static analysis.
-  ```powershell
-  ./scripts/powershell/project/check_project.ps1 -Flavor Full -SkipReleaseBuild
-  ```
-- **Asset Generation**: Automatically generates marketing screenshots from UI tests.
-  ```powershell
-  ./scripts/powershell/assets/create_demo_assets.ps1
-  ```
-
-For release preparation and limitations, see the [release checklist](docs/play-store/release-checklist.md) and [backup flow](docs/BACKUP_FLOW.md). For agent guidelines, see [AGENTS.md](AGENTS.md).
-
----
-
-## 🔒 Security and License
-
-See [SECURITY.md](SECURITY.md) to report a vulnerability. The repository contains Android CI workflows, but GitHub Actions are disabled: build and test locally with the scripts above.
-
-Proprietary, all rights reserved. See [LICENSE](LICENSE).
-
----
-
-<p align="center">
-  OnlyTechTake © 2026 | <a href="https://github.com/dennidalpos">GitHub Repo</a>
-</p>
+The code is proprietary; see [LICENSE](LICENSE) and [CONTRIBUTING.md](CONTRIBUTING.md). The [Italian store listing](docs/play-store/STORE_LISTING_IT.md) and [English store listing](docs/play-store/STORE_LISTING_EN.md) are maintained separately from this developer guide.

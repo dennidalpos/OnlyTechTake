@@ -1,38 +1,29 @@
 # Google Play Data Safety — OnlyTechTake
 
-Fonte ufficiale verificata il 2026-10-07: [Google Play Data safety](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en). Guida canonica per Full e Demo, pubblicati con package separati. Ricontrollare l'artefatto finale e il comportamento degli SDK prima dell'invio.
+Use this guide for Full and Demo, which have separate package identifiers. The publisher must verify the final artifact and SDK behavior before submitting declarations. The [Google Data Safety guidance](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en) was consulted on 2026-11-05; it does not establish this application's compliance.
 
-## Raccolta e condivisione
+## Declarations
 
-Google definisce raccolta la trasmissione di dati fuori dal dispositivo. Il trattamento esclusivamente locale è escluso. Il codice esaminato non integra backend proprietari o analytics; il manifest principale non richiede `INTERNET`. Questa verifica del sorgente non sostituisce l'esame del manifest release unito e degli SDK inclusi.
+Google distinguishes off-device collection from processing that remains on the device. Third-party SDKs must also be assessed. Transfers to another app can be sharing, including on-device transfers; exceptions such as expected user-initiated transfers must be checked for each flow. Internal-only testing is exempt from the Data Safety form; other covered tracks require declarations even for apps reporting no collection.
 
-Un trasferimento a un'altra app può costituire condivisione anche sullo stesso dispositivo. Google esclude i trasferimenti attivati da un'azione specifica dell'utente quando questi si aspetta ragionevolmente la condivisione. OnlyTechTake apre WhatsApp con numero e testo, condivide PDF tramite Android e scrive esportazioni nella destinazione scelta con il selettore documenti. Il provider scelto può trasferire file nel cloud. Verificare l'eccezione per ogni flusso: la sola assenza di invio automatico non basta.
+The inspected main manifest has no `INTERNET` permission and the source has no proprietary backend or analytics integration. The app explicitly opens WhatsApp, Android sharing and document-picker exports. A selected provider can send a file to cloud storage. These observations do not qualify the merged release manifest or all bundled SDKs.
 
-Per il comportamento esaminato, la risposta proposta a **L'app raccoglie o condivide i tipi di dati utente richiesti?** è **No**, a condizione che la verifica degli SDK release confermi l'assenza di altra raccolta e i trasferimenti manuali rispettino l'eccezione. Non dichiarare "Sì, in locale" come raccolta.
+A proposed answer of **No collection/sharing** remains conditional on the publisher verifying the final release and the manual-transfer exceptions. Local storage alone is not a declaration of collected data.
 
-Le app distribuite esclusivamente nel test interno sono esenti dalla sezione Data Safety. Completare modulo e privacy policy pubblica prima della distribuzione sui canali che li richiedono.
+## Local data and protection
 
-## Dati trattati localmente
-
-| Dati | Finalità |
+| Local contents | Purpose and limits |
 |---|---|
-| Nome, ragione sociale, identificativi fiscali, indirizzo, email e telefono | Anagrafica clienti e comunicazioni manuali |
-| Descrizioni, note, preventivi e stato pagamento | Gestione commesse |
-| Foto e video, con audio del microfono quando abilitato | Documentazione tecnica |
-| Firme autografe su schermo | Accettazione e consensi |
-| Credenziali locali operatori e audit | Autenticazione e cronologia operazioni |
-| PDF, XLSX, configurazione e ZIP | Documenti ed esportazioni manuali |
+| Customer contacts, business/tax identifiers and addresses | Customer records and manually initiated communication |
+| Service-order descriptions, notes, estimates and payments | Job management |
+| Photos, videos, optional microphone audio and signatures | Technical documentation and recorded acceptance |
+| Local operator credentials and audit history | Authentication and traceability |
+| PDF, XLSX, JSON and ZIP exports | Explicit document sharing and backup |
 
-La tabella descrive il trattamento locale per la privacy policy; non è un elenco da selezionare come dati raccolti.
+SQLCipher encrypts the database at rest. Media, signatures, PDF and DataStore files are separate private files; private app storage is not file encryption. ZIP password protection currently covers database entries only. XLSX/PDF/JSON export paths do not apply password encryption. See [backup and restore](../BACKUP_FLOW.md).
 
-## Sicurezza e cancellazione
+Local reset does not delete copies exported to other apps/providers. Local operator accounts are not developer-hosted cloud accounts. Database encryption does not demonstrate transport encryption. Check the final merged permissions, including `CAMERA` and `RECORD_AUDIO`.
 
-- SQLCipher cifra il database a riposo. Media, firme, PDF e DataStore sono file privati separati: memoria privata non significa cifratura dei file.
-- La password ZIP attuale cifra solo le voci database. Configurazione, media e DataStore restano in chiaro. Il percorso attuale di esportazione XLSX e i PDF/JSON singoli non applicano cifratura con password. Vedere [limiti del backup](../BACKUP_FLOW.md).
-- Non usare SQLCipher come prova di cifratura in transito. Dopo la risposta "No" a raccolta/condivisione, Google salta le domande dettagliate sulla sicurezza della raccolta. Se altri trasferimenti richiedono "Sì", valutarne la protezione di trasporto effettiva.
-- Reset e cancellazione admin riguardano i dati locali. Copie esportate, ricevute da terzi o conservate dai provider cloud richiedono cancellazione separata. Gli account operatori sono locali, non account cloud dello sviluppatore.
-- Il manifest principale richiede `CAMERA` e `RECORD_AUDIO`. Verificare anche i permessi del manifest release unito.
+## Before submission
 
-## Compilazione
-
-Usare la [guida Play Console](PLAY_CONSOLE_GUIDE_IT.md) dopo aver verificato l'artefatto release. Finalizzare contatto privacy del publisher e URL HTTPS pubblico, senza inventare riferimenti. Mantenere coerenti policy, accesso alla policy nell'app e dichiarazioni.
+Use the [English Play Console guide](PLAY_CONSOLE_GUIDE_EN.md) or its [Italian version](PLAY_CONSOLE_GUIDE_IT.md). Confirm the publisher's actual privacy contact, public policy URL, in-app access and artifact behavior. Do not invent publisher details or derive general compliance from this source inspection.

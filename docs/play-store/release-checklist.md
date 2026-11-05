@@ -1,6 +1,6 @@
 # Google Play release checklist
 
-Scope: Full (`com.onlytechtake.repairapp`) and Demo (`com.onlytechtake.repairapp.demo`). Showcase is outside Play distribution. The owner handles upload; local AAB preparation does not prove Play acceptance or device readiness. Pending work belongs only in `02-areas/products/OnlyTechTake/tracker.json (nel dossier SecondBrain)` as `todos` strings.
+Scope: Full (`com.onlytechtake.repairapp`) and Demo (`com.onlytechtake.repairapp.demo`). Showcase is outside Play distribution. The owner handles upload; local AAB preparation does not prove Play acceptance or device readiness. Track unresolved work in the maintained project tracker; preserve task identifiers, acceptance criteria and evidence.
 
 ## Prepared local artifacts
 
@@ -18,7 +18,7 @@ The signer is self-signed and has no timestamp; `jarsigner` reports these warnin
 
 Checked on 2026-10-07:
 
-- [Target API requirements](https://support.google.com/googleplay/android-developer/answer/11926878?hl=en): new mobile apps and updates require API 36 or higher from 2026-08-31.
+- [Target API requirements](https://support.google.com/googleplay/android-developer/answer/11926878?hl=en): recheck the live policy for the application category and submission date. The configured target SDK alone does not establish Play acceptance.
 - [Data Safety](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en): on-device processing is excluded from collection; qualifying user-initiated transfers are excluded from sharing. Internal-only testing is exempt from this section.
 - [App review preparation](https://support.google.com/googleplay/android-developer/answer/9859455?hl=en): privacy policy, reviewer access and other App content declarations must match app behavior.
 - [Internal testing](https://support.google.com/googleplay/android-developer/answer/9845334?hl=en): start with an internal test before wider distribution; acceptance and testing happen in Play Console.
@@ -51,10 +51,10 @@ Before handoff, verify each archive's package/version, merged permissions and si
 
 1. Select the correct separate Play apps and confirm package identifiers and unused versionCode. Enroll/verify Play App Signing and upload-key acceptance.
 2. Upload the corresponding signed AAB to the chosen track. Use internal testing first unless a different release plan is agreed.
-3. Use [reviewer instructions](PLAY_CONSOLE_GUIDE_IT.md) and the canonical [Data Safety guide](DATA_SAFETY_GUIDE.md). Complete App content and Data Safety when required by the track.
+3. Use [reviewer instructions](PLAY_CONSOLE_GUIDE_EN.md) and the canonical [Data Safety guide](DATA_SAFETY_GUIDE.md). Complete App content and Data Safety when required by the track.
 4. Finalize publisher privacy contact and a working public HTTPS policy URL, with policy access from the app. The [policy draft](PRIVACY_POLICY_IT.md) needs these publisher details. The landing privacy page still requires alignment before publication.
 5. Review separate Full/Demo listing text and assets using [marketing assets](../../marketing/README.md). Use [release notes](../release/release-notes-1.4.0.md) matching the built version.
 6. Install via Play on target devices and exercise setup/login, operators, photo/video permissions, PDF, manual WhatsApp/share and supported backup/restore. Review actual pre-launch findings; record actionable failures in the tracker.
 7. Resolve the backup/key protection issues tracked as P1 before describing the release as production ready. Media/configuration/DataStore backup entries currently remain unencrypted, cross-device restore is unsupported, and restore rollback does not cover preferences. See [backup flow](../BACKUP_FLOW.md).
 
-Close the upload task only after direct Console acceptance evidence. Remove verified completed entries immediately; retain unresolved tasks without completed history or metadata objects.
+Propose closure of the upload task only after direct Console acceptance evidence. Preserve task history, identifiers and provenance in the maintained tracker.

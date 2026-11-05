@@ -1,30 +1,20 @@
-# Documentazione Script di Supporto (PowerShell)
+# Shared PowerShell helpers
 
-Questa cartella contiene script di utilità e librerie di funzioni condivise dagli altri script del progetto. Non sono destinati ad essere eseguiti direttamente dall'utente nella maggior parte dei casi.
+These scripts are loaded by the Android, project and asset wrappers. They are libraries rather than standalone user commands.
 
----
+## `android_env.ps1`
 
-## 1. android_env.ps1
-Gestione dell'ambiente e delle variabili di sistema.
+- `Set-AndroidCliEnvironment` detects supported JDK 17/21 and Android SDK installations and configures the current process environment.
+- `Get-JavaMajorVersion` reads the Java major version.
+- `Get-CandidateJavaHomes` searches candidate JDK locations.
 
-### Funzioni principali
-*   **Set-AndroidCliEnvironment**: Rileva automaticamente e configura `JAVA_HOME` (JDK 17/21) e `ANDROID_HOME`.
-*   **Get-JavaMajorVersion**: Estrae la versione principale di Java dal percorso specificato.
-*   **Get-CandidateJavaHomes**: Cerca installazioni valide di JDK nelle cartelle di sistema comuni.
+The application's configured JVM toolchain is 21. Detecting a supported helper JDK does not prove that the application toolchain, SDK platform or dependencies are available. The wrappers should report environment failures before claiming build success.
 
-### Cosa fa
-Assicura che gli script PowerShell utilizzino i tool corretti (adb, gradle, javac) indipendentemente dalle variabili d'ambiente globali dell'utente, facilitando la portabilità tra diverse macchine Windows.
+## `android_demo.ps1`
 
----
+- `Invoke-DemoScreenshotTest` runs an instrumented capture scenario.
+- `Invoke-DemoApkBuildAndInstall` prepares and installs a demonstration build.
+- `Resolve-DemoDeviceSerial` chooses the test device/emulator.
+- `Set-DeviceGlobalSettingTemporary` records device-setting changes for restoration.
 
-## 2. android_demo.ps1
-Libreria di funzioni per l'automazione dei test e della generazione asset.
-
-### Funzioni principali
-*   **Invoke-DemoScreenshotTest**: Esegue un test strumentato specifico per la cattura di screenshot.
-*   **Invoke-DemoApkBuildAndInstall**: Gestisce il ciclo build-install-clean per i test strumentati.
-*   **Resolve-DemoDeviceSerial**: Identifica il seriale del dispositivo (fisico o emulatore) da utilizzare.
-*   **Set-DeviceGlobalSettingTemporary**: Modifica impostazioni del dispositivo (es. lingua, tema) e ne tiene traccia per il ripristino.
-
-### Cosa fa
-Fornisce il "motore" per gli script di creazione asset, gestendo l'interazione a basso livello con `adb` e il runner dei test di Android.
+The device helpers can install applications and change locale/theme. Use a selected test device with synthetic data and review restoration results. They are not part of a read-only documentation check. See [asset scripts](../assets/README.md).

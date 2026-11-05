@@ -1,13 +1,12 @@
-# Marketing Assets & Copy
+# Marketing assets and copy
 
-Questa cartella contiene gli asset e i testi approvati per la pubblicazione e la promozione di OnlyTechTake.
+This folder contains OnlyTechTake's brand assets and material prepared for review before publication.
 
-## Struttura
-- `registered-assets/`: Icone, loghi e grafiche ufficiali.
-- `screenshots/`: Screenshot dell'applicazione per il Play Store e annunci.
-- `videos/`: Video dimostrativi e promozionali.
-- `copy/`: Testi per campagne pubblicitarie. I testi store canonici sono in [Italiano](../docs/play-store/STORE_LISTING_IT.md) e [English](../docs/play-store/STORE_LISTING_EN.md).
+- `registered-assets/`: official icons, logos and graphics.
+- `screenshots/`: screenshots of the application for store listings and campaigns.
+- `videos/`: demonstration and promotional videos.
+- `copy/`: campaign copy. Canonical store listings are maintained in [English](../docs/play-store/STORE_LISTING_EN.md) and [Italian](../docs/play-store/STORE_LISTING_IT.md).
 
-## Regole
-- Utilizzare solo asset presenti in questa cartella per le pubblicazioni ufficiali.
-- Gli asset generati automaticamente devono essere spostati qui solo dopo revisione.
+Use reviewed assets for official publications. New captures must come from the real application with synthetic data; review privacy, the captured behavior and destination before distributing them. Presence in this folder alone does not establish capture provenance or publication approval.
+
+See [asset automation](../scripts/powershell/assets/README.md) for capture tools and their overwrite/cleanup behavior. Do not regenerate or delete existing official material as part of documentation checks.
