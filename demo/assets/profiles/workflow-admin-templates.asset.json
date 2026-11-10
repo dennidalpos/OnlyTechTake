@@ -1,0 +1,22 @@
+{
+  "id": "workflow-admin-templates",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow4_AdminTemplates",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/workflow-admin-templates",
+  "pulledDirectoryName": "workflow-admin-templates",
+  "cases": [
+    {
+      "id": "admin-templates",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "admin" }
+      ],
+      "expectedFiles": [
+        "01-templates-list.png",
+        "02-template-editor.png",
+        "03-template-mapping.png"
+      ]
+    }
+  ]
+}

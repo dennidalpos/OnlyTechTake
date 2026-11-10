@@ -1,0 +1,26 @@
+{
+  "id": "social-stories",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow8_SocialStories",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/social-stories",
+  "pulledDirectoryName": "social-stories",
+  "cases": [
+    {
+      "id": "operational-stories",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "stories" }
+      ],
+      "expectedFiles": [
+        "01-home-stories.png",
+        "02-customer-selection.png",
+        "04-category-selection.png",
+        "05-problem-details.png",
+        "06-media-acquisition.png",
+        "07-customer-signature.png",
+        "08-share-stories.png"
+      ]
+    }
+  ]
+}

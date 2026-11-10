@@ -1,0 +1,27 @@
+{
+  "id": "workflow-intake",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow1_Intake",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/workflow-intake",
+  "pulledDirectoryName": "workflow-intake",
+  "cases": [
+    {
+      "id": "intake",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "intake" }
+      ],
+      "expectedFiles": [
+        "01-home.png",
+        "02-intake-start.png",
+        "03-intake-customer.png",
+        "04-intake-category.png",
+        "05-intake-problem.png",
+        "06-intake-media.png",
+        "07-intake-signature.png",
+        "08-intake-summary.png"
+      ]
+    }
+  ]
+}

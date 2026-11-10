@@ -1,0 +1,212 @@
+<#
+.SYNOPSIS
+  Genera APK o AAB Android e opzionalmente installa APK debug/release su device.
+#>
+
+param(
+    [ValidateSet("Full", "Demo", "Showcase")]
+    [string]$Flavor,
+
+    [ValidateSet("Debug", "Release")]
+    [string]$BuildType,
+
+    [ValidateSet("Apk", "Aab")]
+    [string]$OutputType,
+
+    [switch]$Clean,
+
+    [switch]$RerunTasks,
+
+    [switch]$Install,
+
+    [switch]$NonInteractive
+)
+
+$ErrorActionPreference = "Stop"
+
+$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Interactive Mode
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Build Installer ---" -ForegroundColor Cyan
+    Write-Host "Genera e installa gli artifact Android (APK/AAB)."
+
+    if (-not $Flavor) {
+        Write-Host "`nScegli il Flavor:"
+        Write-Host "1. Full (default)"
+        Write-Host "2. Demo"
+        Write-Host "3. Showcase"
+        $fChoice = Read-Host "Scelta [1-3]"
+        $Flavor = switch ($fChoice) { "2" { "Demo" }; "3" { "Showcase" }; default { "Full" } }
+    }
+
+    if (-not $BuildType) {
+        Write-Host "`nScegli il Build Type:"
+        Write-Host "1. Debug (default)"
+        Write-Host "2. Release"
+        $btChoice = Read-Host "Scelta [1-2]"
+        $BuildType = switch ($btChoice) { "2" { "Release" }; default { "Debug" } }
+    }
+
+    if (-not $OutputType) {
+        Write-Host "`nScegli l'Output Type:"
+        Write-Host "1. Apk (default)"
+        Write-Host "2. Aab"
+        $otChoice = Read-Host "Scelta [1-2]"
+        $OutputType = switch ($otChoice) { "2" { "Aab" }; default { "Apk" } }
+    }
+
+    if ($OutputType -eq "Apk" -and -not $Install) {
+        $iChoice = Read-Host "`nVuoi installare l'APK dopo la build? [y/N]"
+        if ($iChoice -eq 'y') { $Install = $true }
+    }
+} else {
+    # Default values for non-interactive or partially provided parameters
+    if (-not $Flavor) { $Flavor = "Full" }
+    if (-not $BuildType) { $BuildType = "Debug" }
+    if (-not $OutputType) { $OutputType = "Apk" }
+}
+
+$supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
+. $supportScript
+$resolvedEnvironment = Set-AndroidCliEnvironment
+
+function Write-Section($Text) {
+    Write-Host ""
+    Write-Host "== $Text ==" -ForegroundColor Cyan
+}
+
+function Require-File($Path, $Message) {
+    if (-not (Test-Path $Path)) {
+        throw $Message
+    }
+}
+
+function Test-Command($Name) {
+    $cmd = Get-Command $Name -ErrorAction SilentlyContinue
+    return $null -ne $cmd
+}
+
+$gradlew = Join-Path $root "gradlew.bat"
+
+Write-Section "Ambiente Android"
+if ($null -ne $resolvedEnvironment -and $resolvedEnvironment.JavaHome) {
+    Write-Host "JAVA_HOME=$($resolvedEnvironment.JavaHome)"
+} else {
+    throw "Nessun JDK supportato rilevato. Installare Android Studio JBR o JDK 17/21; Java 26 viene ignorato."
+}
+
+if ($null -ne $resolvedEnvironment -and $resolvedEnvironment.AndroidSdk) {
+    Write-Host "ANDROID_HOME=$($resolvedEnvironment.AndroidSdk)"
+} else {
+    throw "Android SDK non configurato. Imposta ANDROID_HOME/ANDROID_SDK_ROOT o installa Android SDK con Android Studio."
+}
+
+Write-Section "Verifica progetto"
+Require-File $gradlew "gradlew.bat non trovato nella root rilevata: $root"
+
+if (-not (Test-Command "java")) {
+    throw "Java non trovato nel PATH dopo autodetect."
+}
+
+if (-not (Test-Command "javac")) {
+    throw "javac non trovato nel PATH dopo autodetect."
+}
+
+$androidSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } else { $env:ANDROID_SDK_ROOT }
+$requiredCompileSdk = if ($resolvedEnvironment.RequiredCompileSdk) { $resolvedEnvironment.RequiredCompileSdk } else { 37 }
+if (-not (Test-AndroidSdkPlatform -Path $androidSdk -ApiLevel $requiredCompileSdk)) {
+    throw "Android SDK Platform $requiredCompileSdk non trovata. Installa android-$requiredCompileSdk da Android Studio SDK Manager."
+}
+
+if (-not (Test-AndroidBuildToolsInstalled -Path $androidSdk)) {
+    throw "Android SDK Build Tools non trovati. Installa Android SDK Build Tools da Android Studio SDK Manager."
+}
+
+if ($Install -and $OutputType -ne "Apk") {
+    throw "Installazione via adb disponibile solo per APK, non per AAB."
+}
+
+if ($Install -and -not (Test-Command "adb")) {
+    throw "adb non trovato nel PATH. Installa Android Platform Tools."
+}
+
+if ($BuildType -eq "Release") {
+    Write-Section "Verifica signing release"
+    Assert-AndroidReleaseSigningConfigured -RootPath $root
+    Write-Host "Signing release configurato." -ForegroundColor Green
+}
+
+Write-Host "Root progetto: $root"
+Write-Host "Flavor: $Flavor"
+Write-Host "BuildType: $BuildType"
+Write-Host "OutputType: $OutputType"
+
+Push-Location $root
+try {
+    if ($Clean) {
+        Write-Section "Clean"
+        Write-Host "Fermo eventuali daemon Gradle per ridurre i file lock su Windows."
+        & $gradlew --stop
+        if ($LASTEXITCODE -ne 0) {
+            throw "Gradle --stop fallito."
+        }
+
+        & $gradlew --no-configuration-cache clean
+        if ($LASTEXITCODE -ne 0) {
+            throw "Gradle clean fallito."
+        }
+    }
+
+    Write-Section "Build"
+    $variant = "$Flavor$BuildType"
+    $task = if ($OutputType -eq "Apk") { "assemble$variant" } else { "bundle$variant" }
+
+    $gradleArguments = @("--no-configuration-cache")
+    if ($RerunTasks) {
+        $gradleArguments += "--rerun-tasks"
+    }
+    $gradleArguments += $task
+
+    Write-Host "Eseguo: .\gradlew.bat $($gradleArguments -join ' ')"
+    & $gradlew @gradleArguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "Build Gradle fallita."
+    }
+} finally {
+    Pop-Location
+}
+
+Write-Section "Ricerca output"
+$outputFile = $null
+
+if ($OutputType -eq "Apk") {
+    $folder = Join-Path $root ("app\build\outputs\apk\" + $Flavor.ToLower() + "\" + $BuildType.ToLower())
+    $outputFile = Get-ChildItem -Path $folder -Filter "*.apk" -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending |
+        Select-Object -First 1
+} else {
+    $folder = Join-Path $root ("app\build\outputs\bundle\" + $Flavor.ToLower() + $BuildType)
+    $outputFile = Get-ChildItem -Path $folder -Filter "*.aab" -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending |
+        Select-Object -First 1
+}
+
+if ($null -eq $outputFile) {
+    throw "Build completata ma file output non trovato."
+}
+
+Write-Host "File generato:" -ForegroundColor Green
+Write-Host $outputFile.FullName
+
+if ($Install) {
+    Write-Section "Installazione via adb"
+    adb devices
+    adb install -r $outputFile.FullName
+    if ($LASTEXITCODE -ne 0) {
+        throw "Installazione adb fallita."
+    }
+    Write-Host "Installazione completata." -ForegroundColor Green
+}
+
+Write-Section "Completato"
