@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- In night mode, the generic background color is the dark one -->
+    <color name="app_background">@color/background_dark</color>
+</resources>

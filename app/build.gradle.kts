@@ -1,0 +1,204 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties =
+    Properties().apply {
+        if (keystorePropertiesFile.exists()) {
+            keystorePropertiesFile.inputStream().use(::load)
+        }
+    }
+
+// Verifies that keystore.properties exists when a release build is requested.
+tasks.configureEach {
+    if (name.contains("Release", ignoreCase = true)) {
+        doFirst {
+            if (!keystorePropertiesFile.exists()) {
+                throw GradleException("Release build requires keystore.properties in the project root")
+            }
+        }
+    }
+}
+
+fun signingProperty(name: String): String =
+    requireNotNull(keystoreProperties.getProperty(name)) {
+        "Missing '$name' in keystore.properties"
+    }
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
+}
+
+android {
+    namespace = "com.onlytechtake.repairapp"
+    compileSdk = 37
+
+    defaultConfig {
+        applicationId = "com.onlytechtake.repairapp"
+        minSdk = 26
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.4.0"
+
+        testInstrumentationRunner = "com.onlytechtake.repairapp.HiltTestRunner"
+    }
+
+    flavorDimensions.add("version")
+    productFlavors {
+        create("demo") {
+            dimension = "version"
+            applicationIdSuffix = ".demo"
+            resValue("string", "app_name", "OTT Demo")
+            buildConfigField("boolean", "IS_PRO_VERSION", "false")
+            buildConfigField("boolean", "IS_DEMO_VERSION", "true")
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
+            buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
+            buildConfigField("int", "MAX_ORDERS", "1")
+            buildConfigField("int", "MAX_OPERATORS", "3")
+        }
+        create("showcase") {
+            dimension = "version"
+            applicationIdSuffix = ".showcase"
+            resValue("string", "app_name", "OTT Showcase")
+            buildConfigField("boolean", "IS_PRO_VERSION", "false")
+            buildConfigField("boolean", "IS_DEMO_VERSION", "false")
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
+            buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "true")
+            buildConfigField("int", "MAX_ORDERS", "-1")
+            buildConfigField("int", "MAX_OPERATORS", "-1")
+        }
+        create("full") {
+            isDefault = true
+            dimension = "version"
+            resValue("string", "app_name", "OTT Pro")
+            buildConfigField("boolean", "IS_PRO_VERSION", "true")
+            buildConfigField("boolean", "IS_DEMO_VERSION", "false")
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
+            buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
+            buildConfigField("int", "MAX_ORDERS", "-1")
+            buildConfigField("int", "MAX_OPERATORS", "-1")
+        }
+    }
+
+    signingConfigs {
+        if (keystorePropertiesFile.exists()) {
+            create("release") {
+                storeFile = rootProject.file(signingProperty("storeFile"))
+                storePassword = signingProperty("storePassword")
+                keyAlias = signingProperty("keyAlias")
+                keyPassword = signingProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            isDefault = true
+            applicationIdSuffix = ".debug"
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    buildFeatures {
+        buildConfig = true
+        compose = true
+        resValues = true
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+}
+
+kotlin {
+    jvmToolchain(21)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+    }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+}
+
+dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.windowsizeclass)
+    implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.hilt.work)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.documentfile)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.video)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.exifinterface)
+    implementation(libs.zip4j)
+    implementation(libs.sqlcipher)
+    implementation(libs.sqlite.ktx)
+
+    ksp(libs.androidx.room.compiler)
+    ksp(libs.hilt.compiler)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.testing)
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.hilt.android.testing)
+    kspAndroidTest(libs.hilt.compiler)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+}

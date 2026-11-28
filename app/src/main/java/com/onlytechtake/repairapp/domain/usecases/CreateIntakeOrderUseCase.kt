@@ -1,0 +1,136 @@
+package com.onlytechtake.repairapp.domain.usecases
+
+import android.content.Context
+import android.graphics.Bitmap
+import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
+import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.models.IntakeOrderCreationResult
+import com.onlytechtake.repairapp.domain.models.IntakeOrderCreationResult.Complete
+import com.onlytechtake.repairapp.domain.models.IntakeOrderInput
+import com.onlytechtake.repairapp.domain.models.IntakeValidationError
+import com.onlytechtake.repairapp.domain.models.Order
+import com.onlytechtake.repairapp.domain.models.OrderMedia
+import com.onlytechtake.repairapp.domain.models.RepairOrderInput
+import com.onlytechtake.repairapp.domain.models.Signature
+import com.onlytechtake.repairapp.domain.models.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.models.validationErrors
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderMediaRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
+import com.onlytechtake.repairapp.domain.repositories.SignatureRepository
+
+class CreateIntakeOrderUseCase(
+    private val context: Context,
+    private val customerRepository: CustomerRepository,
+    private val orderRepository: OrderRepository,
+    private val orderMediaRepository: OrderMediaRepository,
+    private val signatureRepository: SignatureRepository,
+    private val runAtomically: suspend (suspend () -> IntakeOrderCreationResult) -> IntakeOrderCreationResult = { block -> block() },
+) {
+    suspend fun countAllOrders(): Int = orderRepository.countAllOrders()
+
+    fun getDemoLimitErrorMessage(): String = DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
+
+    suspend fun execute(
+        actor: AuthenticatedUser,
+        input: IntakeOrderInput,
+        stagedMedia: List<StagedOrderMedia>,
+        signerName: String,
+        privacyAccepted: Boolean,
+        termsAccepted: Boolean,
+        signatureBitmap: Bitmap,
+    ): Result<IntakeOrderCreationResult> =
+        runCatching {
+            val normalizedInput =
+                input.copy(
+                    stagedMediaCount = stagedMedia.size,
+                    hasPrivacySignature = privacyAccepted && termsAccepted,
+                )
+            val errors = normalizedInput.validationErrors()
+            if (errors.isNotEmpty()) {
+                val messages =
+                    errors.map { error ->
+                        when (error) {
+                            IntakeValidationError.CUSTOMER_REQUIRED -> context.getString(R.string.error_customer_required)
+                            IntakeValidationError.PROBLEM_REQUIRED -> context.getString(R.string.error_problem_required)
+                            IntakeValidationError.CATEGORY_REQUIRED -> context.getString(R.string.error_category_required)
+                            IntakeValidationError.MEDIA_REQUIRED -> context.getString(R.string.error_media_required)
+                            IntakeValidationError.PRIVACY_REQUIRED -> context.getString(R.string.error_privacy_required)
+                        }
+                    }
+                require(false) { messages.joinToString("\n") }
+            }
+
+            if ((BuildConfig.IS_DEMO_VERSION) && (BuildConfig.MAX_ORDERS > 0)) {
+                val totalOrders = orderRepository.countAllOrders()
+                if (totalOrders >= BuildConfig.MAX_ORDERS) {
+                    throw IllegalStateException(
+                        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS),
+                    )
+                }
+            }
+
+            var savedSignature: Signature? = null
+            var attachedMedia: List<OrderMedia> = emptyList()
+
+            try {
+                runAtomically {
+                    val customerId =
+                        normalizedInput.existingCustomerId?.takeIf { it.isNotBlank() }
+                            ?: customerRepository
+                                .save(
+                                    actor,
+                                    requireNotNull(normalizedInput.newCustomer) {
+                                        context.getString(
+                                            R.string.error_customer_required,
+                                        )
+                                    },
+                                ).getOrThrow()
+                                .id
+
+                    val order: Order =
+                        orderRepository
+                            .createOrder(
+                                actor = actor,
+                                input =
+                                    RepairOrderInput(
+                                        customerId = customerId,
+                                        title = normalizedInput.problemSummary,
+                                        categoryId =
+                                            requireNotNull(normalizedInput.categoryId) {
+                                                context.getString(
+                                                    R.string.error_category_required,
+                                                )
+                                            },
+                                        description = normalizedInput.problemDetails.trim(),
+                                        assignedToUserId = normalizedInput.assignedToUserId,
+                                    ),
+                            ).getOrThrow()
+
+                    signatureRepository
+                        .saveSignature(
+                            actor = actor,
+                            orderId = order.id,
+                            signerName = signerName,
+                            privacyAccepted = privacyAccepted,
+                            termsAccepted = termsAccepted,
+                            bitmap = signatureBitmap,
+                        ).getOrThrow()
+                        .also { savedSignature = it }
+
+                    attachedMedia =
+                        orderMediaRepository
+                            .attachStagedMedia(actor, order.id, stagedMedia)
+                            .getOrThrow()
+
+                    Complete(order)
+                }
+            } catch (error: Throwable) {
+                savedSignature?.let { signatureRepository.deleteSignatureFile(it) }
+                orderMediaRepository.deleteMediaFiles(attachedMedia)
+                throw error
+            }
+        }
+}

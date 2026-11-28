@@ -1,0 +1,21 @@
+{
+  "id": "workflow-backup",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow5_Backup",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/workflow-backup",
+  "pulledDirectoryName": "workflow-backup",
+  "cases": [
+    {
+      "id": "backup",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "backup", "variant": "vertical", "subDir": "admin" }
+      ],
+      "expectedFiles": [
+        "01-backup-settings.png",
+        "02-backup-security-logs.png"
+      ]
+    }
+  ]
+}

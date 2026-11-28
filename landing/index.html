@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="meta.title">OnlyTechTake - Service & Job Management</title>
+    <meta name="description" data-i18n-meta-description content="Professional management of service orders, documentation, and technical intervention reports. Everything on your Android device in total security.">
+
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="assets/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/icons/favicon-192.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <img src="assets/brand/onlytechtake-mark.svg" alt="OnlyTechTake" class="logo-mark">
+                    <span class="app-title">OnlyTechTake</span>
+                </a>
+                <div class="nav-actions">
+                    <div class="lang-selector">
+                        <button class="lang-btn" data-lang-switch="it">IT</button>
+                        <button class="lang-btn active" data-lang-switch="en">EN</button>
+                    </div>
+                    <a href="#features" class="nav-link" data-i18n="nav.features">Features</a>
+                    <a href="#pricing" class="nav-link" data-i18n="nav.versions">Versions</a>
+                    <!-- Play Store Link Dormant: <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-nav btn-pro" data-i18n="nav.downloadPro">Download PRO</a> -->
+                    <a href="mailto:danny.perondi@gmail.com" class="btn-nav btn-pro" data-i18n="nav.requestInfo">Request Info</a>
+                    <div id="theme-toggle" class="theme-switch" data-i18n-title="nav.theme" title="Change Theme">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon"></i>
+                    </div>
+                    <button id="sidebar-toggle" class="menu-btn" data-i18n-aria-label="nav.menu" aria-label="Menu">
+                        <i data-lucide="menu"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Side Navigation Drawer -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="sidebar" class="side-nav">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <img src="assets/brand/onlytechtake-mark.svg" alt="OnlyTechTake" class="logo-mark">
+                <span class="app-title">OnlyTechTake</span>
+            </a>
+            <button id="sidebar-close" class="close-btn" data-i18n-aria-label="nav.close" aria-label="Close">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <nav class="sidebar-links">
+            <a href="#" class="sidebar-link active"><i data-lucide="home"></i> <span data-i18n="sidebar.home">Home</span></a>
+            <a href="#features" class="sidebar-link"><i data-lucide="zap"></i> <span data-i18n="sidebar.features">Features</span></a>
+            <a href="#gallery" class="sidebar-link"><i data-lucide="image"></i> <span data-i18n="sidebar.gallery">Gallery</span></a>
+            <a href="#pricing" class="sidebar-link"><i data-lucide="layout-grid"></i> <span data-i18n="sidebar.versions">Versions</span></a>
+            <div class="sidebar-divider"></div>
+            <!-- Play Store Link Dormant:
+            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="sidebar-link pro-link">
+                <i data-lucide="shopping-cart"></i> <span data-i18n="sidebar.buyPro">Buy PRO</span>
+            </a>
+            -->
+            <a href="mailto:danny.perondi@gmail.com" class="sidebar-link pro-link">
+                <i data-lucide="mail"></i> <span data-i18n="sidebar.requestPro">Request PRO</span>
+            </a>
+            <a href="privacy.html" class="sidebar-link"><i data-lucide="shield"></i> <span data-i18n="sidebar.privacy">Privacy Policy</span></a>
+        </nav>
+        <div class="sidebar-lang-selector">
+            <button class="lang-btn" data-lang-switch="it">IT</button>
+            <button class="lang-btn active" data-lang-switch="en">EN</button>
+        </div>
+        <div class="sidebar-footer">
+            <p>v1.0.0 Baseline | MD3 Ready</p>
+        </div>
+    </aside>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-visual">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="intro-text">
+                        <div class="badge">
+                            <img src="assets/brand/android-logo.svg" alt="Android" class="badge-icon">
+                            <span data-i18n="hero.badge">Target Android 15 (API 37)</span>
+                        </div>
+                        <h1 data-i18n-html="hero.title">An App for managing customer orders at your fingertips!<br><span class="gradient-text">Your Service Workbench.</span></h1>
+                        <p data-i18n="hero.subtitle">The professional application to manage orders, diagnostics, and customers in total security directly on your device. No subscriptions, no cloud.</p>
+                        <div class="hero-btns">
+                            <!-- Play Store Links Dormant
+                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary" data-i18n="hero.ctaPro">Start now (PRO)</a>
+                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-secondary" data-i18n="hero.ctaDemo">Try the Demo</a>
+                            -->
+                            <a href="mailto:danny.perondi@gmail.com" class="btn-primary" data-i18n="hero.ctaPro">Get started (PRO)</a>
+                            <a href="build/app-demo-release.apk" class="btn-secondary" data-i18n="hero.ctaDemo">Download Demo APK</a>
+                        </div>
+                    </div>
+
+                    <div class="showcase-visual">
+                        <div class="video-frame">
+                            <video autoplay muted loop playsinline data-i18n-asset="intake-flow.mp4" data-i18n-poster="01-dashboard-pro.png" poster="assets/screenshots/en/01-dashboard-pro.png">
+                                <source src="assets/videos/en/intake-flow.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <!-- Floating screenshots decorations -->
+                        <div class="floating-img img-1"><img src="assets/screenshots/en/01-dashboard-pro.png" data-i18n-asset="01-dashboard-pro.png" data-i18n-alt="gallery.alt.dashboard" alt="Dashboard"></div>
+                        <div class="floating-img img-2"><img src="assets/screenshots/en/06-whatsapp-pdf-pro.png" data-i18n-asset="06-whatsapp-pdf-pro.png" data-i18n-alt="gallery.alt.pdf" alt="PDF"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Privacy & Security -->
+        <section class="privacy-section">
+            <div class="container">
+                <div class="privacy-card">
+                    <div class="icon-box"><i data-lucide="lock"></i></div>
+                    <h2 data-i18n="privacySection.title">Protected data, privacy guaranteed</h2>
+                    <p data-i18n-html="privacySection.text">OnlyTechTake operates entirely on your device. Photos, signatures, and sensitive data are never sent to external servers. The database is protected by advanced encryption technologies to ensure maximum professional confidentiality.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="features.title">Professional Workflow</h2>
+                    <p data-i18n="features.subtitle">Designed for workshops that need speed, precision, and privacy.</p>
+                </div>
+                <div class="grid-3">
+                    <div class="feature-card">
+                        <i data-lucide="layout"></i>
+                        <h3 data-i18n="features.workbench.title">Service Workbench</h3>
+                        <p data-i18n="features.workbench.text">Manage the operational flow: Open, In Progress, Diagnosis, Ready for Delivery, and Closed.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="camera"></i>
+                        <h3 data-i18n="features.media.title">Media Documentation</h3>
+                        <p data-i18n="features.media.text">Take photos and videos with CameraX to document the aesthetic and technical state of each device.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="signature"></i>
+                        <h3 data-i18n="features.signature.title">Signature & Privacy</h3>
+                        <p data-i18n="features.signature.text">Digital signature on screen for privacy acceptance and customizable intake conditions.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="file-text"></i>
+                        <h3 data-i18n="features.pdf.title">Professional PDF Reports</h3>
+                        <p data-i18n="features.pdf.text">Instantly generate technical sheets and PDF receipts with your workshop logo.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="message-circle"></i>
+                        <h3 data-i18n="features.whatsapp.title">Manual WhatsApp</h3>
+                        <p data-i18n="features.whatsapp.text">Send progress updates and PDFs to customers via predefined templates in just one tap.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="shield-check"></i>
+                        <h3 data-i18n="features.backup.title">Encrypted ZIP Backup</h3>
+                        <p data-i18n="features.backup.text">Export the entire archive or individual XLSX tables for external backups in total security.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- App Gallery (Dynamic Carousel) -->
+        <section id="gallery" class="gallery-section">
+            <div class="container-full">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="gallery.title">Material 3 Experience</h2>
+                    <p data-i18n="gallery.subtitle">Modern interface consistent with Android guidelines, optimized for workshop workflow.</p>
+                </div>
+
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.dashboard">Dashboard & Operational Queues</div>
+                            <img src="assets/screenshots/en/01-dashboard-pro.png" data-i18n-asset="01-dashboard-pro.png" data-i18n-alt="gallery.alt.dashboard" alt="Repair Workbench">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.intake">Guided Intake</div>
+                            <img src="assets/screenshots/en/02-nuova-commessa-pro.png" data-i18n-asset="02-nuova-commessa-pro.png" data-i18n-alt="gallery.alt.newOrder" alt="New Order">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.media">Photos and Digital Signature</div>
+                            <img src="assets/screenshots/en/03-foto-firma-pro.png" data-i18n-asset="03-foto-firma-pro.png" data-i18n-alt="gallery.alt.media" alt="Media and Signatures">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.quotes">Diagnosis and Quotes</div>
+                            <img src="assets/screenshots/en/04-diagnosi-preventivo-pro.png" data-i18n-asset="04-diagnosi-preventivo-pro.png" data-i18n-alt="gallery.alt.diagnosis" alt="Diagnosis">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.repairing">Technical Intervention</div>
+                            <img src="assets/screenshots/en/05-repairing-step-pro.png" data-i18n-asset="05-repairing-step-pro.png" data-i18n-alt="gallery.alt.repairing" alt="Repairing">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.whatsapp">Send status via WhatsApp</div>
+                            <img src="assets/screenshots/en/06-whatsapp-pdf-pro.png" data-i18n-asset="06-whatsapp-pdf-pro.png" data-i18n-alt="gallery.alt.pdf" alt="PDF and Social">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.timeline">Event History & Timeline</div>
+                            <img src="assets/screenshots/en/07-timeline-chiusura-pro.png" data-i18n-asset="07-timeline-chiusura-pro.png" data-i18n-alt="gallery.alt.timeline" alt="Event Timeline">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.customers">Customer Records</div>
+                            <img src="assets/screenshots/en/08-clienti-pro.png" data-i18n-asset="08-clienti-pro.png" data-i18n-alt="gallery.alt.customers" alt="Customer Archive">
+                        </div>
+                        <div class="carousel-item">
+                            <div class="gallery-text" data-i18n="gallery.overlay.customerDetail">Customer History</div>
+                            <img src="assets/screenshots/en/09-dettaglio-cliente-pro.png" data-i18n-asset="09-dettaglio-cliente-pro.png" data-i18n-alt="gallery.alt.detail" alt="Customer Detail">
+                        </div>
+                    </div>
+
+                    <div class="carousel-nav">
+                        <button class="carousel-btn prev-btn"><i data-lucide="chevron-left"></i></button>
+                        <button class="carousel-btn next-btn"><i data-lucide="chevron-right"></i></button>
+                    </div>
+
+                    <div class="carousel-dots"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Versions / Pricing -->
+        <section id="pricing" class="pricing-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="pricing.title">Choose your version</h2>
+                    <p data-i18n="pricing.subtitle">Pay once, own your data forever. No Cloud, no subscription fees.</p>
+                </div>
+                <div class="pricing-grid">
+                    <div class="price-card">
+                        <div class="price-header">
+                            <h3>Demo</h3>
+                            <div class="price" data-i18n="pricing.demo.price">Free</div>
+                        </div>
+                        <ul class="price-features">
+                            <li data-i18n-html="pricing.demo.feature1"><i data-lucide="check"></i> 1 Active order</li>
+                            <li data-i18n-html="pricing.demo.feature2"><i data-lucide="check"></i> Diagnosis and Photos</li>
+                            <li data-i18n-html="pricing.demo.feature3"><i data-lucide="check"></i> Touch Digital Signature</li>
+                            <li data-i18n-html="pricing.demo.feature4"><i data-lucide="check"></i> Local Admin access</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature5"><i data-lucide="x"></i> PDF without Watermark</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature6"><i data-lucide="x"></i> Operator Management</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature7"><i data-lucide="x"></i> Excel Export (XLSX)</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature8"><i data-lucide="x"></i> Full Encrypted Backup</li>
+                        </ul>
+                        <!-- Play Store Link Dormant: <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-outline" data-i18n="pricing.demo.cta">Download Demo</a> -->
+                        <a href="build/app-demo-release.apk" class="btn-outline" data-i18n="pricing.demo.cta">Download APK (Demo)</a>
+                        <div class="install-guide">
+                            <h4 data-i18n="pricing.demo.guideTitle">How to install?</h4>
+                            <p class="guide-steps" data-i18n-html="pricing.demo.guideText">
+                                1. Download APK<br>2. Open file<br>3. Enable Unknown Sources<br>4. Install
+                            </p>
+                        </div>
+                    </div>
+                    <div class="price-card featured">
+                        <div class="featured-badge" data-i18n="pricing.pro.badge">Recommended</div>
+                        <div class="price-header">
+                            <h3>Pro</h3>
+                            <div class="price" data-i18n="pricing.pro.price">One-time License</div>
+                        </div>
+                        <ul class="price-features">
+                            <li data-i18n-html="pricing.pro.feature1"><i data-lucide="check"></i> Unlimited Orders</li>
+                            <li data-i18n-html="pricing.pro.feature2"><i data-lucide="check"></i> Custom PDFs (No Watermark)</li>
+                            <li data-i18n-html="pricing.pro.feature3"><i data-lucide="check"></i> Multi-operator Management</li>
+                            <li data-i18n-html="pricing.pro.feature4"><i data-lucide="check"></i> XLSX Export & ZIP Backup</li>
+                            <li data-i18n-html="pricing.pro.feature5"><i data-lucide="check"></i> SQLCipher Pro Encryption</li>
+                            <li data-i18n-html="pricing.pro.feature6"><i data-lucide="check"></i> Priority Support</li>
+                            <li data-i18n-html="pricing.pro.feature7"><i data-lucide="check"></i> Free Updates</li>
+                        </ul>
+                        <!-- Play Store Link Dormant: <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary" data-i18n="pricing.pro.cta">Buy PRO</a> -->
+                        <a href="mailto:danny.perondi@gmail.com" class="btn-primary" data-i18n="pricing.pro.cta">Contact for PRO</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <img src="assets/brand/onlytechtake-mark.svg" alt="OnlyTechTake" class="logo-mark">
+                        <span class="app-title">OnlyTechTake</span>
+                    </a>
+                    <p data-i18n="footer.subtitle">The professional solution for job management and technical documentation, designed for maximum security of your data.</p>
+                </div>
+                <div class="footer-links">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <a href="privacy.html" data-i18n="sidebar.privacy">Privacy Policy</a>
+                    <a href="mailto:danny.perondi@gmail.com" data-i18n="footer.support">support@onlytechtake.com</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-github-link" data-i18n-aria-label="footer.github" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="github-icon"></a></p>
+                <p class="legal-disclaimer" data-i18n="footer.disclaimer">No implied legal warranty on signature forms. Consult a legal professional for local regulatory compliance.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
